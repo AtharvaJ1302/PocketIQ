@@ -537,3 +537,109 @@ Users shall be able to manage PIN and biometric authentication preferences.
 Priority: High
 
 ---
+
+# 11. Non-Functional Requirements
+
+The following non-functional requirements define the quality standards that PocketIQ must achieve.
+
+---
+
+## Performance
+
+### NFR-001 — Application Startup
+
+The application should launch and display the authentication or home screen within three seconds on a typical mid-range Android device.
+
+---
+
+### NFR-002 — Smooth Animations
+
+All animations should maintain a target frame rate of 60 FPS on supported devices.
+
+---
+
+### NFR-003 — Screen Transitions
+
+Navigation transitions should feel smooth and complete within 300 milliseconds.
+
+---
+
+## Reliability
+
+### NFR-004 — Offline Support
+
+Previously synchronized user data shall remain accessible when the device is offline.
+
+---
+
+### NFR-005 — Data Integrity
+
+No transaction shall be duplicated during SMS or notification parsing.
+
+---
+
+### NFR-006 — Automatic Recovery
+
+The application should gracefully recover from temporary network interruptions.
+
+---
+
+## Security
+
+### NFR-007 — Secure Storage
+
+Sensitive information shall be stored using encrypted device storage.
+
+---
+
+### NFR-008 — Authentication
+
+Biometric authentication shall be used whenever enabled by the user.
+
+---
+
+### NFR-009 — Privacy
+
+User financial information shall never be shared with third parties without explicit consent.
+
+---
+
+## Usability
+
+### NFR-010 — Ease of Use
+
+A new user should be able to complete onboarding and reach the dashboard within five minutes.
+
+---
+
+### NFR-011 — Accessibility
+
+The application shall support scalable text, sufficient color contrast, and screen readers where applicable.
+
+---
+
+## Scalability
+
+### NFR-012 — Multiple Accounts
+
+The application should support managing multiple bank accounts and credit cards without affecting performance.
+
+---
+
+### NFR-013 — Transaction Capacity
+
+The application should efficiently handle at least 10,000 transactions per user.
+
+---
+
+## Maintainability
+
+### NFR-014 — Modular Architecture
+
+The application shall follow a modular, feature-first architecture to simplify future enhancements.
+
+---
+
+### NFR-015 — Code Quality
+
+The project shall follow consistent coding standards, documentation practices, and linting rules.
