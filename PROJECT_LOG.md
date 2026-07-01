@@ -35,34 +35,35 @@ PocketIQ planning phase completed. Ready to begin Flutter development.
 
 # Day 2 - 01 July 2026
 
-## Objective
-Set up the Flutter project foundation.
+# Day 2
 
-### Completed
-- Created Flutter project
-- Implemented feature-first folder structure
-- Configured Material 3
-- Added Light Theme
-- Added Dark Theme
-- Created centralized theme engine
-- Added design system tokens
-    - AppSpacing
-    - AppRadius
-    - AppDurations
-    - AppSizes
-    - AppStrings
-- Initialized GitHub repository for Flutter code
-- Created first project milestone (v0.1.0 Foundation)
-- Created reusable AppText component
-- Established typography foundation for shared UI components
-- Created reusable AppCard component
-- Created reusable AppButton component
-- Expanded shared component library
-- Added centralized asset management
-- Added startup status constants
-- Refactored splash into reusable widgets
-- Added Riverpod state management
-- Added synchronized animations
-- Improved light/dark theme branding
-- Added custom progress indicator
-- Established feature architecture pattern
+## Completed
+
+- Finalized project architecture
+- Completed Splash Screen
+- Completed Onboarding flow
+- Built reusable design system
+- Added AppSpacing, AppRadius and AppDuration
+- Created PocketButton
+- Created PocketTextField
+- Created PocketPasswordField
+- Created AppLogo
+- Added authentication module structure
+- Built AuthHeader and AuthFooter
+- Started Login Screen
+- Fixed dark theme typography issues
+
+## Decisions
+
+- Locked project architecture
+- Locked design system
+- Shared components live under shared/components
+- Feature-specific widgets remain inside their feature
+- No further restructuring unless required
+
+## Next
+
+- Finish Login Screen
+- Register Screen
+- Forgot Password
+- Authentication navigation
