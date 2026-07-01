@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_animation.dart';
+import '../../../../core/constants/app_spacing.dart';
 import '../providers/splash_provider.dart';
 import '../widgets/splash_background.dart';
 import '../widgets/splash_footer.dart';
@@ -28,20 +29,25 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       duration: AppAnimation.splashDuration,
     );
 
-    final splashController = ref.read(splashProvider);
+    final splashNotifier = ref.read(splashProvider);
 
     _animationController.addListener(() {
-      splashController.updateStatus(
+      splashNotifier.updateStatus(
         _animationController.value,
       );
     });
 
-    _animationController.forward().whenComplete(() async {
-      // TODO:
-      // final route = await StartupService.getInitialRoute();
-      // if (!mounted) return;
-      // context.go(route);
-    });
+    _startApp();
+  }
+
+  Future<void> _startApp() async {
+    await _animationController.forward();
+
+    if (!mounted) return;
+
+    // TODO:
+    // final route = await StartupService.getInitialRoute();
+    // context.go(route);
   }
 
   @override
@@ -52,7 +58,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final splashController = ref.watch(splashProvider);
+    final notifier = ref.watch(splashProvider);
 
     return Scaffold(
       body: SplashBackground(
@@ -68,10 +74,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
             SplashLoading(
               animationController: _animationController,
-              controller: splashController,
+              controller: notifier,
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(
+              height: AppSpacing.xl,
+            ),
 
             SplashFooter(
               controller: _animationController,

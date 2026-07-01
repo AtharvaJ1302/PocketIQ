@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
@@ -30,7 +29,7 @@ class AppCard extends StatelessWidget {
       elevation: elevation ?? 0,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: borderRadius ?? const BorderRadius.all(AppRadius.large),
+        borderRadius: borderRadius ?? AppRadius.borderRadiusLg,
       ),
       child: Padding(padding: padding ?? AppSpacing.cardPadding, child: child),
     );
@@ -40,7 +39,7 @@ class AppCard extends StatelessWidget {
     }
 
     return InkWell(
-      borderRadius: borderRadius ?? const BorderRadius.all(AppRadius.large),
+      borderRadius: borderRadius ?? AppRadius.borderRadiusLg,
       onTap: onTap,
         child: card,
     );

@@ -11,6 +11,8 @@ class OnboardingNotifier extends ChangeNotifier {
 
   int get currentPage => _currentPage;
 
+  bool get isLastPage => _currentPage == totalPages - 1;
+
   void updatePage(int page) {
     if (_currentPage == page) return;
 
@@ -18,6 +20,6 @@ class OnboardingNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get isLastPage =>
-      _currentPage == totalPages - 1;
+  int get nextPage =>
+      isLastPage ? _currentPage : _currentPage + 1;
 }

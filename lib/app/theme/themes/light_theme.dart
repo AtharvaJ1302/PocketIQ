@@ -34,9 +34,7 @@ final ThemeData lightTheme = ThemeData(
     shadowColor: Colors.black12,
     margin: EdgeInsets.zero,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        AppRadius.large,
-      ),
+      borderRadius: AppRadius.borderRadiusLg,
     ),
   ),
 
@@ -47,9 +45,7 @@ final ThemeData lightTheme = ThemeData(
         AppSizes.buttonHeight,
       ),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          AppRadius.medium,
-        ),
+        borderRadius: AppRadius.borderRadiusMd,
       ),
       textStyle: const TextStyle(
         fontSize: 16,
@@ -68,25 +64,19 @@ final ThemeData lightTheme = ThemeData(
     ),
 
     border: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(
-        AppRadius.medium,
-      ),
+      borderRadius: AppRadius.borderRadiusMd,
       borderSide: BorderSide.none,
     ),
 
     enabledBorder: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(
-        AppRadius.medium,
-      ),
+      borderRadius: AppRadius.borderRadiusMd,
       borderSide: BorderSide(
         color: AppColors.divider,
       ),
     ),
 
     focusedBorder: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(
-        AppRadius.medium,
-      ),
+      borderRadius: AppRadius.borderRadiusMd,
       borderSide: BorderSide(
         color: AppColors.primary,
         width: 2,
@@ -103,7 +93,7 @@ final ThemeData lightTheme = ThemeData(
     elevation: 0,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
-        top: AppRadius.bottomSheet,
+        top: AppRadius.radiusXl,
       ),
     ),
   ),
@@ -111,7 +101,7 @@ final ThemeData lightTheme = ThemeData(
   snackBarTheme: SnackBarThemeData(
     behavior: SnackBarBehavior.floating,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: AppRadius.borderRadiusMd,
     ),
   ),
 
