@@ -60,3 +60,9 @@ Set up the Flutter project foundation.
 - Expanded shared component library
 - Added centralized asset management
 - Added startup status constants
+- Refactored splash into reusable widgets
+- Added Riverpod state management
+- Added synchronized animations
+- Improved light/dark theme branding
+- Added custom progress indicator
+- Established feature architecture pattern
