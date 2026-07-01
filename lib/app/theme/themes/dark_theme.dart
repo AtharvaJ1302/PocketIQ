@@ -16,7 +16,9 @@ final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
   ),
 
-  textTheme: AppTypography.textTheme,
+  textTheme: AppTypography.getTextTheme(
+    ThemeData.light().textTheme,
+  ),
 
   appBarTheme: const AppBarTheme(
     centerTitle: false,
