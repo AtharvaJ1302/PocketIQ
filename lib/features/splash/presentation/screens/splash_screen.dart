@@ -28,7 +28,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       duration: AppAnimation.splashDuration,
     );
 
-    final splashController = ref.read(splashControllerProvider);
+    final splashController = ref.read(splashProvider);
 
     _animationController.addListener(() {
       splashController.updateStatus(
@@ -52,7 +52,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final splashController = ref.watch(splashControllerProvider);
+    final splashController = ref.watch(splashProvider);
 
     return Scaffold(
       body: SplashBackground(

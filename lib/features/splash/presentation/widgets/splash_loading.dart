@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_animation.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../shared/components/pocket_progress_bar.dart';
-import '../providers/splash_controller.dart';
+import '../providers/splash_notifier.dart';
 
 class SplashLoading extends StatelessWidget {
   final AnimationController animationController;
-  final SplashController controller;
+  final SplashNotifier controller;
 
   const SplashLoading({
     super.key,

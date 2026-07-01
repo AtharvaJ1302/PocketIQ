@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../../core/constants/startup_strings.dart';
 
-class SplashController extends ChangeNotifier {
+class SplashNotifier extends ChangeNotifier {
   String _status = StartupStrings.initializing;
 
   String get status => _status;
