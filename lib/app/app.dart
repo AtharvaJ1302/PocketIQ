@@ -19,11 +19,6 @@ class PocketIQApp extends StatelessWidget{
       themeMode: ThemeMode.system,
 
       routerConfig: AppRouter.router,
-      // home: const Scaffold(
-      //   body: Center(
-      //     child: Text("PocketIQ"),
-      //   ),
-      // )
     );
   }
 }

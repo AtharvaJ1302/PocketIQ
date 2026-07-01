@@ -58,3 +58,5 @@ Set up the Flutter project foundation.
 - Created reusable AppCard component
 - Created reusable AppButton component
 - Expanded shared component library
+- Added centralized asset management
+- Added startup status constants

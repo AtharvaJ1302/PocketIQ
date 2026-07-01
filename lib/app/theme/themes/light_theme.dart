@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/constants/app_radius.dart';
+import '../../../core/constants/app_sizes.dart';
 import '../colors/app_colors.dart';
 import '../typography/app_typography.dart';
 
-ThemeData lightTheme = ThemeData(
+final ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
 
@@ -16,13 +18,100 @@ ThemeData lightTheme = ThemeData(
 
   textTheme: AppTypography.textTheme,
 
-  cardTheme: const CardThemeData(
+  appBarTheme: const AppBarTheme(
+    centerTitle: false,
     elevation: 0,
+    scrolledUnderElevation: 0,
+    backgroundColor: Colors.transparent,
+    foregroundColor: AppColors.textPrimary,
+  ),
+
+  cardTheme: CardThemeData(
+    color: AppColors.surfaceLight,
+    elevation: 2,
+    shadowColor: Colors.black12,
     margin: EdgeInsets.zero,
-    shape: RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
-          Radius.circular(24)
+        AppRadius.large,
       ),
     ),
   ),
+
+  filledButtonTheme: FilledButtonThemeData(
+    style: FilledButton.styleFrom(
+      minimumSize: const Size(
+        double.infinity,
+        AppSizes.buttonHeight,
+      ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          AppRadius.medium,
+        ),
+      ),
+      textStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ),
+
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: Colors.white,
+
+    contentPadding: const EdgeInsets.symmetric(
+      horizontal: 18,
+      vertical: 18,
+    ),
+
+    border: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(
+        AppRadius.medium,
+      ),
+      borderSide: BorderSide.none,
+    ),
+
+    enabledBorder: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(
+        AppRadius.medium,
+      ),
+      borderSide: BorderSide(
+        color: AppColors.divider,
+      ),
+    ),
+
+    focusedBorder: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(
+        AppRadius.medium,
+      ),
+      borderSide: BorderSide(
+        color: AppColors.primary,
+        width: 2,
+      ),
+    ),
+  ),
+
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    color: AppColors.primary,
+  ),
+
+  bottomSheetTheme: const BottomSheetThemeData(
+    showDragHandle: true,
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: AppRadius.bottomSheet,
+      ),
+    ),
+  ),
+
+  snackBarTheme: SnackBarThemeData(
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16),
+    ),
+  ),
+
+  dividerColor: AppColors.divider,
 );
