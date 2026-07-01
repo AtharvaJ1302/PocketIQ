@@ -9,4 +9,6 @@ class AppRoutes {
   static const analytics = '/analytics';
   static const budget = '/budget';
   static const transactions = '/transactions';
+  static const register = '/register';
+  static const forgotPassword = '/forgot-password';
 }

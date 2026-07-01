@@ -1,7 +1,9 @@
 import 'package:go_router/go_router.dart';
 
 import '../../features/analytics/presentation/screens/analytics_screen.dart';
+import '../../features/authentication/presentation/screens/forgot_password_screen.dart';
 import '../../features/authentication/presentation/screens/login_screen.dart';
+import '../../features/authentication/presentation/screens/register_screen.dart';
 import '../../features/budget/presentation/screens/budget_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -14,7 +16,7 @@ class AppRouter {
   AppRouter._();
 
   static final router = GoRouter(
-    initialLocation: AppRoutes.onboarding,
+    initialLocation: AppRoutes.login,
     routes: [
       GoRoute(
           path: AppRoutes.splash,
@@ -47,6 +49,14 @@ class AppRouter {
     GoRoute(
           path: AppRoutes.profile,
           builder: (_, __) => const ProfileScreen()
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        builder: (_, __) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        builder: (_, __) => const ForgotPasswordScreen(),
       ),
     ],
   );

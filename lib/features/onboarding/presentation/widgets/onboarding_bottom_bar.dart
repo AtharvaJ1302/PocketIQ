@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_duration.dart';
 import '../../../../core/constants/app_spacing.dart';
+import '../../../../shared/components/buttons/pocket_button.dart';
 
 class OnboardingBottomBar extends StatelessWidget {
   final bool isLastPage;
@@ -21,42 +22,45 @@ class OnboardingBottomBar extends StatelessWidget {
       top: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
-          24,
-          20,
-          24,
-          28,
+          AppSpacing.lg,
+          AppSpacing.lg,
+          AppSpacing.lg,
+          AppSpacing.xl,
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (!isLastPage)
-              TextButton(
-                onPressed: onSkip,
-                child: const Text(
-                  'Skip →',
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: AppSpacing.xs,
+                ),
+                child: TextButton(
+                  onPressed: onSkip,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    animationDuration: AppDuration.fast,
+                  ),
+                  child: const Text(
+                    'Skip →',
+                  ),
                 ),
               ),
 
-            if (!isLastPage)
-              const Spacer(),
+            if (!isLastPage) const Spacer(),
 
-            Expanded(
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(AppSpacing.buttonHeight),
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(AppSpacing.buttonRadius),
-                  ),
-                ),
-                onPressed: onNext,
-                child: AnimatedSwitcher(
-                  duration: AppDuration.normal,
-                  child: Text(
-                    isLastPage
-                        ? 'Get Started →'
-                        : 'Next →',
-                    key: ValueKey(isLastPage),
-                  ),
+            SizedBox(
+              width: 160,
+              child: AnimatedSwitcher(
+                duration: AppDuration.normal,
+                child: PocketButton(
+                  key: ValueKey(isLastPage),
+                  label: isLastPage
+                      ? 'Get Started →'
+                      : 'Next →',
+                  onPressed: onNext,
                 ),
               ),
             ),

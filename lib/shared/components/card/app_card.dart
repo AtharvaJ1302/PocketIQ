@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../core/constants/app_radius.dart';
-import '../../core/constants/app_spacing.dart';
+import '../../../core/constants/app_radius.dart';
+import '../../../core/constants/app_spacing.dart';
 
 class AppCard extends StatelessWidget {
   final Widget child;

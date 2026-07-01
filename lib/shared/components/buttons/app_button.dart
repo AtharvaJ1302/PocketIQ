@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pocketiq/shared/components/app_text.dart';
+import 'package:pocketiq/shared/components/inputs/app_text.dart';
 
-import '../../core/constants/app_sizes.dart';
+import '../../../core/constants/app_sizes.dart';
 
 class AppButton extends StatelessWidget {
   final String text;
