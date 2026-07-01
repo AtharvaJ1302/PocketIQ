@@ -55,4 +55,6 @@ Set up the Flutter project foundation.
 - Created first project milestone (v0.1.0 Foundation)
 - Created reusable AppText component
 - Established typography foundation for shared UI components
-
+- Created reusable AppCard component
+- Created reusable AppButton component
+- Expanded shared component library
