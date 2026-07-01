@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocketiq/app/router/app_router.dart';
 
 import 'theme/themes/app_theme.dart';
 
@@ -8,7 +9,7 @@ class PocketIQApp extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'PocketIQ',
       debugShowCheckedModeBanner: false,
 
@@ -17,11 +18,12 @@ class PocketIQApp extends StatelessWidget{
 
       themeMode: ThemeMode.system,
 
-      home: const Scaffold(
-        body: Center(
-          child: Text("PocketIQ"),
-        ),
-      )
+      routerConfig: AppRouter.router,
+      // home: const Scaffold(
+      //   body: Center(
+      //     child: Text("PocketIQ"),
+      //   ),
+      // )
     );
   }
 }
