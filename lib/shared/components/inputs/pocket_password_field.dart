@@ -8,6 +8,7 @@ class PocketPasswordField extends StatefulWidget {
   final String? Function(String?)? validator;
   final TextInputAction textInputAction;
   final void Function(String)? onFieldSubmitted;
+  final FocusNode? focusNode;
 
   const PocketPasswordField({
     super.key,
@@ -16,6 +17,7 @@ class PocketPasswordField extends StatefulWidget {
     this.validator,
     this.textInputAction = TextInputAction.done,
     this.onFieldSubmitted,
+    this.focusNode,
   });
 
   @override
@@ -31,6 +33,7 @@ class _PocketPasswordFieldState
   Widget build(BuildContext context) {
     return PocketTextField(
       controller: widget.controller,
+      focusNode: widget.focusNode,
       label: widget.label,
       hint: 'Enter your password',
       obscureText: _obscureText,

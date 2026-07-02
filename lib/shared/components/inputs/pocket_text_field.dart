@@ -55,6 +55,12 @@ class PocketTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
+
+      cursorColor: Theme.of(context).colorScheme.primary,
+
       controller: controller,
       focusNode: focusNode,
 

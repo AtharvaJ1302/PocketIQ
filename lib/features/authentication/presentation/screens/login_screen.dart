@@ -7,10 +7,10 @@ import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../shared/components/buttons/pocket_button.dart';
 import '../../../../shared/components/inputs/pocket_password_field.dart';
+import '../../../../shared/components/inputs/pocket_text_button.dart';
 import '../../../../shared/components/inputs/pocket_text_field.dart';
 import '../providers/authentication_provider.dart';
-import '../widgets/auth_footer.dart';
-import '../widgets/auth_header.dart';
+import '../widgets/auth_layout.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -25,79 +25,95 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
+  late final FocusNode _emailFocusNode;
+  late final FocusNode _passwordFocusNode;
+
   @override
   void initState() {
     super.initState();
 
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+
+    _emailFocusNode = FocusNode();
+    _passwordFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+
     super.dispose();
   }
 
   void _login() {
+    FocusScope.of(context).unfocus();
+
     if (!_formKey.currentState!.validate()) return;
 
     // TODO:
-    // Firebase Authentication
-    // Navigate to Home
+    // authenticationNotifier.login(...)
+    // context.go(AppRoutes.home);
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authenticationProvider);
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppSpacing.screenPadding,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: AuthLayout(
+          title: 'Welcome Back',
+          subtitle:
+          'Manage your finances beautifully and effortlessly.',
+          footerText: "Don't have an account?",
+          footerActionText: 'Create Account',
+          onFooterPressed: () {
+            context.push(AppRoutes.register);
+          },
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: AppSpacing.huge),
-
-                const AuthHeader(
-                  title: 'Welcome Back',
-                  subtitle:
-                  'Manage your finances beautifully and effortlessly.',
-                ),
-
-                const SizedBox(height: AppSpacing.xxxl),
-
                 PocketTextField(
                   controller: _emailController,
+                  focusNode: _emailFocusNode,
                   label: 'Email',
                   hint: 'Enter your email',
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   validator: Validators.email,
                   prefixIcon: const Icon(Icons.email_outlined),
+                  onFieldSubmitted: (_) {
+                    _passwordFocusNode.requestFocus();
+                  },
                 ),
 
                 const SizedBox(height: AppSpacing.lg),
 
                 PocketPasswordField(
                   controller: _passwordController,
+                  focusNode: _passwordFocusNode,
                   validator: Validators.password,
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (_) => _login(),
                 ),
 
                 Align(
                   alignment: Alignment.centerRight,
-                  child: TextButton(
+                  child: PocketTextButton(
+                    label: 'Forgot Password?',
                     onPressed: () {
                       context.push(
                         AppRoutes.forgotPassword,
                       );
                     },
-                    child: const Text(
-                      'Forgot Password?',
-                    ),
                   ),
                 ),
 
@@ -107,18 +123,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   label: 'Sign In',
                   loading: auth.loading,
                   onPressed: _login,
-                ),
-
-                const SizedBox(height: AppSpacing.xl),
-
-                AuthFooter(
-                  text: "Don't have an account?",
-                  actionText: 'Create Account',
-                  onPressed: () {
-                    context.push(
-                      AppRoutes.register,
-                    );
-                  },
                 ),
               ],
             ),

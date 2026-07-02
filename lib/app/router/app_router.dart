@@ -16,7 +16,7 @@ class AppRouter {
   AppRouter._();
 
   static final router = GoRouter(
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.register,
     routes: [
       GoRoute(
           path: AppRoutes.splash,
@@ -57,6 +57,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.forgotPassword,
         builder: (_, __) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        builder: (_, __) => const RegisterScreen(),
       ),
     ],
   );

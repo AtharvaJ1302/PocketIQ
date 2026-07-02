@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../shared/components/inputs/pocket_text_button.dart';
+
 class AuthFooter extends StatelessWidget {
   final String text;
   final String actionText;
@@ -25,15 +27,9 @@ class AuthFooter extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        TextButton(
+        PocketTextButton(
+          label: actionText,
           onPressed: onPressed,
-          child: Text(
-            actionText,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.primary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
         ),
       ],
     );

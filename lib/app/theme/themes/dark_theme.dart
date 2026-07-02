@@ -11,6 +11,10 @@ final ThemeData darkTheme = ThemeData(
 
   scaffoldBackgroundColor: AppColors.backgroundDark,
 
+  textSelectionTheme: const TextSelectionThemeData(
+    cursorColor: AppColors.primary,
+  ),
+
   colorScheme: ColorScheme.fromSeed(
     seedColor: AppColors.primary,
     brightness: Brightness.dark,
@@ -57,6 +61,10 @@ final ThemeData darkTheme = ThemeData(
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: AppColors.surfaceDark,
+
+    floatingLabelStyle: const TextStyle(
+      color: AppColors.primary,
+    ),
 
     contentPadding: const EdgeInsets.symmetric(
       horizontal: 18,
