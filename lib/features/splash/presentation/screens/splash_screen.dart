@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/app_routes.dart';
 import '../../../../core/constants/app_animation.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../providers/splash_provider.dart';
@@ -45,9 +47,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     if (!mounted) return;
 
-    // TODO:
-    // final route = await StartupService.getInitialRoute();
-    // context.go(route);
+    context.go(AppRoutes.onboarding);
   }
 
   @override

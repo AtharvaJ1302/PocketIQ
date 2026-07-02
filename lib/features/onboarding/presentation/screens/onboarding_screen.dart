@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/app_routes.dart';
+import '../../../../core/constants/app_duration.dart';
 import '../../data/onboarding_data.dart';
 import '../providers/onboarding_provider.dart';
 import '../widgets/onboarding_bottom_bar.dart';
@@ -35,14 +38,12 @@ class _OnboardingScreenState
     final notifier = ref.read(onboardingProvider);
 
     if (notifier.isLastPage) {
-      // TODO:
-      // Save onboarding completed
-      // Navigate to Login
+      context.go(AppRoutes.login);
       return;
     }
 
     _pageController.nextPage(
-      duration: const Duration(milliseconds: 350),
+      duration: AppDuration.medium,
       curve: Curves.easeOutCubic,
     );
   }
@@ -50,7 +51,7 @@ class _OnboardingScreenState
   void _skip() {
     _pageController.animateToPage(
       onboardingItems.length - 1,
-      duration: const Duration(milliseconds: 400),
+      duration: AppDuration.medium,
       curve: Curves.easeOutCubic,
     );
   }

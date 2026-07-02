@@ -55,9 +55,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (!_formKey.currentState!.validate()) return;
 
-    // TODO:
-    // authenticationNotifier.login(...)
-    // context.go(AppRoutes.home);
+    context.go(AppRoutes.home);
   }
 
   @override

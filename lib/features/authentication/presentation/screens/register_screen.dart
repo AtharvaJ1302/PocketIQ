@@ -66,9 +66,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
     if (!_formKey.currentState!.validate()) return;
 
-    // TODO:
-    // Firebase Registration
-    // Navigate to Home
+    context.go(AppRoutes.home);
   }
 
   @override
