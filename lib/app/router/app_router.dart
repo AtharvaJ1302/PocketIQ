@@ -10,6 +10,7 @@ import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
+import '../../features/accounts/presentation/screens/accounts_screen.dart';
 import 'app_routes.dart';
 
 class AppRouter {
@@ -61,6 +62,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.register,
         builder: (_, __) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.accounts,
+        builder: (context, state) => const AccountsScreen(),
       ),
     ],
   );

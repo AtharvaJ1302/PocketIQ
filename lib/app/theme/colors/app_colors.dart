@@ -26,4 +26,10 @@ class AppColors{
 
   //Misc
   static const Color divider = Color(0xFFE2E8F0);
+
+  //Home Quick Actions
+  static const Color expense = Color(0xFFEF4444);
+  static const Color income = Color(0xFF22C55E);
+  static const Color account = Color(0xFF3B82F6);
+  static const Color budget = Color(0xFFF59E0B);
 }

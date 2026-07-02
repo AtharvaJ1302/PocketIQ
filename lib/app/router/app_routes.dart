@@ -11,4 +11,5 @@ class AppRoutes {
   static const transactions = '/transactions';
   static const register = '/register';
   static const forgotPassword = '/forgot-password';
+  static const accounts = '/accounts';
 }
