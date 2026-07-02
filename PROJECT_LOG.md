@@ -35,8 +35,6 @@ PocketIQ planning phase completed. Ready to begin Flutter development.
 
 # Day 2 - 01 July 2026
 
-# Day 2
-
 ## Completed
 
 - Finalized project architecture
@@ -61,9 +59,107 @@ PocketIQ planning phase completed. Ready to begin Flutter development.
 - Feature-specific widgets remain inside their feature
 - No further restructuring unless required
 
-## Next
+# Day 3 - 02 July 2026
 
-- Finish Login Screen
-- Register Screen
-- Forgot Password
-- Authentication navigation
+## Completed
+
+### Login Screen
+- Improved keyboard navigation using `FocusNode`.
+- Added field-to-field focus traversal.
+- Dismiss keyboard on outside tap.
+- Submit login using keyboard action.
+- Fixed dark mode text visibility.
+- Improved validation flow.
+
+### Registration Screen
+- Fixed dark mode text colors.
+- Improved validation consistency.
+- Enhanced text field behavior.
+
+### Forgot Password
+- Connected with Login screen.
+- Prepared for Firebase Authentication integration.
+
+# ✅ Authentication Module
+
+### Login Screen
+- Improved keyboard navigation using `FocusNode`.
+- Added field-to-field focus traversal.
+- Dismiss keyboard on outside tap.
+- Submit login using keyboard action.
+- Fixed dark mode text visibility.
+- Improved validation flow.
+
+### Registration Screen
+- Fixed dark mode text colors.
+- Improved validation consistency.
+- Enhanced text field behavior.
+
+### Forgot Password
+- Connected with Login screen.
+- Prepared for Firebase Authentication integration.
+
+---
+
+# ✅ Dashboard
+
+### Balance Card
+- Refined layout and spacing.
+- Improved typography hierarchy.
+- Prepared balance visibility state.
+- Improved card styling.
+
+### Actions Section
+- Renamed **Quick Actions** → **Actions**.
+- Improved semantic colors.
+- Better spacing.
+- Fixed dark mode styling.
+
+### Home App Bar
+- Wrapped notification button for consistency.
+- Improved overall UI alignment.
+
+---
+
+# ✅ My Accounts Section
+
+Implemented a new dashboard section displaying user accounts.
+
+### Features
+- Horizontal scrolling cards.
+- "View All" navigation.
+- Compact account card design.
+- Improved spacing.
+- Account identification using:
+
+```
+Savings ••••4821
+```
+
+instead of displaying the account number on a separate line.
+
+Prepared for:
+- Account Details
+- Edit Account
+- Delete Account
+- Bank emblems/icons
+
+---
+
+# ✅ Accounts Module
+
+Implemented:
+
+- Account Model
+- Repository Pattern
+- Repository Implementation
+- Riverpod Provider
+- Account Notifier
+
+---
+
+# ✅ Navigation
+
+Connected application flow.
+
+- Splash -> Onboarding -> Login/Register/Forgot Password -> Dashboard -> Accounts
