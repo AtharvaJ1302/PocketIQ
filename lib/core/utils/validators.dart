@@ -56,12 +56,47 @@ class Validators {
     return null;
   }
 
-  static String? requiredField(
-      String? value,
-      String fieldName,
-      ) {
+  static String? requiredField(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Please enter $fieldName';
+      return 'This field is required';
+    }
+
+    return null;
+  }
+
+  static String? dropdown<T>(T? value) {
+    if (value == null) {
+      return 'Please select an option';
+    }
+
+    return null;
+  }
+
+  static String? accountNumber(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please enter an account number';
+    }
+
+    if (value.trim().length < 8) {
+      return 'Account number must be at least 8 digits';
+    }
+
+    return null;
+  }
+
+  static String? amount(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please enter an opening balance';
+    }
+
+    final amount = double.tryParse(value);
+
+    if (amount == null) {
+      return 'Enter a valid amount';
+    }
+
+    if (amount < 0) {
+      return 'Amount cannot be negative';
     }
 
     return null;

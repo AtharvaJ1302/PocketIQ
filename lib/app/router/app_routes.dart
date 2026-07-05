@@ -8,8 +8,10 @@ class AppRoutes {
   static const profile = '/profile';
   static const analytics = '/analytics';
   static const budget = '/budget';
-  static const transactions = '/transactions';
   static const register = '/register';
   static const forgotPassword = '/forgot-password';
   static const accounts = '/accounts';
+  static const addAccount = '/add-account';
+  static const transactions = '/transactions';
+  static const addTransaction = '/add-transaction';
 }

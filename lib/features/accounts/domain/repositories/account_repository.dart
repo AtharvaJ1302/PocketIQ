@@ -1,4 +1,3 @@
-import '../../../home/domain/models/account.dart';
 import '../models/account.dart';
 
 abstract class AccountRepository {
@@ -9,4 +8,10 @@ abstract class AccountRepository {
   Future<void> updateAccount(Account account);
 
   Future<void> deleteAccount(String id);
+
+  Future<void> updateBalance(
+      String accountId,
+      double amount,
+      bool isExpense,
+      );
 }

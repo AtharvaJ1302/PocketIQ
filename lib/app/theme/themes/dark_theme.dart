@@ -11,6 +11,22 @@ final ThemeData darkTheme = ThemeData(
 
   scaffoldBackgroundColor: AppColors.backgroundDark,
 
+  dropdownMenuTheme: const DropdownMenuThemeData(
+    textStyle: TextStyle(
+      color: Colors.white,
+    ),
+  ),
+
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: AppColors.primary,
+    ),
+  ),
+
+  iconTheme: const IconThemeData(
+    color: Colors.white,
+  ),
+
   textSelectionTheme: const TextSelectionThemeData(
     cursorColor: AppColors.primary,
   ),
@@ -21,7 +37,7 @@ final ThemeData darkTheme = ThemeData(
   ),
 
   textTheme: AppTypography.getTextTheme(
-    ThemeData.light().textTheme,
+    ThemeData.dark().textTheme,
   ),
 
   appBarTheme: const AppBarTheme(
@@ -61,6 +77,14 @@ final ThemeData darkTheme = ThemeData(
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: AppColors.surfaceDark,
+
+    hintStyle: const TextStyle(
+      color: Colors.white54,
+    ),
+
+    labelStyle: const TextStyle(
+      color: Colors.white70,
+    ),
 
     floatingLabelStyle: const TextStyle(
       color: AppColors.primary,
@@ -112,6 +136,8 @@ final ThemeData darkTheme = ThemeData(
       borderRadius: AppRadius.borderRadiusMd,
     ),
   ),
+
+
 
   dividerColor: Colors.white24,
 );

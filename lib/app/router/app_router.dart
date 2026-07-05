@@ -1,5 +1,8 @@
 import 'package:go_router/go_router.dart';
+import 'package:pocketiq/features/transactions/presentation/screens/add_transaction_screen.dart';
 
+import '../../features/accounts/domain/models/account.dart';
+import '../../features/accounts/presentation/screens/account_form_screen.dart';
 import '../../features/analytics/presentation/screens/analytics_screen.dart';
 import '../../features/authentication/presentation/screens/forgot_password_screen.dart';
 import '../../features/authentication/presentation/screens/login_screen.dart';
@@ -9,8 +12,8 @@ import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
-import '../../features/transactions/presentation/screens/transactions_screen.dart';
 import '../../features/accounts/presentation/screens/accounts_screen.dart';
+import '../../features/transactions/presentation/screens/transactions_screen.dart';
 import 'app_routes.dart';
 
 class AppRouter {
@@ -19,25 +22,37 @@ class AppRouter {
   static final router = GoRouter(
     initialLocation: AppRoutes.splash,
     routes: [
+      // Authentication Routes
+
+      GoRoute(
+        path: AppRoutes.register,
+        builder: (_, __) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        builder: (_, __) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+          path: AppRoutes.login,
+          builder: (_, __) => const LoginScreen()
+      ),
+
+      // Onboarding Routes
+
       GoRoute(
           path: AppRoutes.splash,
           builder: (_, __) => const SplashScreen()
       ),
-    GoRoute(
+      GoRoute(
           path: AppRoutes.onboarding,
           builder: (_, __) => const OnboardingScreen()
       ),
-     GoRoute(
-          path: AppRoutes.login,
-          builder: (_, __) => const LoginScreen()
-      ),
+
+      // Home Routes
+
     GoRoute(
           path: AppRoutes.home,
           builder: (_, __) => const HomeScreen()
-      ),
-    GoRoute(
-          path: AppRoutes.transactions,
-          builder: (_, __) => const TransactionsScreen()
       ),
     GoRoute(
           path: AppRoutes.analytics,
@@ -51,21 +66,31 @@ class AppRouter {
           path: AppRoutes.profile,
           builder: (_, __) => const ProfileScreen()
       ),
-      GoRoute(
-        path: AppRoutes.register,
-        builder: (_, __) => const RegisterScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.forgotPassword,
-        builder: (_, __) => const ForgotPasswordScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.register,
-        builder: (_, __) => const RegisterScreen(),
-      ),
+
+      //Accounts Routes
+
       GoRoute(
         path: AppRoutes.accounts,
         builder: (context, state) => const AccountsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.addAccount,
+        builder: (context, state) {
+          return AccountFormScreen(
+            account: state.extra as Account?,
+          );
+        },
+      ),
+
+      //Transactions Routes
+      GoRoute(
+        path: AppRoutes.transactions,
+        builder: (_, __) => const TransactionsScreen(),
+      ),
+
+      GoRoute(
+        path: AppRoutes.addTransaction,
+        builder: (_, __) => const AddTransactionScreen(),
       ),
     ],
   );

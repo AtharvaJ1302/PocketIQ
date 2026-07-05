@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/constants/app_radius.dart';
 import '../../../core/constants/app_spacing.dart';
@@ -30,6 +31,8 @@ class PocketTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onFieldSubmitted;
 
+  final List<TextInputFormatter>? inputFormatters;
+
   const PocketTextField({
     super.key,
     required this.controller,
@@ -50,6 +53,7 @@ class PocketTextField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.onFieldSubmitted,
+    this.inputFormatters,
   });
 
   @override

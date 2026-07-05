@@ -32,4 +32,12 @@ class AppColors{
   static const Color income = Color(0xFF22C55E);
   static const Color account = Color(0xFF3B82F6);
   static const Color budget = Color(0xFFF59E0B);
+
+  static const cardBackground = Color(0xFF1C2438);
+
+  static const cardTitle = Color(0xFFFFFFFF);
+
+  static const cardSubtitle = Color(0xB3FFFFFF);
+
+  static const cardIcon = Color(0x99FFFFFF);
 }

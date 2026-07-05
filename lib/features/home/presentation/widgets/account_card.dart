@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../../core/bank/bank_colors.dart';
-import '../../../../core/bank/bank_styles.dart';
+import '../../../../app/theme/colors/app_colors.dart';
 import '../../../../core/constants/app_radius.dart';
 import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/finance/bank_info.dart';
+import '../../../../core/finance/bank_styles.dart';
 import '../../../../core/utils/currency_formatter.dart';
-import '../../domain/models/account.dart';
+import '../../../accounts/domain/models/account.dart';
 
 class AccountCard extends StatelessWidget {
   final Account account;
@@ -62,11 +61,13 @@ class AccountCard extends StatelessWidget {
 
                 Expanded(
                   child: Text(
-                    account.bankName,
+                    BankInfo.getName(
+                      account.bankCode,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onSurface,
+                      color: AppColors.cardTitle,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -74,7 +75,7 @@ class AccountCard extends StatelessWidget {
 
                 Icon(
                   Icons.chevron_right_rounded,
-                  color: theme.colorScheme.onSurfaceVariant,
+                  color: AppColors.cardIcon,
                 ),
               ],
             ),
@@ -83,11 +84,11 @@ class AccountCard extends StatelessWidget {
 
             /// Account Name + Number
             Text(
-              '${account.accountName} •••• ${account.lastFourDigits}',
+              '${account.accountType} •••• ${account.lastFourDigits}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+                color: AppColors.cardSubtitle,
               ),
             ),
 
@@ -97,7 +98,7 @@ class AccountCard extends StatelessWidget {
             Text(
               CurrencyFormatter.format(account.balance),
               style: theme.textTheme.titleLarge?.copyWith(
-                color: theme.colorScheme.onSurface,
+                color: AppColors.cardTitle,
                 fontWeight: FontWeight.bold,
               ),
             ),

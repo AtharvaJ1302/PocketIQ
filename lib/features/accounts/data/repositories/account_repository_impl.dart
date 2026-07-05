@@ -1,30 +1,30 @@
-import '../../../../core/bank/bank_codes.dart';
-import '../../../home/domain/models/account.dart';
+import '../../../../core/finance/bank_codes.dart';
+import '../../domain/models/account.dart';
 import '../../domain/repositories/account_repository.dart';
 
 class AccountRepositoryImpl implements AccountRepository {
   final List<Account> _accounts = [
     Account(
       id: '1',
-      bankName: 'ICICI Bank',
-      accountName: 'Savings',
-      balance: 24520,
-      lastFourDigits: '4821',
       bankCode: BankCodes.icici,
+      accountName: 'Savings Account',
+      accountType: 'Savings',
+      accountNumber: '458712364821',
+      balance: 24520,
     ),
     Account(
       id: '2',
-      bankName: 'SBI',
-      accountName: 'Salary',
-      balance: 18200,
-      lastFourDigits: '1942',
       bankCode: BankCodes.sbi,
+      accountName: 'Salary Account',
+      accountType: 'Savings',
+      accountNumber: '654321781942',
+      balance: 18200,
     ),
   ];
 
   @override
   Future<List<Account>> getAccounts() async {
-    return _accounts;
+    return List.unmodifiable(_accounts);
   }
 
   @override
@@ -33,10 +33,40 @@ class AccountRepositoryImpl implements AccountRepository {
   }
 
   @override
-  Future<void> updateAccount(Account account) async {}
+  Future<void> updateAccount(Account account) async {
+    final index = _accounts.indexWhere(
+          (e) => e.id == account.id,
+    );
+
+    if (index == -1) return;
+
+    _accounts[index] = account;
+  }
 
   @override
   Future<void> deleteAccount(String id) async {
     _accounts.removeWhere((e) => e.id == id);
   }
+
+  @override
+  Future<void> updateBalance(
+      String accountId,
+      double amount,
+      bool isExpense,
+      ) async {
+    final index = _accounts.indexWhere(
+          (e) => e.id == accountId,
+    );
+
+    if (index == -1) return;
+
+    final account = _accounts[index];
+
+    _accounts[index] = account.copyWith(
+      balance: isExpense
+          ? account.balance - amount
+          : account.balance + amount,
+    );
+  }
+
 }
