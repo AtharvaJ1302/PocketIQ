@@ -5,6 +5,7 @@ import '../widgets/accounts_section.dart';
 import '../widgets/balance_card.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/quick_actions.dart';
+import '../widgets/recent_transactions_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -41,6 +42,16 @@ class HomeScreen extends StatelessWidget {
 
             const SliverToBoxAdapter(
               child: AccountsSection(),
+            ),
+
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: AppSpacing.xl,
+              ),
+            ),
+
+            const SliverToBoxAdapter(
+              child: RecentTransactionsSection(),
             ),
 
             const SliverToBoxAdapter(
