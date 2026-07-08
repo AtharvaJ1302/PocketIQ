@@ -12,7 +12,7 @@ import '../../../../shared/components/inputs/pocket_text_field.dart';
 import '../../../../shared/layouts/form_section.dart';
 import '../providers/account_provider.dart';
 import '../providers/add_account_notifier.dart';
-import '../providers/add_account_provider.dart';
+import '../providers/account_form_provider.dart';
 import 'package:flutter/services.dart';
 import '../../domain/models/account.dart';
 

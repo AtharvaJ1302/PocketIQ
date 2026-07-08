@@ -22,19 +22,31 @@ class TransactionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Future<void> deleteTransaction(String id) async {
+  //   loading = true;
+  //   notifyListeners();
+  //
+  //   await _repository.deleteTransaction(id);
+  //
+  //   await loadTransactions();
+  //
+  //   loading = false;
+  //   notifyListeners();
+  // }
+
+  Future<void> refresh() async {
+    await loadTransactions();
+  }
+
   Future<void> deleteTransaction(String id) async {
     loading = true;
     notifyListeners();
 
     await _repository.deleteTransaction(id);
 
-    await loadTransactions();
+    transactions = await _repository.getTransactions();
 
     loading = false;
     notifyListeners();
-  }
-
-  Future<void> refresh() async {
-    await loadTransactions();
   }
 }

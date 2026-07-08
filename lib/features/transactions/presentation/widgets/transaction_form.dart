@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/utils/validators.dart';
 import '../../../../shared/components/buttons/pocket_button.dart';
 import '../../../../shared/layouts/form_section.dart';
 import '../providers/transaction_provider.dart';
@@ -24,6 +23,8 @@ class TransactionForm extends ConsumerWidget {
 
   final VoidCallback onSave;
 
+  final bool isEditing;
+
   const TransactionForm({
     super.key,
     required this.formKey,
@@ -32,6 +33,7 @@ class TransactionForm extends ConsumerWidget {
     required this.amountFocus,
     required this.notesFocus,
     required this.onSave,
+    required this.isEditing,
   });
 
   @override
@@ -97,7 +99,9 @@ class TransactionForm extends ConsumerWidget {
           const SizedBox(height: AppSpacing.xxxl),
 
           PocketButton(
-            label: notifier.selectedType.name == 'expense'
+            label: isEditing
+                ? 'Update Transaction'
+                : notifier.selectedType.isExpense
                 ? 'Add Expense'
                 : 'Add Income',
             loading: notifier.loading,

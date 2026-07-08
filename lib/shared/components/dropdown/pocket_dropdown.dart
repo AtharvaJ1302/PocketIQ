@@ -18,6 +18,8 @@ class PocketDropdown<T> extends StatelessWidget {
 
   final bool enabled;
 
+  final DropdownButtonBuilder? selectedItemBuilder;
+
   const PocketDropdown({
     super.key,
     required this.label,
@@ -27,6 +29,7 @@ class PocketDropdown<T> extends StatelessWidget {
     this.validator,
     this.prefixIcon,
     this.enabled = true,
+    this.selectedItemBuilder,
   });
 
   @override
@@ -36,6 +39,7 @@ class PocketDropdown<T> extends StatelessWidget {
     return DropdownButtonFormField<T>(
       value: value,
       items: items,
+      selectedItemBuilder: selectedItemBuilder,
       onChanged: enabled ? onChanged : null,
       validator: validator,
       isExpanded: true,

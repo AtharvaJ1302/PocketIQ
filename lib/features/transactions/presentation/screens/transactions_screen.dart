@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
+import '../models/transaction_form_args.dart';
 import '../providers/transaction_provider.dart';
 import '../widgets/transaction_empty_state.dart';
 import '../widgets/transaction_list.dart';
@@ -42,7 +43,10 @@ class _TransactionsScreenState
 
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await context.push(AppRoutes.addTransaction);
+          await context.push(
+            AppRoutes.addTransaction,
+            extra: const TransactionFormArgs(),
+          );
 
           if (!mounted) return;
 

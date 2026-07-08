@@ -3,19 +3,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_spacing.dart';
+import '../models/transaction_form_args.dart';
 import '../providers/transaction_provider.dart';
 import '../widgets/transaction_form.dart';
 
-class AddTransactionScreen extends ConsumerStatefulWidget {
-  const AddTransactionScreen({super.key});
+class TransactionFormScreen extends ConsumerStatefulWidget {
+  final TransactionFormArgs? args;
+
+  const TransactionFormScreen({
+    super.key,
+    this.args,
+  });
 
   @override
-  ConsumerState<AddTransactionScreen> createState() =>
-      _AddTransactionScreenState();
+  ConsumerState<TransactionFormScreen> createState() =>
+      _TransactionFormScreenState();
 }
 
-class _AddTransactionScreenState
-    extends ConsumerState<AddTransactionScreen> {
+class _TransactionFormScreenState
+    extends ConsumerState<TransactionFormScreen> {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _amountController;
@@ -33,6 +39,23 @@ class _AddTransactionScreenState
 
     _amountFocus = FocusNode();
     _notesFocus = FocusNode();
+
+    Future.microtask(() {
+      final notifier = ref.read(addTransactionProvider);
+
+      if (widget.args?.initialType != null) {
+        notifier.setType(widget.args!.initialType!);
+      }
+
+      final transaction = widget.args?.transaction;
+
+      if (transaction != null) {
+        _amountController.text = transaction.amount.toString();
+        _notesController.text = transaction.note ?? '';
+
+        notifier.loadTransaction(transaction);
+      }
+    });
   }
 
   @override
@@ -73,7 +96,8 @@ class _AddTransactionScreenState
       return;
     }
 
-    final success = await notifier.saveTransaction(
+    final success = await notifier.saveOrUpdateTransaction(
+      existingTransaction: widget.args?.transaction,
       amount: double.parse(
         _amountController.text.trim(),
       ),
@@ -100,8 +124,12 @@ class _AddTransactionScreenState
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Transaction added successfully.'),
+      SnackBar(
+        content: Text(
+          widget.args?.isEditing == true
+              ? 'Transaction updated successfully.'
+              : 'Transaction added successfully.',
+        ),
       ),
     );
 
@@ -114,7 +142,11 @@ class _AddTransactionScreenState
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add Transaction'),
+          title: Text(
+            widget.args?.isEditing == true
+                ? 'Edit Transaction'
+                : 'Add Transaction',
+          ),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -126,6 +158,7 @@ class _AddTransactionScreenState
               amountFocus: _amountFocus,
               notesFocus: _notesFocus,
               onSave: _saveTransaction,
+              isEditing: widget.args?.isEditing ?? false,
             ),
           ),
         ),

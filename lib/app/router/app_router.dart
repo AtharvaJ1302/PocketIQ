@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:pocketiq/features/transactions/presentation/screens/add_transaction_screen.dart';
+import 'package:pocketiq/features/transactions/presentation/screens/transaction_form_screen.dart';
 
 import '../../features/accounts/domain/models/account.dart';
 import '../../features/accounts/presentation/screens/account_form_screen.dart';
@@ -13,6 +13,8 @@ import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/accounts/presentation/screens/accounts_screen.dart';
+import '../../features/transactions/domain/models/transaction_type.dart';
+import '../../features/transactions/presentation/models/transaction_form_args.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
 import 'app_routes.dart';
 
@@ -90,7 +92,13 @@ class AppRouter {
 
       GoRoute(
         path: AppRoutes.addTransaction,
-        builder: (_, __) => const AddTransactionScreen(),
+        builder: (context, state) {
+          final args = state.extra as TransactionFormArgs?;
+
+          return TransactionFormScreen(
+            args: args,
+          );
+        },
       ),
     ],
   );

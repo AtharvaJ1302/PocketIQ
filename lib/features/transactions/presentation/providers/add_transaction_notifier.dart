@@ -52,34 +52,42 @@ class AddTransactionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> saveTransaction({
+  Future<bool> saveOrUpdateTransaction({
+    Transaction? existingTransaction,
     required double amount,
     required String? note,
   }) async {
-    if (selectedAccountId == null ||
-        selectedCategory == null) {
-      return false;
-    }
-
     loading = true;
     notifyListeners();
 
-    final transaction = Transaction(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      accountId: selectedAccountId!,
-      category: selectedCategory!,
-      amount: amount,
-      type: selectedType,
-      note: note,
-      date: selectedDate,
-    );
+    try {
+      final transaction = Transaction(
+        id: existingTransaction?.id ??
+            DateTime.now().millisecondsSinceEpoch.toString(),
+        accountId: selectedAccountId!,
+        category: selectedCategory!,
+        amount: amount,
+        type: selectedType,
+        note: note,
+        date: selectedDate,
+      );
 
-    await _repository.addTransaction(transaction);
+      if (existingTransaction == null) {
+        await _repository.addTransaction(transaction);
+      } else {
+        await _repository.updateTransaction(transaction);
+      }
 
-    loading = false;
-    notifyListeners();
+      loading = false;
+      notifyListeners();
 
-    return true;
+      return true;
+    } catch (_) {
+      loading = false;
+      notifyListeners();
+
+      return false;
+    }
   }
 
   void reset() {
@@ -89,6 +97,15 @@ class AddTransactionNotifier extends ChangeNotifier {
     selectedDate = DateTime.now();
 
     loading = false;
+
+    notifyListeners();
+  }
+
+  void loadTransaction(Transaction transaction) {
+    selectedType = transaction.type;
+    selectedAccountId = transaction.accountId;
+    selectedCategory = transaction.category;
+    selectedDate = transaction.date;
 
     notifyListeners();
   }
