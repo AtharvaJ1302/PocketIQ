@@ -14,7 +14,7 @@ class HomeAppBar extends ConsumerWidget {
 
     final home = ref.watch(homeProvider);
 
-    final preferencesNotifier =
+    final preferences =
     ref.watch(preferencesProvider);
 
     return Padding(
@@ -39,7 +39,7 @@ class HomeAppBar extends ConsumerWidget {
                 ),
 
                 Text(
-                  '${preferencesNotifier.preferences.userName} 👋',
+                  '${preferences.preferences.userName} 👋',
                   style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.onSurface,

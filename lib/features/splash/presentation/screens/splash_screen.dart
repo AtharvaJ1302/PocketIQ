@@ -16,11 +16,14 @@ class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() =>
+      _SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen>
+class _SplashScreenState
+    extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
+
   late final AnimationController _animationController;
 
   @override
@@ -32,7 +35,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       duration: AppAnimation.splashDuration,
     );
 
-    final splashNotifier = ref.read(splashProvider);
+    final splashNotifier = ref.read(
+      splashProvider,
+    );
 
     _animationController.addListener(() {
       splashNotifier.updateStatus(
@@ -66,8 +71,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     }
 
     if (preferences.appLockEnabled) {
-      // App Lock screen will be built next.
-      // For now, go directly to Home.
+      // App Lock screen
       context.go(
         AppRoutes.home,
       );
@@ -79,6 +83,30 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
   }
 
+  // Future<void> _startApp() async {
+  //   await _animationController.forward();
+  //
+  //   if (!mounted) return;
+  //
+  //   try {
+  //     final preferencesNotifier =
+  //     ref.read(preferencesProvider);
+  //
+  //     await preferencesNotifier.loadPreferences();
+  //
+  //     debugPrint('Preferences loaded successfully');
+  //
+  //     if (!mounted) return;
+  //
+  //     context.go(AppRoutes.onboarding);
+  //   } catch (e, stackTrace) {
+  //     debugPrint(e.toString());
+  //     debugPrint(stackTrace.toString());
+  //
+  //     rethrow;
+  //   }
+  // }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -87,22 +115,29 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final notifier = ref.watch(splashProvider);
+    final notifier = ref.watch(
+      splashProvider,
+    );
 
     return Scaffold(
       body: SplashBackground(
         child: Column(
           children: [
-            const Spacer(flex: 3),
+            const Spacer(
+              flex: 3,
+            ),
 
             SplashLogo(
               controller: _animationController,
             ),
 
-            const Spacer(flex: 2),
+            const Spacer(
+              flex: 2,
+            ),
 
             SplashLoading(
-              animationController: _animationController,
+              animationController:
+              _animationController,
               controller: notifier,
             ),
 

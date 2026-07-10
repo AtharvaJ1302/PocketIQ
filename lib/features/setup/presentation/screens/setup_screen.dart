@@ -42,26 +42,26 @@ class _SetupScreenState
   }
 
   Future<void> _continue() async {
-    FocusScope.of(context).unfocus();
-
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    final notifier = ref.read(preferencesProvider);
+    final notifier =
+    ref.read(preferencesProvider);
 
     await notifier.completeSetup(
       userName: _nameController.text.trim(),
       currencyCode: _selectedCurrency,
     );
 
-    if (!mounted) return;
+    FocusScope.of(context).unfocus();
+
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     context.go(AppRoutes.home);
   }
 
   @override
   Widget build(BuildContext context) {
+
     final notifier = ref.watch(preferencesProvider);
 
     return GestureDetector(

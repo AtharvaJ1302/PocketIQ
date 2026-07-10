@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../domain/models/app_preferences.dart';
 import '../../domain/repositories/app_preferences_repository.dart';
@@ -6,38 +6,47 @@ import '../../domain/repositories/app_preferences_repository.dart';
 class PreferencesNotifier extends ChangeNotifier {
   final AppPreferencesRepository _repository;
 
-  PreferencesNotifier(this._repository) {
-    loadPreferences();
-  }
+  PreferencesNotifier(
+      this._repository,
+      );
+
+  AppPreferences _preferences =
+  AppPreferences.initial();
+
+  AppPreferences get preferences =>
+      _preferences;
 
   bool loading = false;
-
-  AppPreferences preferences =
-  AppPreferences.initial();
 
   Future<void> loadPreferences() async {
     loading = true;
     notifyListeners();
 
-    preferences =
-    await _repository.getPreferences();
-
-    loading = false;
-    notifyListeners();
+    try {
+      _preferences =
+      await _repository.loadPreferences();
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> savePreferences(
-      AppPreferences value,
+      AppPreferences preferences,
       ) async {
     loading = true;
     notifyListeners();
 
-    await _repository.savePreferences(value);
+    try {
+      await _repository.savePreferences(
+        preferences,
+      );
 
-    preferences = value;
-
-    loading = false;
-    notifyListeners();
+      _preferences = preferences;
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> completeSetup({
@@ -45,11 +54,38 @@ class PreferencesNotifier extends ChangeNotifier {
     required String currencyCode,
   }) async {
     await savePreferences(
-      AppPreferences(
+      AppPreferences.initial().copyWith(
         userName: userName,
         currencyCode: currencyCode,
         onboardingCompleted: true,
-        appLockEnabled: false,
+      ),
+    );
+  }
+
+  Future<void> updateUserName(
+      String name,
+      ) async {
+    await savePreferences(
+      _preferences.copyWith(
+        userName: name,
+      ),
+    );
+  }
+
+  Future<void> toggleHideBalance() async {
+    await savePreferences(
+      _preferences.copyWith(
+        hideBalance:
+        !_preferences.hideBalance,
+      ),
+    );
+  }
+
+  Future<void> toggleAppLock() async {
+    await savePreferences(
+      _preferences.copyWith(
+        appLockEnabled:
+        !_preferences.appLockEnabled,
       ),
     );
   }

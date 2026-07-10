@@ -1,22 +1,41 @@
+import 'package:sqflite/sqflite.dart';
+
+import '../../../../core/database/database_constants.dart';
+import '../../../../core/database/database_service.dart';
 import '../../domain/models/app_preferences.dart';
 import '../../domain/repositories/app_preferences_repository.dart';
-import '../services/preferences_service.dart';
 
 class AppPreferencesRepositoryImpl
     implements AppPreferencesRepository {
 
-  final PreferencesService _service =
-      PreferencesService.instance;
+  final DatabaseService _databaseService;
+
+  AppPreferencesRepositoryImpl(
+      this._databaseService,
+      );
 
   @override
-  Future<AppPreferences> getPreferences() async {
-    return AppPreferences(
-      userName: await _service.getUserName(),
-      currencyCode: await _service.getCurrencyCode(),
-      onboardingCompleted:
-      await _service.isOnboardingCompleted(),
-      appLockEnabled:
-      await _service.isAppLockEnabled(),
+  Future<AppPreferences> loadPreferences() async {
+    final db = await _databaseService.database;
+
+    final result = await db.query(
+      DatabaseTables.preferences,
+      limit: 1,
+    );
+
+    if (result.isEmpty) {
+      final preferences =
+      AppPreferences.initial();
+
+      await savePreferences(
+        preferences,
+      );
+
+      return preferences;
+    }
+
+    return AppPreferences.fromMap(
+      result.first,
     );
   }
 
@@ -24,20 +43,13 @@ class AppPreferencesRepositoryImpl
   Future<void> savePreferences(
       AppPreferences preferences,
       ) async {
-    await _service.setUserName(
-      preferences.userName,
-    );
+    final db = await _databaseService.database;
 
-    await _service.setCurrencyCode(
-      preferences.currencyCode,
-    );
-
-    await _service.setOnboardingCompleted(
-      preferences.onboardingCompleted,
-    );
-
-    await _service.setAppLockEnabled(
-      preferences.appLockEnabled,
+    await db.insert(
+      DatabaseTables.preferences,
+      preferences.toMap(),
+      conflictAlgorithm:
+      ConflictAlgorithm.replace,
     );
   }
 }

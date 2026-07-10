@@ -3,7 +3,7 @@ class DatabaseConstants {
 
   static const databaseName = 'pocketiq.db';
 
-  static const databaseVersion = 1;
+  static const databaseVersion = 2;
 }
 
 class DatabaseTables {
@@ -12,6 +12,8 @@ class DatabaseTables {
   static const accounts = 'accounts';
 
   static const transactions = 'transactions';
+
+  static const preferences = 'preferences';
 }
 
 class AccountColumns {
@@ -46,4 +48,21 @@ class TransactionColumns {
   static const note = 'note';
 
   static const date = 'date';
+}
+
+class PreferencesColumns {
+  PreferencesColumns._();
+
+  static const id = 'id';
+
+  static const userName = 'userName';
+
+  static const currencyCode = 'currencyCode';
+
+  static const hideBalance = 'hideBalance';
+
+  static const appLockEnabled = 'appLockEnabled';
+
+  static const onboardingCompleted =
+      'onboardingCompleted';
 }

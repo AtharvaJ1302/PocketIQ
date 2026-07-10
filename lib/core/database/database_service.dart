@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import 'package:pocketiq/core/database/schemas/account_schema.dart';
+import 'package:pocketiq/core/database/schemas/preferences_schema.dart';
 import 'package:pocketiq/core/database/schemas/transaction_schema.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -48,6 +49,10 @@ class DatabaseService {
 
     await db.execute(
       TransactionSchema.createTable,
+    );
+
+    await db.execute(
+      PreferencesSchema.createTable,
     );
   }
 
