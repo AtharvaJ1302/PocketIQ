@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 import '../models/transaction_form_args.dart';
 import '../providers/transaction_provider.dart';
 import '../widgets/transaction_form.dart';
@@ -40,20 +40,23 @@ class _TransactionFormScreenState
     _amountFocus = FocusNode();
     _notesFocus = FocusNode();
 
-    Future.microtask(() {
-      final notifier = ref.read(addTransactionProvider);
+    final args = widget.args;
 
-      if (widget.args?.initialType != null) {
-        notifier.setType(widget.args!.initialType!);
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(addTransactionProvider).prepare(
+        initialType: args?.initialType,
+        accountId: args?.accountId,
+        transaction: args?.transaction,
+      );
 
-      final transaction = widget.args?.transaction;
+      if (args?.transaction != null) {
+        final transaction = args!.transaction!;
 
-      if (transaction != null) {
-        _amountController.text = transaction.amount.toString();
-        _notesController.text = transaction.note ?? '';
+        _amountController.text =
+            transaction.amount.toStringAsFixed(2);
 
-        notifier.loadTransaction(transaction);
+        _notesController.text =
+            transaction.note ?? '';
       }
     });
   }
@@ -119,14 +122,12 @@ class _TransactionFormScreenState
 
     await ref.read(transactionProvider).loadTransactions();
 
-    notifier.reset();
-
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          widget.args?.isEditing == true
+          (widget.args?.isEditing ?? false)
               ? 'Transaction updated successfully.'
               : 'Transaction added successfully.',
         ),
@@ -143,7 +144,7 @@ class _TransactionFormScreenState
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            widget.args?.isEditing == true
+            (widget.args?.isEditing ?? false)
                 ? 'Edit Transaction'
                 : 'Add Transaction',
           ),
@@ -159,6 +160,8 @@ class _TransactionFormScreenState
               notesFocus: _notesFocus,
               onSave: _saveTransaction,
               isEditing: widget.args?.isEditing ?? false,
+              accountLocked:
+              widget.args?.lockAccount ?? false,
             ),
           ),
         ),

@@ -48,29 +48,4 @@ class AccountNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> updateBalance(
-      String accountId,
-      double amount,
-      bool isExpense,
-      ) async {
-    await _repository.updateBalance(
-      accountId,
-      amount,
-      isExpense,
-    );
-
-    await loadAccounts();
-  }
-
-  double get totalBalance {
-    return accounts.fold(
-      0,
-          (sum, account) => sum + account.balance,
-    );
-  }
-
-  /// Temporary values until Transactions module is built
-  double get income => 78200.00;
-
-  double get expenses => 19779.25;
 }

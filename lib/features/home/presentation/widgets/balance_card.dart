@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_radius.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/features/constants/app_assets.dart';
+import '../../../../core/features/constants/app_radius.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../../core/features/services/account_balance_service_provider.dart';
+import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../accounts/presentation/providers/account_provider.dart';
+import '../../../transactions/presentation/providers/transaction_provider.dart';
 import '../providers/home_provider.dart';
 
 class BalanceCard extends ConsumerWidget {
@@ -15,7 +17,34 @@ class BalanceCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final home = ref.watch(homeProvider);
+
     final accountNotifier = ref.watch(accountProvider);
+
+    final transactionNotifier =
+    ref.watch(transactionProvider);
+
+    final balanceService =
+    ref.read(accountBalanceServiceProvider);
+
+    final totalBalance =
+    balanceService.getOverallBalance(
+      accounts: accountNotifier.accounts,
+      transactions: transactionNotifier.transactions,
+    );
+
+    final totalIncome = transactionNotifier.transactions
+        .where((t) => t.isIncome)
+        .fold<double>(
+      0,
+          (sum, t) => sum + t.amount,
+    );
+
+    final totalExpense = transactionNotifier.transactions
+        .where((t) => t.isExpense)
+        .fold<double>(
+      0,
+          (sum, t) => sum + t.amount,
+    );
 
     return Padding(
       padding: AppSpacing.screenPadding,
@@ -93,7 +122,9 @@ class BalanceCard extends ConsumerWidget {
 
             /// Balance
             Text(
-              CurrencyFormatter.format(accountNotifier.totalBalance),
+              CurrencyFormatter.format(
+                totalBalance,
+              ),
               style: theme.textTheme.displaySmall?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -108,7 +139,9 @@ class BalanceCard extends ConsumerWidget {
                 Expanded(
                   child: _InfoTile(
                     title: 'Income',
-                    value: CurrencyFormatter.format(accountNotifier.income),
+                    value: CurrencyFormatter.format(
+                      totalIncome,
+                    ),
                     icon: Icons.south_west_rounded,
                   ),
                 ),
@@ -118,7 +151,9 @@ class BalanceCard extends ConsumerWidget {
                 Expanded(
                   child: _InfoTile(
                     title: 'Expenses',
-                    value: CurrencyFormatter.format(accountNotifier.expenses),
+                    value: CurrencyFormatter.format(
+                      totalExpense,
+                    ),
                     icon: Icons.north_east_rounded,
                   ),
                 ),

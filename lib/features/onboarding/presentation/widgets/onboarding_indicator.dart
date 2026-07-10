@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pocketiq/core/constants/app_duration.dart';
+import 'package:pocketiq/core/features/constants/app_duration.dart';
 
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 
 class OnboardingIndicator extends StatelessWidget {
   final int currentPage;

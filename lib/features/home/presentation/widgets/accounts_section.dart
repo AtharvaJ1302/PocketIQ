@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../shared/components/sections/section_header.dart';
 import '../../../accounts/presentation/providers/account_provider.dart';
+import '../../../accounts/presentation/widgets/account_empty_state.dart';
 import 'account_card.dart';
 
 class AccountsSection extends ConsumerWidget {
@@ -28,29 +29,39 @@ class AccountsSection extends ConsumerWidget {
       children: [
         SectionHeader(
           title: 'My Accounts',
-          actionText: 'View All',
-          onPressed: () {
+          actionText: accountNotifier.accounts.isEmpty
+              ? null
+              : 'View All',
+          onPressed: accountNotifier.accounts.isEmpty
+              ? null
+              : () {
             context.push(AppRoutes.accounts);
           },
         ),
 
         const SizedBox(height: AppSpacing.md),
 
-        SizedBox(
-          height: 240,
-          child: ListView.separated(
+        if (accountNotifier.accounts.isEmpty)
+          const Padding(
             padding: AppSpacing.screenPadding,
-            scrollDirection: Axis.horizontal,
-            itemCount: accountNotifier.accounts.length,
-            separatorBuilder: (_, __) =>
-            const SizedBox(width: AppSpacing.md),
-            itemBuilder: (_, index) {
-              return AccountCard(
-                account: accountNotifier.accounts[index],
-              );
-            },
+            child: AccountEmptyState(),
+          )
+        else
+          SizedBox(
+            height: 240,
+            child: ListView.separated(
+              padding: AppSpacing.screenPadding,
+              scrollDirection: Axis.horizontal,
+              itemCount: accountNotifier.accounts.length,
+              separatorBuilder: (_, __) =>
+              const SizedBox(width: AppSpacing.md),
+              itemBuilder: (_, index) {
+                return AccountCard(
+                  account: accountNotifier.accounts[index],
+                );
+              },
+            ),
           ),
-        ),
       ],
     );
   }

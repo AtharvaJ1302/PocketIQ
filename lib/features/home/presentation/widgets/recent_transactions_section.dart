@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 import '../../../transactions/presentation/providers/transaction_provider.dart';
 import 'recent_transaction_card.dart';
 
@@ -51,14 +51,15 @@ class _RecentTransactionsSectionState
 
               const Spacer(),
 
-              TextButton(
-                onPressed: () {
-                  context.push(
-                    AppRoutes.transactions,
-                  );
-                },
-                child: const Text('View All'),
-              ),
+              if (transactions.isNotEmpty)
+                TextButton(
+                  onPressed: () {
+                    context.push(
+                      AppRoutes.transactions,
+                    );
+                  },
+                  child: const Text('View All'),
+                ),
             ],
           ),
 

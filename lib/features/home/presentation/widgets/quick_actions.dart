@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/colors/app_colors.dart';
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../shared/components/sections/section_header.dart';
 import '../../../transactions/domain/models/transaction_type.dart';
 import '../../../transactions/presentation/models/transaction_form_args.dart';

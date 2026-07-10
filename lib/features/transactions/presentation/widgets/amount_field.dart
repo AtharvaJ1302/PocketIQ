@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../shared/components/inputs/pocket_text_field.dart';
-import '../../../../core/utils/validators.dart';
+import '../../../../core/features/utils/validators.dart';
 
 class AmountField extends StatelessWidget {
   final TextEditingController controller;

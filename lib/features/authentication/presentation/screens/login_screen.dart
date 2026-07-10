@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/utils/validators.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../../core/features/utils/validators.dart';
 import '../../../../shared/components/buttons/pocket_button.dart';
 import '../../../../shared/components/inputs/pocket_password_field.dart';
 import '../../../../shared/components/inputs/pocket_text_button.dart';

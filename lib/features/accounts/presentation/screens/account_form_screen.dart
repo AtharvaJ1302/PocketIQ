@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/finance/account_types.dart';
-import '../../../../core/finance/bank_info.dart';
-import '../../../../core/utils/validators.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../../core/features/finance/account_types.dart';
+import '../../../../core/features/finance/bank_info.dart';
+import '../../../../core/features/utils/validators.dart';
 import '../../../../shared/components/buttons/pocket_button.dart';
 import '../../../../shared/components/dropdown/pocket_dropdown.dart';
+import '../../../../shared/components/info/info_tile.dart';
 import '../../../../shared/components/inputs/pocket_text_field.dart';
 import '../../../../shared/layouts/form_section.dart';
 import '../providers/account_provider.dart';
@@ -59,7 +60,7 @@ class _AccountFormScreenState
       _accountNameController.text = account.accountName;
       _accountNumberController.text = account.accountNumber;
       _balanceController.text =
-          account.balance.toStringAsFixed(2);
+          account.openingBalance.toStringAsFixed(2);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final notifier = ref.read(addAccountProvider);
@@ -120,7 +121,7 @@ class _AccountFormScreenState
       await notifier.updateAccount(
         account: widget.account!,
         accountName: _accountNameController.text.trim(),
-        accountNumber: _accountNumberController.text.trim(),
+        accountNumber: widget.account!.accountNumber,
         openingBalance: double.parse(
           _balanceController.text.trim(),
         ),
@@ -162,45 +163,71 @@ class _AccountFormScreenState
                     title: 'Account Information',
                     children: [
 
-                      PocketDropdown<String>(
-                        label: 'Bank',
-                        prefixIcon: const Icon(
-                          Icons.account_balance_outlined,
-                        ),
-                        value: notifier.selectedBank,
-                        validator: Validators.dropdown,
-                        onChanged: notifier.setBank,
-                        items: BankInfo.supportedBanks
-                            .map(
-                              (bank) => DropdownMenuItem(
-                            value: bank,
-                            child: Text(
-                              BankInfo.getName(bank),
+                      if (widget.account == null) ...[
+                        PocketDropdown<String>(
+                          label: 'Bank',
+                          prefixIcon: const Icon(
+                            Icons.account_balance_outlined,
+                          ),
+                          value: notifier.selectedBank,
+                          validator: Validators.dropdown,
+                          onChanged: notifier.setBank,
+                          items: BankInfo.supportedBanks
+                              .map(
+                                (bank) => DropdownMenuItem(
+                              value: bank,
+                              child: Text(
+                                BankInfo.getName(bank),
+                              ),
                             ),
-                          ),
-                        )
-                            .toList(),
-                      ),
-
-                      const SizedBox(height: AppSpacing.lg),
-
-                      PocketDropdown<String>(
-                        label: 'Account Type',
-                        prefixIcon: const Icon(
-                          Icons.credit_card_outlined,
+                          )
+                              .toList(),
                         ),
-                        value: notifier.selectedAccountType,
-                        validator: Validators.dropdown,
-                        onChanged: notifier.setAccountType,
-                        items: AccountTypes.values
-                            .map(
-                              (type) => DropdownMenuItem(
-                            value: type,
-                            child: Text(type),
+
+                        const SizedBox(height: AppSpacing.lg),
+
+                        PocketDropdown<String>(
+                          label: 'Account Type',
+                          prefixIcon: const Icon(
+                            Icons.credit_card_outlined,
                           ),
-                        )
-                            .toList(),
-                      ),
+                          value: notifier.selectedAccountType,
+                          validator: Validators.dropdown,
+                          onChanged: notifier.setAccountType,
+                          items: AccountTypes.values
+                              .map(
+                                (type) => DropdownMenuItem(
+                              value: type,
+                              child: Text(type),
+                            ),
+                          )
+                              .toList(),
+                        ),
+                      ] else ...[
+                        InfoTile(
+                          icon: Icons.account_balance_outlined,
+                          label: 'Bank',
+                          value: BankInfo.getName(
+                            widget.account!.bankCode,
+                          ),
+                        ),
+
+                        const SizedBox(height: AppSpacing.md),
+
+                        InfoTile(
+                          icon: Icons.credit_card_outlined,
+                          label: 'Account Type',
+                          value: widget.account!.accountType,
+                        ),
+
+                        const SizedBox(height: AppSpacing.md),
+
+                        InfoTile(
+                          icon: Icons.pin_outlined,
+                          label: 'Account Number',
+                          value: '•••• ${widget.account!.lastFourDigits}',
+                        ),
+                      ],
 
                       const SizedBox(height: AppSpacing.lg),
 
@@ -210,36 +237,42 @@ class _AccountFormScreenState
                         prefixIcon: const Icon(
                           Icons.badge_outlined,
                         ),
-                        label: 'Account Name',
+                        label: 'Account Alias',
                         hint: 'Salary Account',
                         validator: Validators.requiredField,
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) {
-                          _accountNumberFocusNode.requestFocus();
+                          if (widget.account == null) {
+                            _accountNumberFocusNode.requestFocus();
+                          } else {
+                            _balanceFocusNode.requestFocus();
+                          }
                         },
                       ),
 
                       const SizedBox(height: AppSpacing.lg),
 
-                      PocketTextField(
-                        controller: _accountNumberController,
-                        focusNode: _accountNumberFocusNode,
-                        prefixIcon: const Icon(
-                          Icons.pin_outlined,
+                      if (widget.account == null) ...[
+                        PocketTextField(
+                          controller: _accountNumberController,
+                          focusNode: _accountNumberFocusNode,
+                          prefixIcon: const Icon(
+                            Icons.pin_outlined,
+                          ),
+                          label: 'Account Number',
+                          keyboardType: TextInputType.number,
+                          validator: Validators.accountNumber,
+                          textInputAction: TextInputAction.next,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          onFieldSubmitted: (_) {
+                            _balanceFocusNode.requestFocus();
+                          },
                         ),
-                        label: 'Account Number',
-                        keyboardType: TextInputType.number,
-                        validator: Validators.accountNumber,
-                        textInputAction: TextInputAction.next,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        onFieldSubmitted: (_) {
-                          _balanceFocusNode.requestFocus();
-                        },
-                      ),
 
-                      const SizedBox(height: AppSpacing.lg),
+                        const SizedBox(height: AppSpacing.lg),
+                      ],
 
                       PocketTextField(
                         controller: _balanceController,
@@ -247,7 +280,9 @@ class _AccountFormScreenState
                         prefixIcon: const Icon(
                           Icons.currency_rupee,
                         ),
-                        label: 'Opening Balance',
+                        label: widget.account == null
+                            ? 'Opening Balance'
+                            : 'Current Balance',
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_spacing.dart';
+import '../../../core/features/constants/app_spacing.dart';
 import '../inputs/pocket_text_button.dart';
 
 class SectionHeader extends StatelessWidget {

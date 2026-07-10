@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/finance/categories.dart';
-import '../../../../core/utils/validators.dart';
+import '../../../../core/features/finance/categories.dart';
+import '../../../../core/features/utils/validators.dart';
 import '../../../../shared/components/dropdown/pocket_dropdown.dart';
 import '../../domain/models/transaction_type.dart';
 

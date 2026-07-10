@@ -4,12 +4,18 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
 import '../models/transaction_form_args.dart';
+import '../models/transactions_screen_args.dart';
 import '../providers/transaction_provider.dart';
 import '../widgets/transaction_empty_state.dart';
 import '../widgets/transaction_list.dart';
 
 class TransactionsScreen extends ConsumerStatefulWidget {
-  const TransactionsScreen({super.key});
+  final TransactionsScreenArgs? args;
+
+  const TransactionsScreen({
+    super.key,
+    this.args,
+  });
 
   @override
   ConsumerState<TransactionsScreen> createState() =>
@@ -36,35 +42,56 @@ class _TransactionsScreenState
   Widget build(BuildContext context) {
     final notifier = ref.watch(transactionProvider);
 
+    var transactions = notifier.transactions;
+
+    final filter = widget.args?.filter;
+
+    if (filter?.accountId != null) {
+      transactions = transactions
+          .where(
+            (t) => t.accountId == filter!.accountId,
+      )
+          .toList();
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Transactions'),
+        title: Text(
+          widget.args?.screenTitle ?? 'Transactions',
+        ),
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await context.push(
             AppRoutes.addTransaction,
-            extra: const TransactionFormArgs(),
+            extra: TransactionFormArgs(
+              accountId: filter?.accountId,
+              lockAccount: filter?.accountId != null,
+            ),
           );
 
           if (!mounted) return;
 
-          ref.read(transactionProvider).refresh();
+          await ref
+              .read(transactionProvider)
+              .refresh();
         },
         child: const Icon(Icons.add),
       ),
-
       body: notifier.loading
           ? const Center(
         child: CircularProgressIndicator(),
       )
           : RefreshIndicator(
         onRefresh: _refresh,
-        child: notifier.transactions.isEmpty
-            ? const TransactionEmptyState()
+        child: transactions.isEmpty
+            ? TransactionEmptyState(
+          message: filter?.accountId != null
+              ? 'No transactions found for this account.'
+              : 'Tap + to add your first transaction.',
+        )
             : TransactionList(
-          transactions: notifier.transactions,
+          transactions: transactions,
         ),
       ),
     );

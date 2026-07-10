@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
-import '../../../../core/constants/app_radius.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/finance/bank_info.dart';
-import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/features/constants/app_radius.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../../core/features/finance/bank_info.dart';
+import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../../shared/dialogs/confirm_delete_dialog.dart';
-import '../../../../shared/layouts/account_actions_sheet.dart';
 import '../../domain/models/account.dart';
 
 class AccountListCard extends StatelessWidget {
@@ -32,7 +31,7 @@ class AccountListCard extends StatelessWidget {
       child: InkWell(
         borderRadius: AppRadius.borderRadiusLg,
 
-        /// Tap = Edit
+        /// Tap = Edit Account
         onTap: () {
           context.push(
             AppRoutes.addAccount,
@@ -40,32 +39,15 @@ class AccountListCard extends StatelessWidget {
           );
         },
 
-        /// Long Press = Actions
+        /// Long Press = Delete Account
         onLongPress: () {
-          showModalBottomSheet(
+          showDialog(
             context: context,
-            showDragHandle: true,
-            builder: (_) => AccountActionsSheet(
-              onEdit: () {
-                context.push(
-                  AppRoutes.addAccount,
-                  extra: account,
-                );
-              },
-              onDelete: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => ConfirmDeleteDialog(
-                    title: 'Delete Account',
-                    message:
-                    'Are you sure you want to delete "${account.accountName}"?',
-                    onDelete: onDelete,
-                  ),
-                );
-              },
-              onViewTransactions: () {
-                // TODO
-              },
+            builder: (_) => ConfirmDeleteDialog(
+              title: 'Delete Account',
+              message:
+              'Are you sure you want to delete "${account.accountName}"?',
+              onDelete: onDelete,
             ),
           );
         },
@@ -74,9 +56,9 @@ class AccountListCard extends StatelessWidget {
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Row(
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 24,
-                child: const Icon(
+                child: Icon(
                   Icons.account_balance_outlined,
                 ),
               ),
@@ -112,7 +94,7 @@ class AccountListCard extends StatelessWidget {
               ),
 
               Text(
-                CurrencyFormatter.format(account.balance),
+                CurrencyFormatter.format(account.openingBalance),
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),

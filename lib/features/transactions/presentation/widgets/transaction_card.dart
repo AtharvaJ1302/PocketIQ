@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_radius.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/finance/category_colors.dart';
-import '../../../../core/finance/category_icons.dart';
-import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/features/constants/app_radius.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../../core/features/finance/category_colors.dart';
+import '../../../../core/features/finance/category_icons.dart';
+import '../../../../core/features/utils/currency_formatter.dart';
 import '../../domain/models/transaction.dart';
 
 class TransactionCard extends StatelessWidget {
   final Transaction transaction;
-  final VoidCallback? onTap;
-  final VoidCallback? onLongPress;
 
   const TransactionCard({
     super.key,
     required this.transaction,
-    this.onTap,
-    this.onLongPress,
   });
 
   @override
@@ -34,8 +30,6 @@ class TransactionCard extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: AppRadius.borderRadiusLg,
-        onTap: onTap,
-        onLongPress: onLongPress,
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Row(

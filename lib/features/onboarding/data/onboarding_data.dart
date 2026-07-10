@@ -1,4 +1,4 @@
-import '../../../core/constants/app_lottie.dart';
+import '../../../core/features/constants/app_lottie.dart';
 import '../domain/models/onboarding_item.dart';
 
 const onboardingItems = [

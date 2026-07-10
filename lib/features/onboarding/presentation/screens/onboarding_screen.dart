@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
-import '../../../../core/constants/app_duration.dart';
+import '../../../../core/features/constants/app_duration.dart';
 import '../../data/onboarding_data.dart';
 import '../providers/onboarding_provider.dart';
 import '../widgets/onboarding_bottom_bar.dart';
@@ -38,7 +38,9 @@ class _OnboardingScreenState
     final notifier = ref.read(onboardingProvider);
 
     if (notifier.isLastPage) {
-      context.go(AppRoutes.login);
+      context.go(
+        AppRoutes.setup,
+      );
       return;
     }
 

@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
-import '../../../../core/constants/app_animation.dart';
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_animation.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../setup/presentation/providers/preferences_provider.dart';
 import '../providers/splash_provider.dart';
 import '../widgets/splash_background.dart';
 import '../widgets/splash_footer.dart';
@@ -47,7 +48,35 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     if (!mounted) return;
 
-    context.go(AppRoutes.onboarding);
+    final preferencesNotifier =
+    ref.read(preferencesProvider);
+
+    await preferencesNotifier.loadPreferences();
+
+    if (!mounted) return;
+
+    final preferences =
+        preferencesNotifier.preferences;
+
+    if (!preferences.onboardingCompleted) {
+      context.go(
+        AppRoutes.onboarding,
+      );
+      return;
+    }
+
+    if (preferences.appLockEnabled) {
+      // App Lock screen will be built next.
+      // For now, go directly to Home.
+      context.go(
+        AppRoutes.home,
+      );
+      return;
+    }
+
+    context.go(
+      AppRoutes.home,
+    );
   }
 
   @override

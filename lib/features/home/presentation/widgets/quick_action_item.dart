@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_radius.dart';
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_radius.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 
 class QuickActionItem extends StatefulWidget {
   final IconData icon;

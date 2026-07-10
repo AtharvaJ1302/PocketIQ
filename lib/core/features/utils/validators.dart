@@ -101,4 +101,20 @@ class Validators {
 
     return null;
   }
+
+  static String? userName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please enter your name.';
+    }
+
+    if (value.trim().length < 2) {
+      return 'Name must be at least 2 characters.';
+    }
+
+    if (value.trim().length > 30) {
+      return 'Name cannot exceed 30 characters.';
+    }
+
+    return null;
+  }
 }

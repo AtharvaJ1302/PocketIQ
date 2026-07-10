@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_radius.dart';
-import '../../../core/constants/app_sizes.dart';
+import '../../../core/features/constants/app_radius.dart';
+import '../../../core/features/constants/app_sizes.dart';
 import '../colors/app_colors.dart';
 import '../typography/app_typography.dart';
 

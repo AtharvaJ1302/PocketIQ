@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../app/router/app_routes.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../shared/dialogs/confirm_delete_dialog.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 import '../../domain/models/transaction.dart';
-import '../models/transaction_form_args.dart';
-import '../providers/transaction_provider.dart';
-import 'transaction_actions_sheet.dart';
 import 'transaction_card.dart';
 
-class TransactionList extends ConsumerWidget {
+class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
 
   const TransactionList({
@@ -20,7 +13,7 @@ class TransactionList extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return ListView.separated(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: AppSpacing.screenPadding,
@@ -30,49 +23,14 @@ class TransactionList extends ConsumerWidget {
       itemBuilder: (_, index) {
         final transaction = transactions[index];
 
-        return TransactionCard(
-          transaction: transaction,
-
+        return GestureDetector(
           onTap: () {
-            context.push(
-              AppRoutes.addTransaction,
-              extra: TransactionFormArgs(
-                transaction: transaction,
-              ),
-            );
+            // TODO:
+            // Navigate to Transaction Details Screen
           },
-
-          onLongPress: () {
-            showModalBottomSheet(
-              context: context,
-              showDragHandle: true,
-              builder: (_) => TransactionActionsSheet(
-                onEdit: () {
-                  context.push(
-                    AppRoutes.addTransaction,
-                    extra: TransactionFormArgs(
-                      transaction: transaction,
-                    ),
-                  );
-                },
-                onDelete: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => ConfirmDeleteDialog(
-                      title: 'Delete Transaction',
-                      message:
-                      'Are you sure you want to delete this transaction?',
-                      onDelete: () async {
-                        await ref
-                            .read(transactionProvider)
-                            .deleteTransaction(transaction.id);
-                      },
-                    ),
-                  );
-                },
-              ),
-            );
-          },
+          child: TransactionCard(
+            transaction: transaction,
+          ),
         );
       },
     );

@@ -6,8 +6,8 @@ class StartupStrings {
   static const String loadingPreferences =
       'Loading your preferences...';
 
-  static const String checkingAuthentication =
-      'Securing your account...';
+  static const String checkingAppSetup =
+      'Checking App Setup...';
 
   static const String preparingDashboard =
       'Preparing your dashboard...';

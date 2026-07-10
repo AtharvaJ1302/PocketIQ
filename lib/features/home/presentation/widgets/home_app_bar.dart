@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../setup/presentation/providers/preferences_provider.dart';
 import '../providers/home_provider.dart';
 
 class HomeAppBar extends ConsumerWidget {
@@ -10,7 +11,11 @@ class HomeAppBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
     final home = ref.watch(homeProvider);
+
+    final preferencesNotifier =
+    ref.watch(preferencesProvider);
 
     return Padding(
       padding: AppSpacing.screenPadding,
@@ -34,7 +39,7 @@ class HomeAppBar extends ConsumerWidget {
                 ),
 
                 Text(
-                  '${home.userName} 👋',
+                  '${preferencesNotifier.preferences.userName} 👋',
                   style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.onSurface,
@@ -46,15 +51,12 @@ class HomeAppBar extends ConsumerWidget {
 
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .colorScheme
+              color: theme.colorScheme
                   .surfaceContainerHighest
                   .withValues(alpha: .35),
               shape: BoxShape.circle,
               border: Border.all(
-                color: Theme.of(context)
-                    .colorScheme
-                    .outline
+                color: theme.colorScheme.outline
                     .withValues(alpha: .12),
               ),
             ),

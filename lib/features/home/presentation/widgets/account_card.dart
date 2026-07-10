@@ -1,132 +1,161 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/colors/app_colors.dart';
-import '../../../../core/constants/app_radius.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/finance/bank_info.dart';
-import '../../../../core/finance/bank_styles.dart';
-import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/features/constants/app_radius.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../../core/features/finance/bank_info.dart';
+import '../../../../core/features/finance/bank_styles.dart';
+import '../../../../core/features/services/account_balance_service_provider.dart';
+import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../accounts/domain/models/account.dart';
+import '../../../transactions/presentation/models/transactions_filter.dart';
+import '../../../transactions/presentation/models/transactions_screen_args.dart';
+import '../../../transactions/presentation/providers/transaction_provider.dart';
 
-class AccountCard extends StatelessWidget {
+class AccountCard extends ConsumerWidget {
   final Account account;
-  final VoidCallback? onTap;
-  late final bankStyle = BankStyles.get(account.bankCode);
 
-   AccountCard({
+  const AccountCard({
     super.key,
     required this.account,
-    this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
-    return InkWell(
-      borderRadius: AppRadius.borderRadiusLg,
-      onTap: onTap,
-      child: Container(
-        width: 260,
-        height: 205,
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1C2438),
-          borderRadius: AppRadius.borderRadiusLg,
-          border: Border.all(
-            color: Colors.white.withValues(alpha: .06),
-          ),
+    final bankStyle = BankStyles.get(account.bankCode);
+
+    final transactions =
+        ref.watch(transactionProvider).transactions;
+
+    final balanceService =
+    ref.read(accountBalanceServiceProvider);
+
+    final currentBalance =
+    balanceService.getCurrentBalance(
+      account: account,
+      transactions: transactions,
+    );
+
+    return Container(
+      width: 260,
+      height: 205,
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1C2438),
+        borderRadius: AppRadius.borderRadiusLg,
+        border: Border.all(
+          color: Colors.white.withValues(alpha: .06),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// Header
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: bankStyle.color.withValues(alpha: .15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  bankStyle.icon,
+                  size: 22,
+                  color: bankStyle.color,
+                ),
+              ),
 
-            /// Header
-            Row(
-              children: [
-        Container(
-        width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: bankStyle.color.withValues(alpha: .15),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(
-            bankStyle.icon,
-            size: 22,
-            color: bankStyle.color,
-          ),
-        ),
+              const SizedBox(width: AppSpacing.md),
 
-                const SizedBox(width: AppSpacing.md),
-
-                Expanded(
-                  child: Text(
-                    BankInfo.getName(
-                      account.bankCode,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: AppColors.cardTitle,
-                      fontWeight: FontWeight.bold,
-                    ),
+              Expanded(
+                child: Text(
+                  BankInfo.getName(
+                    account.bankCode,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: AppColors.cardTitle,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: AppColors.cardIcon,
-                ),
-              ],
-            ),
-
-            const SizedBox(height: AppSpacing.lg),
-
-            /// Account Name + Number
-            Text(
-              '${account.accountType} •••• ${account.lastFourDigits}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: AppColors.cardSubtitle,
               ),
-            ),
 
-            const SizedBox(height: AppSpacing.md),
-
-            /// Balance
-            Text(
-              CurrencyFormatter.format(account.balance),
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: AppColors.cardTitle,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const Spacer(),
-
-            /// Footer
-            Row(
-              children: [
-                Icon(
-                  Icons.sync,
-                  size: 14,
-                  color: Colors.green.shade400,
-                ),
-
-                const SizedBox(width: 4),
-
-                Text(
-                  'Synced',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: Colors.green.shade400,
-                    fontWeight: FontWeight.w600,
+              InkResponse(
+                radius: 22,
+                borderRadius: BorderRadius.circular(20),
+                onTap: () {
+                  context.push(
+                    AppRoutes.transactions,
+                    extra: TransactionsScreenArgs(
+                      screenTitle: account.accountName,
+                      filter: TransactionsFilter(
+                        accountId: account.id,
+                      ),
+                    ),
+                  );
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppColors.cardIcon,
                   ),
                 ),
-              ],
+              ),
+            ],
+          ),
+
+          const SizedBox(height: AppSpacing.lg),
+
+          Text(
+            '${account.accountType} •••• ${account.lastFourDigits}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.cardSubtitle,
             ),
-          ],
-        ),
+          ),
+
+          const SizedBox(height: AppSpacing.md),
+
+          Text(
+            CurrencyFormatter.format(currentBalance),
+            style: theme.textTheme.titleLarge?.copyWith(
+              color: AppColors.cardTitle,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const Spacer(),
+
+          Row(
+            children: [
+              Icon(
+                Icons.sync,
+                size: 14,
+                color: Colors.green,
+              ),
+
+              const SizedBox(width: 4),
+
+              Text(
+                'Synced',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.green,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

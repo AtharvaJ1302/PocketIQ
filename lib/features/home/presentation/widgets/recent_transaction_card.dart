@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_radius.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/finance/category_colors.dart';
-import '../../../../core/finance/category_icons.dart';
-import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/features/constants/app_radius.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../../core/features/finance/category_colors.dart';
+import '../../../../core/features/finance/category_icons.dart';
+import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../transactions/domain/models/transaction.dart';
 
 class RecentTransactionCard extends StatelessWidget {

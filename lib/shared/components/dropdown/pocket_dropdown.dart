@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_radius.dart';
-import '../../../core/constants/app_spacing.dart';
+import '../../../core/features/constants/app_radius.dart';
+import '../../../core/features/constants/app_spacing.dart';
 
 class PocketDropdown<T> extends StatelessWidget {
   final String label;
@@ -10,7 +10,7 @@ class PocketDropdown<T> extends StatelessWidget {
 
   final List<DropdownMenuItem<T>> items;
 
-  final ValueChanged<T?> onChanged;
+  final ValueChanged<T?>? onChanged;
 
   final String? Function(T?)? validator;
 
@@ -25,7 +25,7 @@ class PocketDropdown<T> extends StatelessWidget {
     required this.label,
     required this.items,
     required this.value,
-    required this.onChanged,
+    this.onChanged,
     this.validator,
     this.prefixIcon,
     this.enabled = true,

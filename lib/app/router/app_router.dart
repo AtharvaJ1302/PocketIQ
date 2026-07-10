@@ -11,10 +11,12 @@ import '../../features/budget/presentation/screens/budget_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/setup/presentation/screens/setup_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/accounts/presentation/screens/accounts_screen.dart';
 import '../../features/transactions/domain/models/transaction_type.dart';
 import '../../features/transactions/presentation/models/transaction_form_args.dart';
+import '../../features/transactions/presentation/models/transactions_screen_args.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
 import 'app_routes.dart';
 
@@ -68,6 +70,10 @@ class AppRouter {
           path: AppRoutes.profile,
           builder: (_, __) => const ProfileScreen()
       ),
+      GoRoute(
+        path: AppRoutes.setup,
+        builder: (_, __) => const SetupScreen(),
+      ),
 
       //Accounts Routes
 
@@ -87,7 +93,11 @@ class AppRouter {
       //Transactions Routes
       GoRoute(
         path: AppRoutes.transactions,
-        builder: (_, __) => const TransactionsScreen(),
+        builder: (context, state) {
+          return TransactionsScreen(
+            args: state.extra as TransactionsScreenArgs?,
+          );
+        },
       ),
 
       GoRoute(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_animation.dart';
-import '../../../../core/constants/app_duration.dart';
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_animation.dart';
+import '../../../../core/features/constants/app_duration.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../shared/components/indicators/pocket_progress_bar.dart';
 import '../providers/splash_notifier.dart';
 

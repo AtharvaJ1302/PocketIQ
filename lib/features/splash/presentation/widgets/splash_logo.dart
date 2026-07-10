@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_animation.dart';
-import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/constants/app_strings.dart';
+import '../../../../core/features/constants/app_animation.dart';
+import '../../../../core/features/constants/app_assets.dart';
+import '../../../../core/features/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_strings.dart';
 
 class SplashLogo extends StatelessWidget {
   final AnimationController controller;

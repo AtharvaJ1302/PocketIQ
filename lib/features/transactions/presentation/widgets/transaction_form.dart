@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../shared/components/buttons/pocket_button.dart';
 import '../../../../shared/layouts/form_section.dart';
 import '../providers/transaction_provider.dart';
@@ -25,6 +25,8 @@ class TransactionForm extends ConsumerWidget {
 
   final bool isEditing;
 
+  final bool accountLocked;
+
   const TransactionForm({
     super.key,
     required this.formKey,
@@ -34,6 +36,7 @@ class TransactionForm extends ConsumerWidget {
     required this.notesFocus,
     required this.onSave,
     required this.isEditing,
+    this.accountLocked = false,
   });
 
   @override
@@ -68,6 +71,7 @@ class TransactionForm extends ConsumerWidget {
               AccountDropdown(
                 value: notifier.selectedAccountId,
                 onChanged: notifier.setAccount,
+                enabled: !accountLocked,
               ),
 
               const SizedBox(height: AppSpacing.lg),

@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/finance/bank_info.dart';
-import '../../../../core/utils/validators.dart';
+import '../../../../core/features/finance/bank_info.dart';
+import '../../../../core/features/utils/validators.dart';
 import '../../../../shared/components/dropdown/pocket_dropdown.dart';
 import '../../../accounts/presentation/providers/account_provider.dart';
 
 class AccountDropdown extends ConsumerWidget {
   final String? value;
   final ValueChanged<String?> onChanged;
+  final bool enabled;
 
   const AccountDropdown({
     super.key,
     required this.value,
     required this.onChanged,
+    this.enabled = true,
   });
 
   @override
@@ -21,13 +23,15 @@ class AccountDropdown extends ConsumerWidget {
     final notifier = ref.watch(accountProvider);
 
     return PocketDropdown<String>(
-      label: 'Account',
+      label: enabled
+          ? 'Account'
+          : 'Selected Account',
       value: value,
       validator: Validators.dropdown,
       prefixIcon: const Icon(
         Icons.account_balance_outlined,
       ),
-      onChanged: onChanged,
+      onChanged: enabled ? onChanged : null,
 
       // Dropdown menu (2 lines)
       items: notifier.accounts.map((account) {

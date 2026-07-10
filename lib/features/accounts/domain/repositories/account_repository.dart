@@ -9,9 +9,4 @@ abstract class AccountRepository {
 
   Future<void> deleteAccount(String id);
 
-  Future<void> updateBalance(
-      String accountId,
-      double amount,
-      bool isExpense,
-      );
 }

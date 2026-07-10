@@ -5,9 +5,11 @@ import '../../domain/models/transaction_type.dart';
 import '../../domain/repositories/transaction_repository.dart';
 
 class AddTransactionNotifier extends ChangeNotifier {
-  final TransactionRepository _repository;
+  final TransactionRepository _transactionRepository;
 
-  AddTransactionNotifier(this._repository);
+  AddTransactionNotifier(
+      this._transactionRepository,
+      );
 
   bool loading = false;
 
@@ -32,6 +34,36 @@ class AddTransactionNotifier extends ChangeNotifier {
 
   void setCategory(String? value) {
     selectedCategory = value;
+    notifyListeners();
+  }
+
+  Future<void> prepare({
+    TransactionType? initialType,
+    String? accountId,
+    Transaction? transaction,
+  }) async {
+    // Always start from a clean state.
+    selectedType = TransactionType.expense;
+    selectedAccountId = null;
+    selectedCategory = null;
+    selectedDate = DateTime.now();
+    loading = false;
+
+    if (initialType != null) {
+      selectedType = initialType;
+    }
+
+    if (accountId != null) {
+      selectedAccountId = accountId;
+    }
+
+    if (transaction != null) {
+      selectedType = transaction.type;
+      selectedAccountId = transaction.accountId;
+      selectedCategory = transaction.category;
+      selectedDate = transaction.date;
+    }
+
     notifyListeners();
   }
 
@@ -73,20 +105,17 @@ class AddTransactionNotifier extends ChangeNotifier {
       );
 
       if (existingTransaction == null) {
-        await _repository.addTransaction(transaction);
+        await _transactionRepository.addTransaction(transaction);
       } else {
-        await _repository.updateTransaction(transaction);
+        await _transactionRepository.updateTransaction(transaction);
       }
-
-      loading = false;
-      notifyListeners();
 
       return true;
     } catch (_) {
+      return false;
+    } finally {
       loading = false;
       notifyListeners();
-
-      return false;
     }
   }
 
@@ -95,7 +124,6 @@ class AddTransactionNotifier extends ChangeNotifier {
     selectedAccountId = null;
     selectedCategory = null;
     selectedDate = DateTime.now();
-
     loading = false;
 
     notifyListeners();

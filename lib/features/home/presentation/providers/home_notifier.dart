@@ -1,12 +1,6 @@
 import 'package:flutter/foundation.dart';
 
 class HomeNotifier extends ChangeNotifier {
-  double totalBalance = 58420.75;
-  double income = 78200.00;
-  double expenses = 19779.25;
-
-  String userName = 'Atharva';
-
   bool hideBalance = false;
 
   void toggleBalanceVisibility() {
@@ -25,6 +19,10 @@ class HomeNotifier extends ChangeNotifier {
       return 'Good Afternoon';
     }
 
-    return 'Good Evening';
+    if (hour < 21) {
+      return 'Good Evening';
+    }
+
+    return 'Welcome Back';
   }
 }

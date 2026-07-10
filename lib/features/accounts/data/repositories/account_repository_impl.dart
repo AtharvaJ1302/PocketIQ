@@ -1,71 +1,67 @@
-import '../../../../core/finance/bank_codes.dart';
+import 'package:sqflite/sqflite.dart';
+
+import '../../../../core/database/database_constants.dart';
+import '../../../../core/database/database_service.dart';
 import '../../domain/models/account.dart';
 import '../../domain/repositories/account_repository.dart';
+import '../mappers/account_mapper.dart';
 
 class AccountRepositoryImpl implements AccountRepository {
-  final List<Account> _accounts = [
-    Account(
-      id: '1',
-      bankCode: BankCodes.icici,
-      accountName: 'Savings Account',
-      accountType: 'Savings',
-      accountNumber: '458712364821',
-      balance: 24520,
-    ),
-    Account(
-      id: '2',
-      bankCode: BankCodes.sbi,
-      accountName: 'Salary Account',
-      accountType: 'Savings',
-      accountNumber: '654321781942',
-      balance: 18200,
-    ),
-  ];
+  Future<Database> get _db =>
+      DatabaseService.instance.database;
 
   @override
   Future<List<Account>> getAccounts() async {
-    return List.unmodifiable(_accounts);
+    final db = await _db;
+
+    final result = await db.query(
+      DatabaseTables.accounts,
+      orderBy: AccountColumns.accountName,
+    );
+
+    return result
+        .map(AccountMapper.fromMap)
+        .toList();
   }
 
   @override
   Future<void> addAccount(Account account) async {
-    _accounts.add(account);
-  }
+    final db = await _db;
 
-  @override
-  Future<void> updateAccount(Account account) async {
-    final index = _accounts.indexWhere(
-          (e) => e.id == account.id,
+    await db.insert(
+      DatabaseTables.accounts,
+      AccountMapper.toMap(account),
+      conflictAlgorithm:
+      ConflictAlgorithm.replace,
     );
-
-    if (index == -1) return;
-
-    _accounts[index] = account;
   }
 
   @override
-  Future<void> deleteAccount(String id) async {
-    _accounts.removeWhere((e) => e.id == id);
-  }
-
-  @override
-  Future<void> updateBalance(
-      String accountId,
-      double amount,
-      bool isExpense,
+  Future<void> updateAccount(
+      Account account,
       ) async {
-    final index = _accounts.indexWhere(
-          (e) => e.id == accountId,
+    final db = await _db;
+
+    await db.update(
+      DatabaseTables.accounts,
+      AccountMapper.toMap(account),
+      where:
+      '${AccountColumns.id} = ?',
+      whereArgs: [account.id],
     );
+  }
 
-    if (index == -1) return;
+  @override
+  Future<void> deleteAccount(
+      String id,
+      ) async {
+    final db = await _db;
 
-    final account = _accounts[index];
-
-    _accounts[index] = account.copyWith(
-      balance: isExpense
-          ? account.balance - amount
-          : account.balance + amount,
+    await db.delete(
+      DatabaseTables.accounts,
+      where:
+      '${AccountColumns.id} = ?',
+      whereArgs: [id],
     );
   }
 

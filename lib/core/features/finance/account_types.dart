@@ -6,17 +6,17 @@ class AccountTypes {
   static const savings = 'Savings';
   static const current = 'Current';
   static const creditCard = 'Credit Card';
-  static const cash = 'Cash';
-  static const wallet = 'Wallet';
-  static const investment = 'Investment';
+  // static const cash = 'Cash';
+  // static const wallet = 'Wallet';
+  // static const investment = 'Investment';
 
   static const values = [
     savings,
     current,
     creditCard,
-    cash,
-    wallet,
-    investment,
+    // cash,
+    // wallet,
+    // investment,
   ];
 
 }

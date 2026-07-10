@@ -42,7 +42,7 @@ class AddAccountNotifier extends ChangeNotifier {
         accountType: selectedAccountType!,
         accountName: accountName,
         accountNumber: accountNumber,
-        balance: openingBalance,
+        openingBalance: openingBalance,
       );
 
       await _repository.addAccount(account);
@@ -68,7 +68,7 @@ class AddAccountNotifier extends ChangeNotifier {
         accountType: selectedAccountType!,
         accountName: accountName,
         accountNumber: accountNumber,
-        balance: openingBalance,
+        openingBalance: openingBalance,
       );
 
       await _repository.updateAccount(updatedAccount);

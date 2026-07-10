@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_duration.dart';
-import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/features/constants/app_duration.dart';
+import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../shared/components/buttons/pocket_button.dart';
 
 class OnboardingBottomBar extends StatelessWidget {

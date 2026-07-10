@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TransactionEmptyState extends StatelessWidget {
-  const TransactionEmptyState({super.key});
+  final String? message;
+
+  const TransactionEmptyState({
+    super.key,
+    this.message,
+  });
 
   @override
   Widget build(BuildContext context) {
