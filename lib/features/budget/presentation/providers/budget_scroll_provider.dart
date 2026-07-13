@@ -10,8 +10,6 @@ class BudgetScrollService {
       String category,
       GlobalKey key,
       ) {
-    debugPrint("Registered: $category");
-
     keys[category] = key;
   }
 
@@ -19,20 +17,15 @@ class BudgetScrollService {
       String category,
       ) async {
 
-    debugPrint("Scrolling to: $category");
-    debugPrint("Available keys: ${keys.keys}");
-
     final key = keys[category];
 
     if (key == null) {
-      debugPrint("Key not found!");
       return;
     }
 
     final context = key.currentContext;
 
     if (context == null) {
-      debugPrint("Context is null!");
       return;
     }
 
@@ -42,7 +35,9 @@ class BudgetScrollService {
         milliseconds: 700,
       ),
       curve: Curves.easeInOut,
-      alignment: 0.2,
+      alignment: 0.1,
+      alignmentPolicy:
+      ScrollPositionAlignmentPolicy.explicit,
     );
   }
 }

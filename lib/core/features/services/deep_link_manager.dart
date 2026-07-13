@@ -5,20 +5,20 @@ class DeepLinkManager {
 
   void Function(String)? onDeepLink;
 
-  String? _currentPayload;
+  String? _pendingPayload;
 
   void handle(String payload) {
-    _currentPayload = payload;
+    if (onDeepLink != null) {
+      onDeepLink!(payload);
+      return;
+    }
 
-    onDeepLink?.call(payload);
+    _pendingPayload = payload;
   }
 
-  String? get payload => _currentPayload;
-
-  String? consumePayload() {
-    final value = _currentPayload;
-    _currentPayload = null;
-    return value;
+  String? consumePendingPayload() {
+    final payload = _pendingPayload;
+    _pendingPayload = null;
+    return payload;
   }
-
 }

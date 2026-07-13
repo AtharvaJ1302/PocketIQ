@@ -30,6 +30,15 @@ class _MainScreenState
 
     DeepLinkManager.instance.onDeepLink =
         _handleDeepLink;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final payload = DeepLinkManager.instance
+          .consumePendingPayload();
+
+      if (payload != null) {
+        _handleDeepLink(payload);
+      }
+    });
   }
 
   @override
@@ -42,15 +51,11 @@ class _MainScreenState
 
   void _handleDeepLink(String payload) async {
 
-    debugPrint('DeepLink received: $payload');
-
     if (!payload.startsWith('budget/')) {
       return;
     }
 
     final category = payload.split('/')[1];
-
-    debugPrint('Changing to Budget tab');
 
     ref.read(navigationProvider).changeTab(2);
 

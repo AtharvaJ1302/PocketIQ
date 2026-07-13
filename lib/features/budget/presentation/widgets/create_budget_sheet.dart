@@ -10,8 +10,12 @@ import '../../domain/models/budget.dart';
 import '../providers/budget_provider.dart';
 
 class CreateBudgetSheet extends ConsumerStatefulWidget {
+
+  final Budget? budget;
+
   const CreateBudgetSheet({
     super.key,
+    this.budget,
   });
 
   @override
@@ -21,6 +25,28 @@ class CreateBudgetSheet extends ConsumerStatefulWidget {
 
 class _CreateBudgetSheetState
     extends ConsumerState<CreateBudgetSheet> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.budget != null) {
+      _selectedCategory =
+          widget.budget!.category;
+
+      _budgetController.text =
+          widget.budget!.budgetAmount
+              .toString();
+
+      _notificationsEnabled =
+          widget.budget!.notificationsEnabled;
+
+      _threshold =
+          widget.budget!
+              .notificationThreshold
+              .toDouble();
+    }
+  }
 
   Future<void> _saveBudget() async {
     if (_selectedCategory == null) {
@@ -51,32 +77,50 @@ class _CreateBudgetSheetState
 
     final now = DateTime.now();
 
-    final budget = Budget(
-      category: _selectedCategory!,
-      budgetAmount: amount,
-      notificationsEnabled:
-      _notificationsEnabled,
-      notificationThreshold:
-      _threshold.toInt(),
-      lastNotificationThreshold: 0,
-      createdAt: now,
-      updatedAt: now,
-    );
+    if (widget.budget == null) {
 
-    await ref
-        .read(budgetProvider)
-        .saveBudget(
-      budget,
-    );
+      final budget = Budget(
+        category: _selectedCategory!,
+        budgetAmount: amount,
+        notificationsEnabled:
+        _notificationsEnabled,
+        notificationThreshold:
+        _threshold.toInt(),
+        lastNotificationThreshold: 0,
+        createdAt: now,
+        updatedAt: now,
+      );
 
-    // //testing
-    // await LocalNotificationService.instance.show(
-    //   id: 1,
-    //   title: 'PocketIQ Test',
-    //   body:
-    //   'Congratulations! Notifications are working correctly.',
-    // );
-    // //testing
+      await ref
+          .read(budgetProvider)
+          .saveBudget(
+        budget,
+      );
+
+    } else {
+
+      final updatedBudget = Budget(
+        id: widget.budget!.id,
+        category: widget.budget!.category,
+        budgetAmount: amount,
+        notificationsEnabled:
+        _notificationsEnabled,
+        notificationThreshold:
+        _threshold.toInt(),
+        lastNotificationThreshold:
+        widget.budget!
+            .lastNotificationThreshold,
+        createdAt:
+        widget.budget!.createdAt,
+        updatedAt: now,
+      );
+
+      await ref
+          .read(budgetProvider)
+          .updateBudget(
+        updatedBudget,
+      );
+    }
 
     if (!mounted) return;
 
@@ -112,15 +156,20 @@ class _CreateBudgetSheetState
 
     final budgets = ref.watch(budgetProvider).budgets;
 
-    final availableCategories = AppCategories
+    final availableCategories =
+    widget.budget == null
+        ? AppCategories
         .budgetCategories()
         .where(
           (category) => !budgets.any(
             (budget) =>
-        budget.category == category.name,
+        budget.category ==
+            category.name,
       ),
     )
-        .toList();
+        .toList()
+        : AppCategories
+        .budgetCategories();
 
     final noCategoriesAvailable =
         availableCategories.isEmpty;
@@ -152,7 +201,9 @@ class _CreateBudgetSheetState
           children: [
 
             Text(
-              'Monthly Budget',
+              widget.budget == null
+                  ? 'Monthly Budget'
+                  : 'Edit Budget',
               style: theme.textTheme.headlineSmall,
             ),
 
@@ -161,7 +212,9 @@ class _CreateBudgetSheetState
             ),
 
             Text(
-              'Set spending limits for your categories.',
+              widget.budget == null
+                  ? 'Set spending limits for your categories.'
+                  : 'Update your monthly budget settings.',
               style: theme.textTheme.bodyMedium,
             ),
 
@@ -250,11 +303,11 @@ class _CreateBudgetSheetState
                             ),
                       )
                           .toList(),
-                      onChanged:
-                          (value) {
+                      onChanged: widget.budget != null
+                          ? null
+                          : (value) {
                         setState(() {
-                          _selectedCategory =
-                              value;
+                          _selectedCategory = value;
                         });
                       },
                     ),
@@ -354,7 +407,9 @@ class _CreateBudgetSheetState
 
             if (!noCategoriesAvailable)
               PocketButton(
-                label: 'Save Budget',
+                label: widget.budget == null
+                    ? 'Save Budget'
+                    : 'Save Changes',
                 onPressed: _saveBudget,
               ),
 

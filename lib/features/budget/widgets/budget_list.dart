@@ -5,6 +5,7 @@ import '../../../../core/features/services/financial_insights_service_provider.d
 import '../../../../shared/components/states/pocket_empty_state.dart';
 import '../../transactions/presentation/providers/transaction_provider.dart';
 import '../presentation/providers/budget_provider.dart';
+import '../presentation/widgets/create_budget_sheet.dart';
 import '../presentation/widgets/overall_budget_card.dart';
 import 'budget_tile.dart';
 
@@ -89,6 +90,90 @@ class BudgetList extends ConsumerWidget {
             ),
             child: BudgetTile(
               summary: summary,
+
+              onEdit: () async {
+
+                await showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  useSafeArea: true,
+                  builder: (_) => CreateBudgetSheet(
+                    budget: summary.budget,
+                  ),
+                );
+
+                if (!context.mounted) return;
+
+                await ref
+                    .read(budgetProvider)
+                    .loadBudgets();
+              },
+
+              onDelete: () async {
+
+                final shouldDelete =
+                await showDialog<bool>(
+                  context: context,
+                  builder: (dialogContext) {
+
+                    return AlertDialog(
+
+                      title: const Text(
+                        'Delete Budget',
+                      ),
+
+                      content: const Text(
+                        'Deleting this budget will NOT remove your transactions.\n\nAre you sure?',
+                      ),
+
+                      actions: [
+
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(
+                              dialogContext,
+                              false,
+                            );
+                          },
+                          child: const Text(
+                            'Cancel',
+                          ),
+                        ),
+
+                        FilledButton(
+                          onPressed: () {
+                            Navigator.pop(
+                              dialogContext,
+                              true,
+                            );
+                          },
+                          child: const Text(
+                            'Delete',
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (shouldDelete != true) {
+                  return;
+                }
+
+                await ref
+                    .read(budgetProvider)
+                    .deleteBudget(
+                  summary.budget.id!,
+                );
+
+                if (!context.mounted) {
+                  return;
+                }
+
+                await ref
+                    .read(budgetProvider)
+                    .loadBudgets();
+              },
             ),
           ),
         ),

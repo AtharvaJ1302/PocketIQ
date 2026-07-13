@@ -36,7 +36,6 @@ class BudgetAlertService {
       Budget budget,
       List<Transaction> transactions,
       ) async {
-
     if (!budget.notificationsEnabled) {
       return;
     }
@@ -45,68 +44,92 @@ class BudgetAlertService {
         .where(
           (transaction) =>
       transaction.isExpense &&
-          transaction.category ==
-              budget.category,
+          transaction.category == budget.category,
     )
         .fold<double>(
       0,
-          (sum, transaction) =>
-      sum + transaction.amount,
+          (sum, transaction) => sum + transaction.amount,
     );
 
     final progress =
         (spent / budget.budgetAmount) * 100;
 
-    if (progress >=
-        budget.notificationThreshold &&
-        budget.lastNotificationThreshold ==
-            0) {
+    // ------------------------------------------
+    // CASE 1
+    // Budget exceeded (>100%)
+    // Highest priority
+    // ------------------------------------------
 
-      await LocalNotificationService.instance.show(
-        id: budget.category.hashCode,
-        title: 'Budget Alert',
-        body:
-        'You have spent ${progress.toStringAsFixed(0)}% of your ${budget.category} budget.',
-        payload:
-        'budget/${budget.category}',
-      );
-
-      final updated =
-      budget.copyWith(
-        lastNotificationThreshold:
-        budget.notificationThreshold,
-      );
-
-      await _budgetRepository
-          .updateBudget(updated);
-
-      return;
-    }
-
-    if (progress >= 100 &&
-        budget.lastNotificationThreshold <
-            100) {
-
+    if (spent > budget.budgetAmount &&
+        budget.lastNotificationThreshold < 101) {
       final exceeded =
           spent - budget.budgetAmount;
 
       await LocalNotificationService.instance.show(
-        id: budget.category.hashCode + 1,
-        title: 'Budget Exceeded',
+        id: budget.category.hashCode + 2,
+        title: '🚨 Budget Exceeded',
         body:
-        'You exceeded your ${budget.category} budget.',
-        payload:
-        'budget/${budget.category}',
+        'You exceeded your ${budget.category} budget by ₹${exceeded.toStringAsFixed(0)}.',
+        payload: 'budget/${budget.category}',
       );
 
-      final updated =
-      budget.copyWith(
-        lastNotificationThreshold:
-        100,
+      await _budgetRepository.updateBudget(
+        budget.copyWith(
+          lastNotificationThreshold: 101,
+        ),
       );
 
-      await _budgetRepository
-          .updateBudget(updated);
+      return;
+    }
+
+    // ------------------------------------------
+    // CASE 2
+    // Budget exactly reached (100%)
+    // ------------------------------------------
+
+    if (spent == budget.budgetAmount &&
+        budget.lastNotificationThreshold < 100) {
+      await LocalNotificationService.instance.show(
+        id: budget.category.hashCode + 1,
+        title: '⚠️ Budget Reached',
+        body:
+        'You have fully used your ${budget.category} budget.',
+        payload: 'budget/${budget.category}',
+      );
+
+      await _budgetRepository.updateBudget(
+        budget.copyWith(
+          lastNotificationThreshold: 100,
+        ),
+      );
+
+      return;
+    }
+
+    // ------------------------------------------
+    // CASE 3
+    // User threshold
+    // ------------------------------------------
+
+    if (progress >= budget.notificationThreshold &&
+        budget.lastNotificationThreshold == 0) {
+      final remaining =
+          budget.budgetAmount - spent;
+
+      await LocalNotificationService.instance.show(
+        id: budget.category.hashCode,
+        title: '💰 Budget Alert',
+        body:
+        'You have spent ${progress.toStringAsFixed(0)}% of your ${budget.category} budget. ₹${remaining.toStringAsFixed(0)} remaining.',
+        payload: 'budget/${budget.category}',
+      );
+
+      await _budgetRepository.updateBudget(
+        budget.copyWith(
+          lastNotificationThreshold:
+          budget.notificationThreshold,
+        ),
+      );
     }
   }
 }

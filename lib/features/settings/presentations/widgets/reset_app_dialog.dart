@@ -87,6 +87,7 @@ class _ResetAppDialogState
           Text('• All Accounts'),
           Text('• All Transactions'),
           Text('• Your Preferences'),
+          Text('• Your Budgets'),
 
           SizedBox(
             height: AppSpacing.md,

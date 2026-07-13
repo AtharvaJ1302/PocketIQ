@@ -11,9 +11,14 @@ import '../presentation/providers/budget_scroll_provider.dart';
 class BudgetTile extends StatefulWidget {
   final BudgetSummary summary;
 
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
   const BudgetTile({
     super.key,
     required this.summary,
+    required this.onEdit,
+    required this.onDelete,
   });
 
   @override
@@ -109,6 +114,41 @@ class _BudgetTileState
                   fontWeight:
                   FontWeight.bold,
                 ),
+              ),
+              PopupMenuButton<String>(
+                onSelected: (value) {
+                  switch (value) {
+                    case 'edit':
+                      widget.onEdit();
+                      break;
+
+                    case 'delete':
+                      widget.onDelete();
+                      break;
+                  }
+                },
+                itemBuilder: (_) => const [
+                  PopupMenuItem(
+                    value: 'edit',
+                    child: Row(
+                      children: [
+                        Icon(Icons.edit_outlined),
+                        SizedBox(width: 12),
+                        Text('Edit Budget'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete_outline),
+                        SizedBox(width: 12),
+                        Text('Delete Budget'),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
