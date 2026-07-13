@@ -108,8 +108,9 @@ class _CreateBudgetSheetState
         notificationThreshold:
         _threshold.toInt(),
         lastNotificationThreshold:
-        widget.budget!
-            .lastNotificationThreshold,
+        widget.budget!.budgetAmount != amount
+            ? 0
+            : widget.budget!.lastNotificationThreshold,
         createdAt:
         widget.budget!.createdAt,
         updatedAt: now,

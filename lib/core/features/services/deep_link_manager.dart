@@ -8,12 +8,9 @@ class DeepLinkManager {
   String? _pendingPayload;
 
   void handle(String payload) {
-    if (onDeepLink != null) {
-      onDeepLink!(payload);
-      return;
-    }
-
     _pendingPayload = payload;
+
+    onDeepLink?.call(payload);
   }
 
   String? consumePendingPayload() {

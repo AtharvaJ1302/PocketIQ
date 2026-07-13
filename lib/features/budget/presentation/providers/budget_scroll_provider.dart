@@ -14,18 +14,49 @@ class BudgetScrollService {
   }
 
   Future<void> scrollTo(
-      String category,
-      ) async {
+      String category, {
+        int retry = 0,
+      }) async {
 
     final key = keys[category];
 
     if (key == null) {
+
+      if (retry < 8) {
+
+        await Future.delayed(
+          const Duration(
+            milliseconds: 150,
+          ),
+        );
+
+        return scrollTo(
+          category,
+          retry: retry + 1,
+        );
+      }
+
       return;
     }
 
     final context = key.currentContext;
 
     if (context == null) {
+
+      if (retry < 8) {
+
+        await Future.delayed(
+          const Duration(
+            milliseconds: 150,
+          ),
+        );
+
+        return scrollTo(
+          category,
+          retry: retry + 1,
+        );
+      }
+
       return;
     }
 

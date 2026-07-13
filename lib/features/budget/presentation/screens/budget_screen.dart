@@ -21,8 +21,10 @@ class _BudgetScreenState
     extends ConsumerState<BudgetScreen> {
 
   Future<void> _handleDeepLink() async {
+
     final payload =
-    DeepLinkManager.instance.consumePendingPayload();
+    DeepLinkManager.instance
+        .consumePendingPayload();
 
     if (payload == null) {
       return;
@@ -32,7 +34,8 @@ class _BudgetScreenState
       return;
     }
 
-    final category = payload.split('/')[1];
+    final category =
+    payload.split('/')[1];
 
     await Future.delayed(
       const Duration(milliseconds: 150),
@@ -53,15 +56,18 @@ class _BudgetScreenState
     super.initState();
 
     Future.microtask(() async {
+
       await ref
           .read(budgetProvider)
           .loadBudgets();
 
       if (!mounted) return;
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) {
         _handleDeepLink();
       });
+
     });
   }
 
