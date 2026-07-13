@@ -22,7 +22,7 @@ class BudgetRepositoryImpl
     final result = await db.query(
       DatabaseTables.budgets,
       orderBy:
-      '${BudgetColumns.category} ASC',
+      '${BudgetColumns.createdAt} DESC',
     );
 
     return result

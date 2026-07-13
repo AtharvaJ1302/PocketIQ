@@ -6,8 +6,9 @@ import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../shared/components/indicators/pocket_progress_bar.dart';
 import '../domain/models/budget_summary.dart';
+import '../presentation/providers/budget_scroll_provider.dart';
 
-class BudgetTile extends StatelessWidget {
+class BudgetTile extends StatefulWidget {
   final BudgetSummary summary;
 
   const BudgetTile({
@@ -16,15 +17,38 @@ class BudgetTile extends StatelessWidget {
   });
 
   @override
+  State<BudgetTile> createState() =>
+      _BudgetTileState();
+}
+
+class _BudgetTileState
+    extends State<BudgetTile> {
+
+  final GlobalKey _tileKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) {
+      BudgetScrollService.instance.register(
+        widget.summary.budget.category,
+        _tileKey,
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final category =
-    AppCategories.byName(
-      summary.budget.category,
+    final category = AppCategories.byName(
+      widget.summary.budget.category,
     );
 
     return Container(
+      key: _tileKey,
       width: double.infinity,
       padding: const EdgeInsets.all(
         AppSpacing.lg,
@@ -38,10 +62,8 @@ class BudgetTile extends StatelessWidget {
         crossAxisAlignment:
         CrossAxisAlignment.start,
         children: [
-
           Row(
             children: [
-
               CircleAvatar(
                 backgroundColor:
                 category?.color.withValues(
@@ -67,7 +89,7 @@ class BudgetTile extends StatelessWidget {
 
               Expanded(
                 child: Text(
-                  summary.budget.category,
+                  widget.summary.budget.category,
                   style: theme
                       .textTheme
                       .titleMedium
@@ -79,7 +101,7 @@ class BudgetTile extends StatelessWidget {
               ),
 
               Text(
-                summary.percentageLabel,
+                widget.summary.percentageLabel,
                 style: theme
                     .textTheme
                     .titleMedium
@@ -97,14 +119,12 @@ class BudgetTile extends StatelessWidget {
 
           Row(
             children: [
-
               Expanded(
                 child: _BudgetMetric(
                   title: 'Budget',
                   value: CurrencyFormatter
                       .format(
-                    summary
-                        .budget
+                    widget.summary.budget
                         .budgetAmount,
                   ),
                 ),
@@ -115,22 +135,24 @@ class BudgetTile extends StatelessWidget {
                   title: 'Spent',
                   value: CurrencyFormatter
                       .format(
-                    summary.spent,
+                    widget.summary.spent,
                   ),
                 ),
               ),
 
               Expanded(
                 child: _BudgetMetric(
-                  title:
-                  summary.isExceeded
+                  title: widget
+                      .summary.isExceeded
                       ? 'Exceeded'
                       : 'Remaining',
                   value: CurrencyFormatter
                       .format(
-                    summary.isExceeded
-                        ? summary.exceeded
-                        : summary.remaining,
+                    widget.summary.isExceeded
+                        ? widget.summary
+                        .exceeded
+                        : widget.summary
+                        .remaining,
                   ),
                 ),
               ),
@@ -142,7 +164,8 @@ class BudgetTile extends StatelessWidget {
           ),
 
           PocketProgressBar(
-            progress: summary.progress,
+            progress:
+            widget.summary.progress,
           ),
         ],
       ),
@@ -167,7 +190,6 @@ class _BudgetMetric extends StatelessWidget {
       crossAxisAlignment:
       CrossAxisAlignment.start,
       children: [
-
         Text(
           title,
           style:
@@ -180,8 +202,7 @@ class _BudgetMetric extends StatelessWidget {
 
         Text(
           value,
-          style: theme
-              .textTheme
+          style: theme.textTheme
               .titleMedium
               ?.copyWith(
             fontWeight:

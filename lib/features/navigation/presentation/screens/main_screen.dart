@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/features/services/deep_link_manager.dart';
 import '../../../analytics/presentation/screens/analytics_screen.dart';
+import '../../../budget/presentation/providers/budget_scroll_provider.dart';
+import '../../../budget/presentation/providers/highlight_budget_provider.dart';
 import '../../../budget/presentation/screens/budget_screen.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../settings/presentations/screens/settings_screen.dart';
@@ -38,18 +40,33 @@ class _MainScreenState
     super.dispose();
   }
 
-  void _handleDeepLink(
-      String payload,
-      ) {
-    debugPrint(
-      'DeepLink received: $payload',
-    );
+  void _handleDeepLink(String payload) async {
 
-    if (payload.startsWith('budget/')) {
-      ref
-          .read(navigationProvider)
-          .changeTab(2);
+    debugPrint('DeepLink received: $payload');
+
+    if (!payload.startsWith('budget/')) {
+      return;
     }
+
+    final category = payload.split('/')[1];
+
+    debugPrint('Changing to Budget tab');
+
+    ref.read(navigationProvider).changeTab(2);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+      await BudgetScrollService.instance
+          .scrollTo(category);
+
+      if (!mounted) return;
+
+      await ref
+          .read(highlightBudgetProvider)
+          .highlight(category);
+
+    });
+
   }
 
   @override
