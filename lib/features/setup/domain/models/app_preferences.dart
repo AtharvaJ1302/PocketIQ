@@ -13,6 +13,10 @@ class AppPreferences {
 
   final bool hideBalance;
 
+  final bool notificationPermissionAsked;
+
+  final bool notificationsEnabled;
+
   const AppPreferences({
     this.id = 1,
     required this.userName,
@@ -20,6 +24,8 @@ class AppPreferences {
     required this.onboardingCompleted,
     required this.appLockEnabled,
     required this.hideBalance,
+    required this.notificationPermissionAsked,
+    required this.notificationsEnabled,
   });
 
   factory AppPreferences.initial() {
@@ -30,6 +36,8 @@ class AppPreferences {
       onboardingCompleted: false,
       appLockEnabled: false,
       hideBalance: false,
+      notificationPermissionAsked: false,
+      notificationsEnabled: false,
     );
   }
 
@@ -40,6 +48,8 @@ class AppPreferences {
     bool? onboardingCompleted,
     bool? appLockEnabled,
     bool? hideBalance,
+    bool? notificationPermissionAsked,
+    bool? notificationsEnabled,
   }) {
     return AppPreferences(
       id: id ?? this.id,
@@ -50,9 +60,17 @@ class AppPreferences {
       onboardingCompleted ??
           this.onboardingCompleted,
       appLockEnabled:
-      appLockEnabled ?? this.appLockEnabled,
+      appLockEnabled ??
+          this.appLockEnabled,
       hideBalance:
-      hideBalance ?? this.hideBalance,
+      hideBalance ??
+          this.hideBalance,
+      notificationPermissionAsked:
+      notificationPermissionAsked ??
+          this.notificationPermissionAsked,
+      notificationsEnabled:
+      notificationsEnabled ??
+          this.notificationsEnabled,
     );
   }
 
@@ -60,19 +78,29 @@ class AppPreferences {
     return {
       PreferencesColumns.id: id,
       PreferencesColumns.userName: userName,
-      PreferencesColumns.currencyCode: currencyCode,
+      PreferencesColumns.currencyCode:
+      currencyCode,
       PreferencesColumns.hideBalance:
       hideBalance ? 1 : 0,
       PreferencesColumns.appLockEnabled:
       appLockEnabled ? 1 : 0,
       PreferencesColumns.onboardingCompleted:
       onboardingCompleted ? 1 : 0,
+      PreferencesColumns
+          .notificationPermissionAsked:
+      notificationPermissionAsked
+          ? 1
+          : 0,
+      PreferencesColumns
+          .notificationsEnabled:
+      notificationsEnabled
+          ? 1
+          : 0,
     };
   }
 
   factory AppPreferences.fromMap(
-      Map<String, dynamic> map,
-      ) {
+      Map<String, dynamic> map) {
     return AppPreferences(
       id: map[PreferencesColumns.id],
       userName:
@@ -80,11 +108,26 @@ class AppPreferences {
       currencyCode:
       map[PreferencesColumns.currencyCode],
       hideBalance:
-      map[PreferencesColumns.hideBalance] == 1,
+      map[PreferencesColumns.hideBalance] ==
+          1,
       appLockEnabled:
-      map[PreferencesColumns.appLockEnabled] == 1,
+      map[PreferencesColumns
+          .appLockEnabled] ==
+          1,
       onboardingCompleted:
-      map[PreferencesColumns.onboardingCompleted] == 1,
+      map[PreferencesColumns
+          .onboardingCompleted] ==
+          1,
+      notificationPermissionAsked:
+      (map[PreferencesColumns
+          .notificationPermissionAsked] ??
+          0) ==
+          1,
+      notificationsEnabled:
+      (map[PreferencesColumns
+          .notificationsEnabled] ??
+          0) ==
+          1,
     );
   }
 }

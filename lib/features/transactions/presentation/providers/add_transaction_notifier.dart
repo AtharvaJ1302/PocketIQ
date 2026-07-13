@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/features/services/budget_alert_service.dart';
 import '../../domain/models/transaction.dart';
 import '../../domain/models/transaction_type.dart';
 import '../../domain/repositories/transaction_repository.dart';
@@ -7,8 +8,11 @@ import '../../domain/repositories/transaction_repository.dart';
 class AddTransactionNotifier extends ChangeNotifier {
   final TransactionRepository _transactionRepository;
 
+  final BudgetAlertService _budgetAlertService;
+
   AddTransactionNotifier(
       this._transactionRepository,
+      this._budgetAlertService,
       );
 
   bool loading = false;
@@ -105,9 +109,20 @@ class AddTransactionNotifier extends ChangeNotifier {
       );
 
       if (existingTransaction == null) {
-        await _transactionRepository.addTransaction(transaction);
+        await _transactionRepository.addTransaction(
+          transaction,
+        );
+
+        final transactions =
+        await _transactionRepository.getTransactions();
+
+        await _budgetAlertService.checkBudgetAlerts(
+          transactions,
+        );
       } else {
-        await _transactionRepository.updateTransaction(transaction);
+        await _transactionRepository.updateTransaction(
+          transaction,
+        );
       }
 
       return true;

@@ -10,6 +10,7 @@ import '../../../../shared/components/buttons/pocket_button.dart';
 import '../../../../shared/components/dropdown/pocket_dropdown.dart';
 import '../../../../shared/components/inputs/pocket_text_field.dart';
 import '../providers/preferences_provider.dart';
+import '../widgets/notification_permission_sheet.dart';
 
 class SetupScreen extends ConsumerStatefulWidget {
   const SetupScreen({super.key});
@@ -42,13 +43,6 @@ class _SetupScreenState
   }
 
   Future<void> _continue() async {
-    final notifier =
-    ref.read(preferencesProvider);
-
-    await notifier.completeSetup(
-      userName: _nameController.text.trim(),
-      currencyCode: _selectedCurrency,
-    );
 
     FocusScope.of(context).unfocus();
 
@@ -56,7 +50,40 @@ class _SetupScreenState
       return;
     }
 
-    context.go(AppRoutes.home);
+    final notifier =
+    ref.read(
+      preferencesProvider,
+    );
+
+    await notifier.completeSetup(
+      userName:
+      _nameController.text.trim(),
+      currencyCode:
+      _selectedCurrency,
+    );
+
+    final preferences =
+        notifier.preferences;
+
+    if (!preferences
+        .notificationPermissionAsked) {
+
+      if (!mounted) return;
+
+      await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        useSafeArea: true,
+        builder: (_) =>
+        const NotificationPermissionSheet(),
+      );
+    }
+
+    if (!mounted) return;
+
+    context.go(
+      AppRoutes.main,
+    );
   }
 
   @override

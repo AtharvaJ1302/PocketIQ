@@ -9,4 +9,6 @@ abstract class AccountRepository {
 
   Future<void> deleteAccount(String id);
 
+  Future<void> clearAccounts();
+
 }

@@ -8,4 +8,6 @@ abstract class TransactionRepository {
   Future<void> updateTransaction(Transaction transaction);
 
   Future<void> deleteTransaction(String id);
+
+  Future<void> clearTransactions();
 }

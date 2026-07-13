@@ -9,6 +9,21 @@ import '../mappers/transaction_mapper.dart';
 class TransactionRepositoryImpl
     implements TransactionRepository {
 
+  final DatabaseService _databaseService;
+
+  TransactionRepositoryImpl(
+      this._databaseService,
+      );
+
+  @override
+  Future<void> clearTransactions() async {
+    final db = await _db;
+
+    await db.delete(
+      DatabaseTables.transactions,
+    );
+  }
+
   Future<Database> get _db =>
       DatabaseService.instance.database;
 

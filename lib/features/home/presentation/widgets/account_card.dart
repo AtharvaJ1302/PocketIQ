@@ -11,6 +11,7 @@ import '../../../../core/features/finance/bank_styles.dart';
 import '../../../../core/features/services/account_balance_service_provider.dart';
 import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../accounts/domain/models/account.dart';
+import '../../../setup/presentation/providers/preferences_provider.dart';
 import '../../../transactions/presentation/models/transactions_filter.dart';
 import '../../../transactions/presentation/models/transactions_screen_args.dart';
 import '../../../transactions/presentation/providers/transaction_provider.dart';
@@ -23,9 +24,24 @@ class AccountCard extends ConsumerWidget {
     required this.account,
   });
 
+  String _displayAmount(
+      bool hidden,
+      String amount,
+      ) {
+    return hidden
+        ? '••••••'
+        : amount;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
+    final preferences =
+        ref.watch(preferencesProvider).preferences;
+
+    final hideBalance =
+        preferences.hideBalance;
 
     final bankStyle = BankStyles.get(account.bankCode);
 
@@ -127,7 +143,12 @@ class AccountCard extends ConsumerWidget {
           const SizedBox(height: AppSpacing.md),
 
           Text(
-            CurrencyFormatter.format(currentBalance),
+            _displayAmount(
+              hideBalance,
+              CurrencyFormatter.format(
+                currentBalance,
+              ),
+            ),
             style: theme.textTheme.titleLarge?.copyWith(
               color: AppColors.cardTitle,
               fontWeight: FontWeight.bold,

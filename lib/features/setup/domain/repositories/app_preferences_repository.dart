@@ -1,9 +1,11 @@
 import '../models/app_preferences.dart';
 
 abstract class AppPreferencesRepository {
-  Future<AppPreferences> loadPreferences();
+  Future<AppPreferences> getPreferences();
 
   Future<void> savePreferences(
       AppPreferences preferences,
       );
+
+  Future<void> clearPreferences();
 }

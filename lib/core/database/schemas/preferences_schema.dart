@@ -10,7 +10,9 @@ class PreferencesSchema {
       ${PreferencesColumns.currencyCode} TEXT NOT NULL,
       ${PreferencesColumns.hideBalance} INTEGER NOT NULL,
       ${PreferencesColumns.appLockEnabled} INTEGER NOT NULL,
-      ${PreferencesColumns.onboardingCompleted} INTEGER NOT NULL
+      ${PreferencesColumns.onboardingCompleted} INTEGER NOT NULL,
+      ${PreferencesColumns.notificationPermissionAsked } INTEGER NOT NULL DEFAULT 0,
+      ${PreferencesColumns.notificationsEnabled} INTEGER NOT NULL DEFAULT 0
     )
   ''';
 }

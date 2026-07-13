@@ -71,41 +71,14 @@ class _SplashScreenState
     }
 
     if (preferences.appLockEnabled) {
-      // App Lock screen
       context.go(
-        AppRoutes.home,
+        AppRoutes.appLock,
       );
       return;
     }
 
-    context.go(
-      AppRoutes.home,
-    );
+    context.go(AppRoutes.main);
   }
-
-  // Future<void> _startApp() async {
-  //   await _animationController.forward();
-  //
-  //   if (!mounted) return;
-  //
-  //   try {
-  //     final preferencesNotifier =
-  //     ref.read(preferencesProvider);
-  //
-  //     await preferencesNotifier.loadPreferences();
-  //
-  //     debugPrint('Preferences loaded successfully');
-  //
-  //     if (!mounted) return;
-  //
-  //     context.go(AppRoutes.onboarding);
-  //   } catch (e, stackTrace) {
-  //     debugPrint(e.toString());
-  //     debugPrint(stackTrace.toString());
-  //
-  //     rethrow;
-  //   }
-  // }
 
   @override
   void dispose() {

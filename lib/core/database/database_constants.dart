@@ -3,7 +3,7 @@ class DatabaseConstants {
 
   static const databaseName = 'pocketiq.db';
 
-  static const databaseVersion = 2;
+  static const databaseVersion = 4;
 }
 
 class DatabaseTables {
@@ -14,6 +14,8 @@ class DatabaseTables {
   static const transactions = 'transactions';
 
   static const preferences = 'preferences';
+
+  static const budgets = 'budgets';
 }
 
 class AccountColumns {
@@ -65,4 +67,33 @@ class PreferencesColumns {
 
   static const onboardingCompleted =
       'onboardingCompleted';
+
+  static const notificationPermissionAsked =
+      'notificationPermissionAsked';
+
+  static const notificationsEnabled =
+      'notificationsEnabled';
+}
+
+class BudgetColumns {
+  BudgetColumns._();
+
+  static const id = 'id';
+
+  static const category = 'category';
+
+  static const budgetAmount = 'budgetAmount';
+
+  static const notificationsEnabled =
+      'notificationsEnabled';
+
+  static const notificationThreshold =
+      'notificationThreshold';
+
+  static const lastNotificationThreshold =
+      'lastNotificationThreshold';
+
+  static const createdAt = 'createdAt';
+
+  static const updatedAt = 'updatedAt';
 }

@@ -5,7 +5,7 @@ class AppRoutes {
   static const onboarding = '/onboarding';
   static const login = '/login';
   static const home = '/home';
-  static const profile = '/profile';
+  static const settings = '/settings';
   static const analytics = '/analytics';
   static const budget = '/budget';
   static const register = '/register';
@@ -15,4 +15,6 @@ class AppRoutes {
   static const transactions = '/transactions';
   static const addTransaction = '/add-transaction';
   static const setup = '/setup';
+  static const main = '/main';
+  static const appLock = '/app-lock';
 }

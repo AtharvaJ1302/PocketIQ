@@ -7,6 +7,12 @@ import '../../domain/repositories/account_repository.dart';
 import '../mappers/account_mapper.dart';
 
 class AccountRepositoryImpl implements AccountRepository {
+  final DatabaseService _databaseService;
+
+  AccountRepositoryImpl(
+      this._databaseService,
+      );
+
   Future<Database> get _db =>
       DatabaseService.instance.database;
 
@@ -62,6 +68,16 @@ class AccountRepositoryImpl implements AccountRepository {
       where:
       '${AccountColumns.id} = ?',
       whereArgs: [id],
+    );
+  }
+
+
+  @override
+  Future<void> clearAccounts() async {
+    final db = await _db;
+
+    await db.delete(
+      DatabaseTables.accounts,
     );
   }
 

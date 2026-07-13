@@ -15,7 +15,16 @@ class AppPreferencesRepositoryImpl
       );
 
   @override
-  Future<AppPreferences> loadPreferences() async {
+  Future<void> clearPreferences() async {
+    final db = await _databaseService.database;
+
+    await db.delete(
+      DatabaseTables.preferences,
+    );
+  }
+
+  @override
+  Future<AppPreferences> getPreferences() async {
     final db = await _databaseService.database;
 
     final result = await db.query(

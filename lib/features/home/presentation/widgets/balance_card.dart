@@ -7,18 +7,30 @@ import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/services/account_balance_service_provider.dart';
 import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../accounts/presentation/providers/account_provider.dart';
+import '../../../setup/presentation/providers/preferences_provider.dart';
 import '../../../transactions/presentation/providers/transaction_provider.dart';
-import '../providers/home_provider.dart';
 
 class BalanceCard extends ConsumerWidget {
   const BalanceCard({super.key});
 
+  String _displayAmount(
+      bool hidden,
+      String amount,
+      ) {
+    return hidden ? '••••••' : amount;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final home = ref.watch(homeProvider);
 
-    final accountNotifier = ref.watch(accountProvider);
+    final preferences =
+        ref.watch(preferencesProvider).preferences;
+
+    final hideBalance = preferences.hideBalance;
+
+    final accountNotifier =
+    ref.watch(accountProvider);
 
     final transactionNotifier =
     ref.watch(transactionProvider);
@@ -32,14 +44,16 @@ class BalanceCard extends ConsumerWidget {
       transactions: transactionNotifier.transactions,
     );
 
-    final totalIncome = transactionNotifier.transactions
+    final totalIncome =
+    transactionNotifier.transactions
         .where((t) => t.isIncome)
         .fold<double>(
       0,
           (sum, t) => sum + t.amount,
     );
 
-    final totalExpense = transactionNotifier.transactions
+    final totalExpense =
+    transactionNotifier.transactions
         .where((t) => t.isExpense)
         .fold<double>(
       0,
@@ -50,9 +64,12 @@ class BalanceCard extends ConsumerWidget {
       padding: AppSpacing.screenPadding,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.all(
+          AppSpacing.xl,
+        ),
         decoration: BoxDecoration(
-          borderRadius: AppRadius.borderRadiusXl,
+          borderRadius:
+          AppRadius.borderRadiusXl,
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -63,16 +80,17 @@ class BalanceCard extends ConsumerWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: theme.colorScheme.primary.withValues(alpha: .25),
+              color: theme.colorScheme.primary
+                  .withValues(alpha: .25),
               blurRadius: 24,
               offset: const Offset(0, 12),
             ),
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+          CrossAxisAlignment.start,
           children: [
-
             /// Header
             Row(
               children: [
@@ -81,57 +99,97 @@ class BalanceCard extends ConsumerWidget {
                   height: 50,
                 ),
 
-                const SizedBox(width: AppSpacing.sm),
+                const SizedBox(
+                  width: AppSpacing.sm,
+                ),
 
                 Text(
                   'PocketIQ',
-                  style: theme.textTheme.titleMedium?.copyWith(
+                  style: theme
+                      .textTheme.titleMedium
+                      ?.copyWith(
                     color: Colors.white,
-                    fontWeight: FontWeight.w700,
+                    fontWeight:
+                    FontWeight.w700,
                   ),
                 ),
 
                 const Spacer(),
 
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: .12),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.visibility_outlined,
-                    color: Colors.white,
-                    size: 20,
+                InkWell(
+                  borderRadius:
+                  BorderRadius.circular(100),
+                  onTap: () async {
+                    await ref
+                        .read(
+                      preferencesProvider,
+                    )
+                        .toggleHideBalance();
+                  },
+                  child: Container(
+                    padding:
+                    const EdgeInsets.all(8),
+                    decoration:
+                    BoxDecoration(
+                      color: Colors.white
+                          .withValues(
+                        alpha: .12,
+                      ),
+                      shape:
+                      BoxShape.circle,
+                    ),
+                    child: Icon(
+                      hideBalance
+                          ? Icons
+                          .visibility_off_outlined
+                          : Icons
+                          .visibility_outlined,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
                 ),
               ],
             ),
 
-            const SizedBox(height: AppSpacing.xl),
+            const SizedBox(
+              height: AppSpacing.xl,
+            ),
 
             /// Balance Label
             Text(
               'Total Balance',
-              style: theme.textTheme.bodyMedium?.copyWith(
+              style: theme
+                  .textTheme.bodyMedium
+                  ?.copyWith(
                 color: Colors.white70,
               ),
             ),
 
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(
+              height: AppSpacing.sm,
+            ),
 
             /// Balance
             Text(
-              CurrencyFormatter.format(
-                totalBalance,
+              _displayAmount(
+                hideBalance,
+                CurrencyFormatter.format(
+                  totalBalance,
+                ),
               ),
-              style: theme.textTheme.displaySmall?.copyWith(
+              style: theme
+                  .textTheme.displaySmall
+                  ?.copyWith(
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
+                fontWeight:
+                FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: AppSpacing.xxl),
+            const SizedBox(
+              height: AppSpacing.xxl,
+            ),
 
             /// Income / Expense
             Row(
@@ -139,22 +197,34 @@ class BalanceCard extends ConsumerWidget {
                 Expanded(
                   child: _InfoTile(
                     title: 'Income',
-                    value: CurrencyFormatter.format(
-                      totalIncome,
+                    value: _displayAmount(
+                      hideBalance,
+                      CurrencyFormatter
+                          .format(
+                        totalIncome,
+                      ),
                     ),
-                    icon: Icons.south_west_rounded,
+                    icon: Icons
+                        .south_west_rounded,
                   ),
                 ),
 
-                const SizedBox(width: AppSpacing.xl),
+                const SizedBox(
+                  width: AppSpacing.xl,
+                ),
 
                 Expanded(
                   child: _InfoTile(
                     title: 'Expenses',
-                    value: CurrencyFormatter.format(
-                      totalExpense,
+                    value: _displayAmount(
+                      hideBalance,
+                      CurrencyFormatter
+                          .format(
+                        totalExpense,
+                      ),
                     ),
-                    icon: Icons.north_east_rounded,
+                    icon: Icons
+                        .north_east_rounded,
                   ),
                 ),
               ],
@@ -189,15 +259,20 @@ class _InfoTile extends StatelessWidget {
           size: 18,
         ),
 
-        const SizedBox(width: AppSpacing.sm),
+        const SizedBox(
+          width: AppSpacing.sm,
+        ),
 
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: theme.textTheme.bodySmall?.copyWith(
+                style: theme
+                    .textTheme.bodySmall
+                    ?.copyWith(
                   color: Colors.white70,
                 ),
               ),
@@ -207,10 +282,14 @@ class _InfoTile extends StatelessWidget {
               Text(
                 value,
                 maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleMedium?.copyWith(
+                overflow:
+                TextOverflow.ellipsis,
+                style: theme
+                    .textTheme.titleMedium
+                    ?.copyWith(
                   color: Colors.white,
-                  fontWeight: FontWeight.w700,
+                  fontWeight:
+                  FontWeight.w700,
                 ),
               ),
             ],

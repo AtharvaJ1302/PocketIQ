@@ -31,4 +31,6 @@ class AppSpacing {
   );
 
   static const EdgeInsets cardPadding = EdgeInsets.all(md);
+
+  static const section = 40.0;
 }

@@ -1,12 +1,6 @@
 import 'package:flutter/foundation.dart';
 
 class HomeNotifier extends ChangeNotifier {
-  bool hideBalance = false;
-
-  void toggleBalanceVisibility() {
-    hideBalance = !hideBalance;
-    notifyListeners();
-  }
 
   String get greeting {
     final hour = DateTime.now().hour;

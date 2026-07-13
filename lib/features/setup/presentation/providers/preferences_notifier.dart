@@ -24,7 +24,7 @@ class PreferencesNotifier extends ChangeNotifier {
 
     try {
       _preferences =
-      await _repository.loadPreferences();
+      await _repository.getPreferences();
     } finally {
       loading = false;
       notifyListeners();
@@ -47,6 +47,14 @@ class PreferencesNotifier extends ChangeNotifier {
       loading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> updatePreferences(
+      AppPreferences preferences,
+      ) async {
+    await savePreferences(
+      preferences,
+    );
   }
 
   Future<void> completeSetup({
