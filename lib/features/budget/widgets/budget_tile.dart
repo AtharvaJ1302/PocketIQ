@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/features/constants/app_categories.dart';
 import '../../../../core/features/constants/app_radius.dart';
@@ -7,8 +8,9 @@ import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../shared/components/indicators/pocket_progress_bar.dart';
 import '../domain/models/budget_summary.dart';
 import '../presentation/providers/budget_scroll_provider.dart';
+import '../presentation/providers/highlight_budget_provider.dart';
 
-class BudgetTile extends StatefulWidget {
+class BudgetTile extends ConsumerStatefulWidget {
   final BudgetSummary summary;
 
   final VoidCallback onEdit;
@@ -22,14 +24,16 @@ class BudgetTile extends StatefulWidget {
   });
 
   @override
-  State<BudgetTile> createState() =>
+  ConsumerState<BudgetTile> createState() =>
       _BudgetTileState();
 }
 
 class _BudgetTileState
-    extends State<BudgetTile> {
+    extends ConsumerState<BudgetTile> {
 
   final GlobalKey _tileKey = GlobalKey();
+
+  bool _highlighted = false;
 
   @override
   void initState() {
@@ -48,53 +52,122 @@ class _BudgetTileState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final highlightedCategory = ref.watch(
+      highlightBudgetProvider,
+    ).highlightedCategory;
+
+    final shouldHighlight =
+        highlightedCategory ==
+            widget.summary.budget.category;
+
+    if (shouldHighlight != _highlighted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+
+        setState(() {
+          _highlighted = shouldHighlight;
+        });
+      });
+    }
+
     final category = AppCategories.byName(
       widget.summary.budget.category,
     );
 
-    return Container(
-      key: _tileKey,
-      width: double.infinity,
-      padding: const EdgeInsets.all(
-        AppSpacing.lg,
-      ),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainer,
-        borderRadius:
-        AppRadius.borderRadiusLg,
-      ),
-      child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundColor:
-                category?.color.withValues(
-                  alpha: .15,
-                ) ??
-                    theme.colorScheme.primary
-                        .withValues(
-                      alpha: .15,
-                    ),
-                child: Icon(
-                  category?.icon ??
-                      Icons.category,
-                  color:
-                  category?.color ??
-                      theme.colorScheme
-                          .primary,
+    return AnimatedScale(
+        scale: _highlighted ? 1.03 : 1.0,
+        duration: const Duration(
+          milliseconds: 350,
+        ),
+        curve: Curves.easeOut,
+
+        child: AnimatedContainer(
+            duration: const Duration(
+              milliseconds: 350,
+            ),
+
+            decoration: BoxDecoration(
+              color:
+              theme.colorScheme.surfaceContainer,
+
+              borderRadius:
+              AppRadius.borderRadiusLg,
+
+              border: Border.all(
+                color: _highlighted
+                    ? (category?.color ??
+                    theme.colorScheme.primary)
+                    : Colors.transparent,
+                width: 2,
+              ),
+
+              boxShadow: _highlighted
+                  ? [
+                BoxShadow(
+                  color: (category?.color ??
+                      theme.colorScheme.primary)
+                      .withValues(alpha: .35),
+                  blurRadius: 18,
+                  spreadRadius: 2,
                 ),
-              ),
-
-              const SizedBox(
-                width: AppSpacing.md,
-              ),
-
-              Expanded(
-                child: Text(
-                  widget.summary.budget.category,
+              ]
+                  : [],
+            ),
+      child: Container(
+        key: _tileKey,
+        width: double.infinity,
+        padding: const EdgeInsets.all(
+          AppSpacing.lg,
+        ),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainer,
+          borderRadius:
+          AppRadius.borderRadiusLg,
+        ),
+        child: Column(
+          crossAxisAlignment:
+          CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor:
+                  category?.color.withValues(
+                    alpha: .15,
+                  ) ??
+                      theme.colorScheme.primary
+                          .withValues(
+                        alpha: .15,
+                      ),
+                  child: Icon(
+                    category?.icon ??
+                        Icons.category,
+                    color:
+                    category?.color ??
+                        theme.colorScheme
+                            .primary,
+                  ),
+                ),
+      
+                const SizedBox(
+                  width: AppSpacing.md,
+                ),
+      
+                Expanded(
+                  child: Text(
+                    widget.summary.budget.category,
+                    style: theme
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(
+                      fontWeight:
+                      FontWeight.bold,
+                    ),
+                  ),
+                ),
+      
+                Text(
+                  widget.summary.percentageLabel,
                   style: theme
                       .textTheme
                       .titleMedium
@@ -103,112 +176,102 @@ class _BudgetTileState
                     FontWeight.bold,
                   ),
                 ),
-              ),
-
-              Text(
-                widget.summary.percentageLabel,
-                style: theme
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(
-                  fontWeight:
-                  FontWeight.bold,
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    switch (value) {
+                      case 'edit':
+                        widget.onEdit();
+                        break;
+      
+                      case 'delete':
+                        widget.onDelete();
+                        break;
+                    }
+                  },
+                  itemBuilder: (_) => const [
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit_outlined),
+                          SizedBox(width: 12),
+                          Text('Edit Budget'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          Icon(Icons.delete_outline),
+                          SizedBox(width: 12),
+                          Text('Delete Budget'),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              PopupMenuButton<String>(
-                onSelected: (value) {
-                  switch (value) {
-                    case 'edit':
-                      widget.onEdit();
-                      break;
-
-                    case 'delete':
-                      widget.onDelete();
-                      break;
-                  }
-                },
-                itemBuilder: (_) => const [
-                  PopupMenuItem(
-                    value: 'edit',
-                    child: Row(
-                      children: [
-                        Icon(Icons.edit_outlined),
-                        SizedBox(width: 12),
-                        Text('Edit Budget'),
-                      ],
+              ],
+            ),
+      
+            const SizedBox(
+              height: AppSpacing.lg,
+            ),
+      
+            Row(
+              children: [
+                Expanded(
+                  child: _BudgetMetric(
+                    title: 'Budget',
+                    value: CurrencyFormatter
+                        .format(
+                      widget.summary.budget
+                          .budgetAmount,
                     ),
                   ),
-                  PopupMenuItem(
-                    value: 'delete',
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete_outline),
-                        SizedBox(width: 12),
-                        Text('Delete Budget'),
-                      ],
+                ),
+      
+                Expanded(
+                  child: _BudgetMetric(
+                    title: 'Spent',
+                    value: CurrencyFormatter
+                        .format(
+                      widget.summary.spent,
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
-
-          const SizedBox(
-            height: AppSpacing.lg,
-          ),
-
-          Row(
-            children: [
-              Expanded(
-                child: _BudgetMetric(
-                  title: 'Budget',
-                  value: CurrencyFormatter
-                      .format(
-                    widget.summary.budget
-                        .budgetAmount,
+                ),
+      
+                Expanded(
+                  child: _BudgetMetric(
+                    title: widget
+                        .summary.isExceeded
+                        ? 'Exceeded'
+                        : 'Remaining',
+                    value: CurrencyFormatter
+                        .format(
+                      widget.summary.isExceeded
+                          ? widget.summary
+                          .exceeded
+                          : widget.summary
+                          .remaining,
+                    ),
                   ),
                 ),
-              ),
-
-              Expanded(
-                child: _BudgetMetric(
-                  title: 'Spent',
-                  value: CurrencyFormatter
-                      .format(
-                    widget.summary.spent,
-                  ),
-                ),
-              ),
-
-              Expanded(
-                child: _BudgetMetric(
-                  title: widget
-                      .summary.isExceeded
-                      ? 'Exceeded'
-                      : 'Remaining',
-                  value: CurrencyFormatter
-                      .format(
-                    widget.summary.isExceeded
-                        ? widget.summary
-                        .exceeded
-                        : widget.summary
-                        .remaining,
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(
-            height: AppSpacing.lg,
-          ),
-
-          PocketProgressBar(
-            progress:
-            widget.summary.progress,
-          ),
-        ],
+              ],
+            ),
+      
+            const SizedBox(
+              height: AppSpacing.lg,
+            ),
+      
+            PocketProgressBar(
+              progress:
+              widget.summary.progress,
+            ),
+          ],
+        ),
       ),
+        ),
     );
   }
 }
