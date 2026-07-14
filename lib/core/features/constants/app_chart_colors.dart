@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppChartColors {
   AppChartColors._();
+  static const Color income =
+  Color(0xFF4CAF50);
+
+  static const Color expense =
+  Color(0xFFFF5252);
 
   static const gradients = [
 
@@ -46,5 +51,6 @@ class AppChartColors {
         Color(0xFFF472B6),
       ],
     ),
+
   ];
 }

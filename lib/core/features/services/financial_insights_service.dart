@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../features/analytics/domain/models/analytics_filter.dart';
+import '../../../features/analytics/domain/models/cash_flow_data.dart';
 import '../../../features/analytics/domain/models/category_summary.dart';
 import '../../../features/analytics/domain/models/financial_insight.dart';
+import '../../../features/analytics/domain/models/financial_snapshot_item.dart';
 import '../../../features/analytics/domain/models/monthly_summary.dart';
 import '../../../features/budget/domain/models/budget.dart';
 import '../../../features/budget/domain/models/budget_summary.dart';
@@ -321,5 +324,114 @@ class FinancialInsightsService {
           a.percentage,
         ),
       );
+  }
+
+  List<Transaction> filterTransactions(
+      List<Transaction> transactions,
+      AnalyticsFilter filter,
+      ) {
+    final now = DateTime.now();
+
+    switch (filter) {
+      case AnalyticsFilter.thisMonth:
+        return transactions.where(
+              (transaction) =>
+          transaction.date.month == now.month &&
+              transaction.date.year == now.year,
+        ).toList();
+
+      case AnalyticsFilter.lastMonth:
+        final previousMonth =
+        DateTime(now.year, now.month - 1);
+
+        return transactions.where(
+              (transaction) =>
+          transaction.date.month ==
+              previousMonth.month &&
+              transaction.date.year ==
+                  previousMonth.year,
+        ).toList();
+
+      case AnalyticsFilter.last3Months:
+        final start =
+        DateTime(now.year, now.month - 2, 1);
+
+        return transactions.where(
+              (transaction) =>
+          transaction.date.isAfter(
+            start.subtract(
+              const Duration(days: 1),
+            ),
+          ) &&
+              transaction.date.isBefore(
+                DateTime(
+                  now.year,
+                  now.month + 1,
+                  1,
+                ),
+              ),
+        ).toList();
+
+      case AnalyticsFilter.thisYear:
+        return transactions.where(
+              (transaction) =>
+          transaction.date.year ==
+              now.year,
+        ).toList();
+    }
+  }
+
+  List<CashFlowData> getCashFlowData(
+      List<Transaction> transactions,
+      ) {
+    final Map<String, CashFlowData> data = {};
+
+    for (final transaction in transactions) {
+      final key =
+          '${transaction.date.year}-${transaction.date.month}';
+
+      final current = data[key];
+
+      if (current == null) {
+        data[key] = CashFlowData(
+          year: transaction.date.year,
+          month: transaction.date.month,
+          income:
+          transaction.isIncome
+              ? transaction.amount
+              : 0,
+          expense:
+          transaction.isExpense
+              ? transaction.amount
+              : 0,
+        );
+
+        continue;
+      }
+
+      data[key] = CashFlowData(
+        year: current.year,
+        month: current.month,
+        income: current.income +
+            (transaction.isIncome
+                ? transaction.amount
+                : 0),
+        expense: current.expense +
+            (transaction.isExpense
+                ? transaction.amount
+                : 0),
+      );
+    }
+
+    final result = data.values.toList();
+
+    result.sort((a, b) {
+      final left = DateTime(a.year, a.month);
+      final right = DateTime(b.year, b.month);
+
+      return left.compareTo(right);
+    });
+
+    return result;
   }
 }

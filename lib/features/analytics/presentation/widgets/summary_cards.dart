@@ -5,6 +5,7 @@ import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/services/financial_insights_service_provider.dart';
 import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../transactions/presentation/providers/transaction_provider.dart';
+import '../providers/analytics_provider.dart';
 import 'summary_card.dart';
 
 class SummaryCards extends ConsumerWidget {
@@ -16,7 +17,8 @@ class SummaryCards extends ConsumerWidget {
     ref.read(financialInsightsServiceProvider);
 
     final transactions =
-        ref.watch(transactionProvider).transactions;
+        ref.watch(analyticsProvider)
+            .filteredTransactions;
 
     final income =
     service.getTotalIncome(transactions);

@@ -1,0 +1,4 @@
+enum StatementType {
+  pdf,
+  csv,
+}

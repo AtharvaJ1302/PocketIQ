@@ -5,6 +5,7 @@ import 'package:pocketiq/shared/components/states/pocket_empty_state.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/services/financial_insights_service_provider.dart';
 import '../../transactions/presentation/providers/transaction_provider.dart';
+import '../presentation/providers/analytics_provider.dart';
 import 'financial_insight_tile.dart';
 
 class FinancialInsights extends ConsumerWidget {
@@ -18,7 +19,8 @@ class FinancialInsights extends ConsumerWidget {
     ref.read(financialInsightsServiceProvider);
 
     final transactions =
-        ref.watch(transactionProvider).transactions;
+        ref.watch(analyticsProvider)
+            .filteredTransactions;
 
     final insights =
     service.getInsights(transactions);

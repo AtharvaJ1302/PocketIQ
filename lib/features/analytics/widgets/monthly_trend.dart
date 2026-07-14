@@ -5,6 +5,7 @@ import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/services/financial_insights_service_provider.dart';
 import '../../../shared/components/states/pocket_empty_state.dart';
 import '../../transactions/presentation/providers/transaction_provider.dart';
+import '../presentation/providers/analytics_provider.dart';
 import 'monthly_summary_tile.dart';
 
 class MonthlyTrend extends ConsumerWidget {
@@ -15,7 +16,8 @@ class MonthlyTrend extends ConsumerWidget {
     final theme = Theme.of(context);
 
     final transactions =
-        ref.watch(transactionProvider).transactions;
+        ref.watch(analyticsProvider)
+            .filteredTransactions;
 
     final service =
     ref.read(financialInsightsServiceProvider);

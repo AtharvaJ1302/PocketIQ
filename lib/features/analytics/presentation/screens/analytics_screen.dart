@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:pocketiq/features/analytics/presentation/widgets/cash_flow/cash_flow_card.dart';
 
 import '../../../../core/features/constants/app_spacing.dart';
-import '../../widgets/category_breakdown.dart';
 import '../../widgets/financial_insights.dart';
 import '../../widgets/monthly_trend.dart';
 import '../widgets/analytics_header.dart';
+import '../widgets/budget_health.dart';
+import '../widgets/expense_breakdown/expense_breakdown_card.dart';
 import '../widgets/summary_cards.dart';
 
 class AnalyticsScreen extends StatelessWidget {
-  const AnalyticsScreen({super.key});
+  const AnalyticsScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,33 +21,44 @@ class AnalyticsScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 20),
+
+              SizedBox(
+                height: 20,
+              ),
 
               AnalyticsHeader(),
 
-              SizedBox(height: 24),
+              SizedBox(
+                height: 24,
+              ),
 
               SummaryCards(),
 
-              const SizedBox(
+              SizedBox(
                 height: AppSpacing.section,
               ),
 
-              CategoryBreakdown(),
+              BudgetHealth(),
 
-              const SizedBox(
+              SizedBox(
                 height: AppSpacing.section,
               ),
 
-              MonthlyTrend(),
+              ExpenseBreakdownCard(),
 
-              const SizedBox(
+              SizedBox(
+                height: AppSpacing.section,
+              ),
+
+              CashFlowCard(),
+
+              SizedBox(
                 height: AppSpacing.section,
               ),
 
               FinancialInsights(),
 
-              const SizedBox(
+              SizedBox(
                 height: AppSpacing.section,
               ),
             ],
