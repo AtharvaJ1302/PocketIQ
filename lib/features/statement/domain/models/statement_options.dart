@@ -1,13 +1,13 @@
-import 'package:pocketiq/features/statement/domain/models/statement_data.dart';
-
+import 'statement_period.dart';
 import 'statement_type.dart';
 
 class StatementOptions {
   final StatementType type;
 
-  final bool includeIncome;
-  final bool includeExpense;
+  final StatementPeriod period;
+
   final bool includeCategories;
+  final bool includeBudgetSummary;
   final bool includeNotes;
 
   final DateTime? from;
@@ -15,9 +15,9 @@ class StatementOptions {
 
   const StatementOptions({
     this.type = StatementType.pdf,
-    this.includeIncome = true,
-    this.includeExpense = true,
+    this.period = StatementPeriod.thisMonth,
     this.includeCategories = true,
+    this.includeBudgetSummary = true,
     this.includeNotes = true,
     this.from,
     this.to,
@@ -25,19 +25,21 @@ class StatementOptions {
 
   StatementOptions copyWith({
     StatementType? type,
-    bool? includeIncome,
-    bool? includeExpense,
+    StatementPeriod? period,
     bool? includeCategories,
+    bool? includeBudgetSummary,
     bool? includeNotes,
     DateTime? from,
     DateTime? to,
   }) {
     return StatementOptions(
       type: type ?? this.type,
-      includeIncome: includeIncome ?? this.includeIncome,
-      includeExpense: includeExpense ?? this.includeExpense,
+      period: period ?? this.period,
       includeCategories:
       includeCategories ?? this.includeCategories,
+      includeBudgetSummary:
+      includeBudgetSummary ??
+          this.includeBudgetSummary,
       includeNotes:
       includeNotes ?? this.includeNotes,
       from: from ?? this.from,

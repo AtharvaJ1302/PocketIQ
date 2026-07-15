@@ -1,39 +1,31 @@
 import 'package:flutter/foundation.dart';
 
 import '../../domain/models/statement_options.dart';
+import '../../domain/models/statement_period.dart';
+import '../../domain/models/statement_type.dart';
 
-class StatementNotifier
-    extends ChangeNotifier {
-
+class StatementNotifier extends ChangeNotifier {
   StatementOptions _options =
   const StatementOptions();
 
-  StatementOptions get options =>
-      _options;
+  StatementOptions get options => _options;
 
-  void changeType(type) {
-    _options =
-        _options.copyWith(
-          type: type,
-        );
-
-    notifyListeners();
-  }
-
-  void toggleIncome(bool value) {
-    _options =
-        _options.copyWith(
-          includeIncome: value,
-        );
+  void changeType(
+      StatementType type,
+      ) {
+    _options = _options.copyWith(
+      type: type,
+    );
 
     notifyListeners();
   }
 
-  void toggleExpense(bool value) {
-    _options =
-        _options.copyWith(
-          includeExpense: value,
-        );
+  void changePeriod(
+      StatementPeriod period,
+      ) {
+    _options = _options.copyWith(
+      period: period,
+    );
 
     notifyListeners();
   }
@@ -41,10 +33,19 @@ class StatementNotifier
   void toggleCategories(
       bool value,
       ) {
-    _options =
-        _options.copyWith(
-          includeCategories: value,
-        );
+    _options = _options.copyWith(
+      includeCategories: value,
+    );
+
+    notifyListeners();
+  }
+
+  void toggleBudgetSummary(
+      bool value,
+      ) {
+    _options = _options.copyWith(
+      includeBudgetSummary: value,
+    );
 
     notifyListeners();
   }
@@ -52,10 +53,9 @@ class StatementNotifier
   void toggleNotes(
       bool value,
       ) {
-    _options =
-        _options.copyWith(
-          includeNotes: value,
-        );
+    _options = _options.copyWith(
+      includeNotes: value,
+    );
 
     notifyListeners();
   }
@@ -64,11 +64,10 @@ class StatementNotifier
     DateTime? from,
     DateTime? to,
   }) {
-    _options =
-        _options.copyWith(
-          from: from,
-          to: to,
-        );
+    _options = _options.copyWith(
+      from: from,
+      to: to,
+    );
 
     notifyListeners();
   }

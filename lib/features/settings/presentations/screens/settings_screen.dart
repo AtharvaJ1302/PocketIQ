@@ -5,6 +5,7 @@ import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../shared/components/sheets/pocket_bottom_sheet.dart';
 import '../../../security/presentation/providers/app_lock_provider.dart';
 import '../../../setup/presentation/providers/preferences_provider.dart';
+import '../../../statement/presentation/screens/statement_screen.dart';
 import '../widgets/edit_name_sheet.dart';
 import '../widgets/reset_app_dialog.dart';
 import '../widgets/settings_section.dart';
@@ -81,21 +82,6 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
 
-          /// Display
-          SettingsSection(
-            title: 'Display',
-            children: [
-              SettingsSwitchTile(
-                icon: Icons.visibility_outlined,
-                title: 'Hide Balance',
-                value: preferences.hideBalance,
-                onChanged: (_) async {
-                  await preferencesNotifier.toggleHideBalance();
-                },
-              ),
-            ],
-          ),
-
           /// Data
           SettingsSection(
             title: 'Data',
@@ -112,6 +98,27 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
             ],
+          ),
+
+          ///statement
+          ListTile(
+            leading: const Icon(
+              Icons.description_outlined,
+            ),
+            title: const Text(
+              'Generate Statement',
+            ),
+            trailing: const Icon(
+              Icons.chevron_right,
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const StatementScreen(),
+                ),
+              );
+            },
           ),
 
           /// About

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/features/constants/app_radius.dart';
 import '../../../core/features/constants/app_sizes.dart';
@@ -44,8 +45,12 @@ final ThemeData darkTheme = ThemeData(
     centerTitle: false,
     elevation: 0,
     scrolledUnderElevation: 0,
+
     backgroundColor: Colors.transparent,
+
     foregroundColor: Colors.white,
+
+    systemOverlayStyle: SystemUiOverlayStyle.light,
   ),
 
   cardTheme: CardThemeData(
