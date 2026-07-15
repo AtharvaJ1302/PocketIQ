@@ -16,6 +16,8 @@ import '../../features/security/presentation/screens/app_lock_screen.dart';
 import '../../features/setup/presentation/screens/setup_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/accounts/presentation/screens/accounts_screen.dart';
+import '../../features/statement/presentation/screens/statement_preview_screen.dart';
+import '../../features/statement/presentation/screens/statement_screen.dart';
 import '../../features/transactions/presentation/models/transaction_form_args.dart';
 import '../../features/transactions/presentation/models/transactions_screen_args.dart';
 import '../../features/transactions/presentation/screens/transactions_screen.dart';
@@ -119,6 +121,13 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.appLock,
         builder: (_, __) => const AppLockScreen(),
+      ),
+
+      //Statement Route
+      GoRoute(
+        path: AppRoutes.statement,
+        builder: (_, __) =>
+        const StatementScreen(),
       ),
     ],
   );

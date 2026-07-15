@@ -72,12 +72,12 @@ class QuickActions extends StatelessWidget {
               const SizedBox(width: AppSpacing.md),
 
               QuickActionItem(
-                icon: Icons.pie_chart_outline,
-                label: 'Budget',
-                iconColor: AppColors.budget,
+                icon: Icons.picture_as_pdf_outlined,
+                label: 'Statement',
+                iconColor: AppColors.statement,
                 onPressed: () {
                   context.push(
-                    AppRoutes.budget,
+                    AppRoutes.statement,
                   );
                 },
               ),

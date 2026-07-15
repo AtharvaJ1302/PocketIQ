@@ -40,4 +40,7 @@ class AppColors{
   static const cardSubtitle = Color(0xB3FFFFFF);
 
   static const cardIcon = Color(0x99FFFFFF);
+
+  static const statement =
+  Color(0xFF7E57C2);
 }

@@ -100,26 +100,6 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
 
-          ///statement
-          ListTile(
-            leading: const Icon(
-              Icons.description_outlined,
-            ),
-            title: const Text(
-              'Generate Statement',
-            ),
-            trailing: const Icon(
-              Icons.chevron_right,
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const StatementScreen(),
-                ),
-              );
-            },
-          ),
 
           /// About
           SettingsSection(

@@ -17,4 +17,5 @@ class AppRoutes {
   static const setup = '/setup';
   static const main = '/main';
   static const appLock = '/app-lock';
+  static const statement = '/statement';
 }
