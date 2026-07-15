@@ -73,7 +73,7 @@ class QuickActions extends StatelessWidget {
 
               QuickActionItem(
                 icon: Icons.picture_as_pdf_outlined,
-                label: 'Statement',
+                label: 'Reports',
                 iconColor: AppColors.statement,
                 onPressed: () {
                   context.push(

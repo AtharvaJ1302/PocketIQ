@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/app_routes.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/services/deep_link_manager.dart';
+import '../../../accounts/presentation/providers/account_provider.dart';
 import '../../widgets/budget_list.dart';
 import '../providers/budget_provider.dart';
 import '../providers/budget_scroll_provider.dart';
@@ -73,18 +76,26 @@ class _BudgetScreenState
 
   @override
   Widget build(BuildContext context) {
+
+    final accountNotifier = ref.watch(accountProvider);
+
+    final hasAccounts =
+        accountNotifier.accounts.isNotEmpty;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Budget'),
       ),
-      body: const SafeArea(
-        child: SingleChildScrollView(
+      body: SafeArea(
+        child: hasAccounts
+            ? const SingleChildScrollView(
           padding: AppSpacing.screenPadding,
           child: BudgetList(),
-        ),
+        )
+            : _NoAccountBudgetState(),
       ),
-      floatingActionButton:
-      FloatingActionButton.extended(
+      floatingActionButton: hasAccounts
+          ? FloatingActionButton.extended(
         onPressed: () async {
           await showModalBottomSheet(
             context: context,
@@ -103,6 +114,74 @@ class _BudgetScreenState
         icon: const Icon(Icons.add),
         label: const Text(
           'Add Budget',
+        ),
+      )
+          : null,
+      );
+  }
+}
+
+class _NoAccountBudgetState
+    extends StatelessWidget {
+  const _NoAccountBudgetState();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: AppSpacing.screenPadding,
+      child: Center(
+        child: Column(
+          mainAxisAlignment:
+          MainAxisAlignment.center,
+          children: [
+
+            Icon(
+              Icons.account_balance_wallet_outlined,
+              size: 72,
+              color: theme.colorScheme.primary,
+            ),
+
+            const SizedBox(
+              height: AppSpacing.xl,
+            ),
+
+            Text(
+              'Create Your First Account',
+              style: theme.textTheme.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(
+              height: AppSpacing.md,
+            ),
+
+            Text(
+              'Budgets are linked to your accounts.\n\n'
+                  'Create an account first, then start planning your monthly spending.',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium,
+            ),
+
+            const SizedBox(
+              height: AppSpacing.xxxl,
+            ),
+
+            FilledButton.icon(
+              onPressed: () {
+                context.push(
+                  AppRoutes.accounts,
+                );
+              },
+              icon: const Icon(
+                Icons.add,
+              ),
+              label: const Text(
+                'Create Account',
+              ),
+            ),
+          ],
         ),
       ),
     );

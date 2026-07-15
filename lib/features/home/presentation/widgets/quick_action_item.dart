@@ -59,7 +59,7 @@ class _QuickActionItemState extends State<QuickActionItem> {
                 color: theme.colorScheme.surfaceContainer,
                 borderRadius: AppRadius.borderRadiusLg,
                 border: Border.all(
-                  color: theme.dividerColor.withValues(alpha: 0.3),
+                  color: theme.colorScheme.outline.withOpacity(0.15),
                 ),
                 boxShadow: [
                   BoxShadow(
