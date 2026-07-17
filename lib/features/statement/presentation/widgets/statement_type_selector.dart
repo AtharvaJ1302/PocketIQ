@@ -49,14 +49,14 @@ class StatementTypeSelector extends ConsumerWidget {
                   ),
                 ),
 
-                ButtonSegment(
-                  value: StatementType.csv,
-                  label: Text('CSV'),
-                  icon: Icon(
-                    Icons.lock_outline_rounded,
-                  ),
-                  enabled: false,
-                ),
+                // ButtonSegment(
+                //   value: StatementType.csv,
+                //   label: Text('CSV'),
+                //   icon: Icon(
+                //     Icons.lock_outline_rounded,
+                //   ),
+                //   enabled: false,
+                // ),
               ],
 
               selected: {
@@ -74,12 +74,12 @@ class StatementTypeSelector extends ConsumerWidget {
 
             const SizedBox(height: 12),
 
-            Text(
-              'CSV export will be available in a future update.',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
+            // Text(
+            //   'CSV export will be available in a future update.',
+            //   style: theme.textTheme.bodySmall?.copyWith(
+            //     color: theme.colorScheme.onSurfaceVariant,
+            //   ),
+            // ),
           ],
         ),
       ),

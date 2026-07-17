@@ -1,13 +1,18 @@
 import 'package:flutter/foundation.dart';
+import '../../../budget/presentation/providers/budget_notifier.dart';
 import '../../domain/models/account.dart';
 import '../../domain/repositories/account_repository.dart';
 
 class AccountNotifier extends ChangeNotifier {
-  AccountNotifier(this._repository) {
+  AccountNotifier(
+      this._repository,
+      this._budgetNotifier,
+      ) {
     loadAccounts();
   }
 
   final AccountRepository _repository;
+  final BudgetNotifier _budgetNotifier;
 
   bool loading = false;
 
@@ -40,7 +45,15 @@ class AccountNotifier extends ChangeNotifier {
     notifyListeners();
 
     try {
+      final remainingAccounts =
+          accounts.length - 1;
+
+      if (remainingAccounts == 0) {
+        await _budgetNotifier.clearBudgets();
+      }
+
       await _repository.deleteAccount(id);
+
       await loadAccounts();
     } finally {
       loading = false;

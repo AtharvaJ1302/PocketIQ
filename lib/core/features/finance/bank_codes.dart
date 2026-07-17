@@ -11,6 +11,6 @@ class BankCodes {
   static const bob = 'BOB';
   static const canara = 'CANARA';
   static const union = 'UNION';
-  static const cash = 'CASH';
-  static const wallet = 'WALLET';
+  // static const cash = 'CASH';
+  // static const wallet = 'WALLET';
 }

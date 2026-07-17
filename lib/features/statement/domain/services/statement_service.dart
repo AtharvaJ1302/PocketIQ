@@ -106,8 +106,8 @@ class StatementService {
               now.year;
         }).toList();
 
-      case StatementPeriod.custom:
-        return transactions;
+      // case StatementPeriod.custom:
+      //   return transactions;
     }
   }
 }

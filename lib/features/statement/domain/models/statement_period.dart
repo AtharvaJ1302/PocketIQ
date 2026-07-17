@@ -3,5 +3,5 @@ enum StatementPeriod {
   lastMonth,
   last3Months,
   thisYear,
-  custom,
+  // custom,
 }

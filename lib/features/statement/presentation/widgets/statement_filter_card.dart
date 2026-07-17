@@ -82,14 +82,14 @@ class StatementFilterCard extends ConsumerWidget {
                   ),
                 ),
 
-                DropdownMenuItem(
-                  value: StatementPeriod.custom,
-                  enabled: false,
-                  child: Text(
-                    'Custom Range',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
+                // DropdownMenuItem(
+                //   value: StatementPeriod.custom,
+                //   enabled: false,
+                //   child: Text(
+                //     'Custom Range',
+                //     overflow: TextOverflow.ellipsis,
+                //   ),
+                // ),
               ],
 
               onChanged: (value) {
@@ -107,22 +107,22 @@ class StatementFilterCard extends ConsumerWidget {
               height: AppSpacing.lg,
             ),
 
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(
-                Icons.date_range_rounded,
-              ),
-              title: const Text(
-                'Custom Date Range',
-              ),
-              subtitle: Text(
-                'Available in a future update',
-                style: theme.textTheme.bodySmall,
-              ),
-              trailing: const Icon(
-                Icons.lock_outline_rounded,
-              ),
-            ),
+            // ListTile(
+            //   contentPadding: EdgeInsets.zero,
+            //   leading: const Icon(
+            //     Icons.date_range_rounded,
+            //   ),
+            //   title: const Text(
+            //     'Custom Date Range',
+            //   ),
+            //   subtitle: Text(
+            //     'Available in a future update',
+            //     style: theme.textTheme.bodySmall,
+            //   ),
+            //   trailing: const Icon(
+            //     Icons.lock_outline_rounded,
+            //   ),
+            // ),
           ],
         ),
       ),

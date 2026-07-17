@@ -14,8 +14,8 @@ class BankInfo {
     BankCodes.bob: 'Bank of Baroda',
     BankCodes.canara: 'Canara Bank',
     BankCodes.union: 'Union Bank',
-    BankCodes.cash: 'Cash',
-    BankCodes.wallet: 'Wallet',
+    // BankCodes.cash: 'Cash',
+    // BankCodes.wallet: 'Wallet',
   };
 
   static String getName(String bankCode) {

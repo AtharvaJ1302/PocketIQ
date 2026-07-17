@@ -17,7 +17,8 @@ class NotificationPermissionSheet
       BuildContext context,
       WidgetRef ref,
       ) {
-    return Padding(
+    return SafeArea(
+      child: SingleChildScrollView(
       padding: EdgeInsets.only(
         left: 24,
         right: 24,
@@ -32,12 +33,22 @@ class NotificationPermissionSheet
         mainAxisSize: MainAxisSize.min,
         children: [
 
-          Icon(
-            Icons.notifications_active_rounded,
-            size: 72,
-            color: Theme.of(context)
-                .colorScheme
-                .primary,
+          Container(
+            width: 88,
+            height: 88,
+            decoration: BoxDecoration(
+              color: Theme.of(context)
+                  .colorScheme
+                  .primaryContainer,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.notifications_active_rounded,
+              size: 72,
+              color: Theme.of(context)
+                  .colorScheme
+                  .primary,
+            ),
           ),
 
           const SizedBox(
@@ -56,7 +67,7 @@ class NotificationPermissionSheet
           ),
 
           Text(
-            'PocketIQ can notify you when you are approaching or exceeding your budgets.\n\n'
+            'PocketIQ can remind you before you exceed your budget, helping you stay in control of your finances.\n\n'
                 'Later, you can choose which individual budgets should receive notifications.',
             textAlign: TextAlign.center,
             style: Theme.of(context)
@@ -65,7 +76,7 @@ class NotificationPermissionSheet
           ),
 
           const SizedBox(
-            height: AppSpacing.xxxl,
+            height: AppSpacing.xl,
           ),
 
           PocketButton(
@@ -129,6 +140,7 @@ class NotificationPermissionSheet
             height: AppSpacing.md,
           ),
         ],
+      ),
       ),
     );
   }

@@ -491,7 +491,7 @@ String _periodLabel(
     case StatementPeriod.thisYear:
       return 'This Year';
 
-    case StatementPeriod.custom:
-      return 'Custom Range';
+    // case StatementPeriod.custom:
+    //   return 'Custom Range';
   }
 }
