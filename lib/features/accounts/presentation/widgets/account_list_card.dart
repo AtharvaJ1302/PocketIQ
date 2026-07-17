@@ -93,12 +93,12 @@ class AccountListCard extends StatelessWidget {
                 ),
               ),
 
-              Text(
-                CurrencyFormatter.format(account.openingBalance),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              // Text(
+              //   CurrencyFormatter.format(account.openingBalance),
+              //   style: theme.textTheme.titleMedium?.copyWith(
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
             ],
           ),
         ),

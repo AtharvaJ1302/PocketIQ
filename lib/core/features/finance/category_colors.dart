@@ -13,10 +13,10 @@ class CategoryColors {
       case FinanceCategories.shopping:
         return Colors.purple;
 
-      case FinanceCategories.transport:
+      // case FinanceCategories.transport:
         return Colors.blue;
 
-      case FinanceCategories.health:
+      // case FinanceCategories.health:
         return Colors.red;
 
       case FinanceCategories.salary:

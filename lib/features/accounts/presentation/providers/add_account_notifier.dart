@@ -26,7 +26,6 @@ class AddAccountNotifier extends ChangeNotifier {
   Future<void> saveAccount({
     required String accountName,
     required String accountNumber,
-    required double openingBalance,
   }) async {
     if (selectedBank == null || selectedAccountType == null) {
       return;
@@ -42,7 +41,7 @@ class AddAccountNotifier extends ChangeNotifier {
         accountType: selectedAccountType!,
         accountName: accountName,
         accountNumber: accountNumber,
-        openingBalance: openingBalance,
+        openingBalance: 0,
       );
 
       await _repository.addAccount(account);
@@ -56,7 +55,6 @@ class AddAccountNotifier extends ChangeNotifier {
     required Account account,
     required String accountName,
     required String accountNumber,
-    required double openingBalance,
   }) async {
     loading = true;
     notifyListeners();
@@ -68,7 +66,9 @@ class AddAccountNotifier extends ChangeNotifier {
         accountType: selectedAccountType!,
         accountName: accountName,
         accountNumber: accountNumber,
-        openingBalance: openingBalance,
+
+        // Preserve the existing value in the database
+        openingBalance: account.openingBalance,
       );
 
       await _repository.updateAccount(updatedAccount);

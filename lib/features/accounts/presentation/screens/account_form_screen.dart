@@ -36,10 +36,10 @@ class _AccountFormScreenState
 
   late final TextEditingController _accountNameController;
   late final TextEditingController _accountNumberController;
-  late final TextEditingController _balanceController;
+  // late final TextEditingController _balanceController;
   late final FocusNode _accountNameFocusNode;
   late final FocusNode _accountNumberFocusNode;
-  late final FocusNode _balanceFocusNode;
+  // late final FocusNode _balanceFocusNode;
 
   @override
   void initState() {
@@ -47,19 +47,19 @@ class _AccountFormScreenState
 
     _accountNameController = TextEditingController();
     _accountNumberController = TextEditingController();
-    _balanceController = TextEditingController();
+    // _balanceController = TextEditingController();
 
     _accountNameFocusNode = FocusNode();
     _accountNumberFocusNode = FocusNode();
-    _balanceFocusNode = FocusNode();
+    // _balanceFocusNode = FocusNode();
 
     if (widget.account != null) {
       final account = widget.account!;
 
       _accountNameController.text = account.accountName;
       _accountNumberController.text = account.accountNumber;
-      _balanceController.text =
-          account.openingBalance.toStringAsFixed(2);
+      // _balanceController.text =
+      //     account.openingBalance.toStringAsFixed(2);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final notifier = ref.read(addAccountProvider);
@@ -74,10 +74,10 @@ class _AccountFormScreenState
   void dispose() {
     _accountNameController.dispose();
     _accountNumberController.dispose();
-    _balanceController.dispose();
+    // _balanceController.dispose();
     _accountNameFocusNode.dispose();
     _accountNumberFocusNode.dispose();
-    _balanceFocusNode.dispose();
+    // _balanceFocusNode.dispose();
     super.dispose();
   }
 
@@ -112,18 +112,12 @@ class _AccountFormScreenState
       await notifier.saveAccount(
         accountName: _accountNameController.text.trim(),
         accountNumber: _accountNumberController.text.trim(),
-        openingBalance: double.parse(
-          _balanceController.text.trim(),
-        ),
       );
     } else {
       await notifier.updateAccount(
         account: widget.account!,
         accountName: _accountNameController.text.trim(),
         accountNumber: widget.account!.accountNumber,
-        openingBalance: double.parse(
-          _balanceController.text.trim(),
-        ),
       );
     }
 
@@ -244,7 +238,7 @@ class _AccountFormScreenState
                           if (widget.account == null) {
                             _accountNumberFocusNode.requestFocus();
                           } else {
-                            _balanceFocusNode.requestFocus();
+                            // _balanceFocusNode.requestFocus();
                           }
                         },
                       ),
@@ -266,34 +260,34 @@ class _AccountFormScreenState
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           onFieldSubmitted: (_) {
-                            _balanceFocusNode.requestFocus();
+                            // _balanceFocusNode.requestFocus();
                           },
                         ),
 
                         const SizedBox(height: AppSpacing.lg),
                       ],
 
-                      PocketTextField(
-                        controller: _balanceController,
-                        focusNode: _balanceFocusNode,
-                        prefixIcon: const Icon(
-                          Icons.currency_rupee,
-                        ),
-                        label: widget.account == null
-                            ? 'Opening Balance'
-                            : 'Current Balance',
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        validator: Validators.amount,
-                        textInputAction: TextInputAction.done,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\.?\d{0,2}'),
-                          ),
-                        ],
-                        onFieldSubmitted: (_) => _saveAccount(notifier),
-                      ),
+                      // PocketTextField(
+                      //   controller: _balanceController,
+                      //   focusNode: _balanceFocusNode,
+                      //   prefixIcon: const Icon(
+                      //     Icons.currency_rupee,
+                      //   ),
+                      //   label: widget.account == null
+                      //       ? 'Opening Balance'
+                      //       : 'Current Balance',
+                      //   keyboardType: const TextInputType.numberWithOptions(
+                      //     decimal: true,
+                      //   ),
+                      //   validator: Validators.amount,
+                      //   textInputAction: TextInputAction.done,
+                      //   inputFormatters: [
+                      //     FilteringTextInputFormatter.allow(
+                      //       RegExp(r'^\d*\.?\d{0,2}'),
+                      //     ),
+                      //   ],
+                      //   onFieldSubmitted: (_) => _saveAccount(notifier),
+                      // ),
                     ],
                   ),
 

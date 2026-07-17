@@ -60,12 +60,12 @@ class HomeAppBar extends ConsumerWidget {
                     .withValues(alpha: .12),
               ),
             ),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications_none_rounded,
-              ),
-            ),
+            // child: IconButton(
+            //   onPressed: () {},
+            //   icon: const Icon(
+            //     Icons.notifications_none_rounded,
+            //   ),
+            // ),
           ),
         ],
       ),

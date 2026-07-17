@@ -48,8 +48,8 @@ class AppCategories {
     ),
 
     CategoryDefinition(
-      name: 'Entertainment',
-      icon: Icons.movie_rounded,
+      name: 'Groceries',
+      icon: Icons.local_grocery_store_rounded,
       color: Color(0xFFEC4899),
       supportsBudget: true,
       isIncome: false,
@@ -64,8 +64,8 @@ class AppCategories {
     ),
 
     CategoryDefinition(
-      name: 'Transport',
-      icon: Icons.directions_bus_rounded,
+      name: 'Other',
+      icon: Icons.inventory_2_rounded,
       color: Color(0xFF14B8A6),
       supportsBudget: true,
       isIncome: false,

@@ -18,8 +18,13 @@ class StatementService {
     required List<Budget> budgets,
     required StatementOptions options,
   }) {
-    final filtered = _filterTransactions(
+    final filteredTransactions = _filterTransactions(
       transactions: transactions,
+      period: options.period,
+    );
+
+    final filteredBudgets = _filterBudgets(
+      budgets: budgets,
       period: options.period,
     );
 
@@ -28,33 +33,33 @@ class StatementService {
 
       summary: StatementSummary(
         income: _insightsService.getTotalIncome(
-          filtered,
+          filteredTransactions,
         ),
         expense: _insightsService.getTotalExpense(
-          filtered,
+          filteredTransactions,
         ),
         savings: _insightsService.getSavings(
-          filtered,
+          filteredTransactions,
         ),
       ),
 
-      transactions: filtered,
+      transactions: filteredTransactions,
 
       categories: options.includeCategories
           ? _insightsService.getCategorySummary(
-        filtered,
+        filteredTransactions,
       )
           : const [],
 
       budgets: options.includeBudgetSummary
           ? _insightsService.getBudgetSummaries(
-        budgets: budgets,
-        transactions: filtered,
+        budgets: filteredBudgets,
+        transactions: filteredTransactions,
       )
           : const [],
 
       notedTransactions: options.includeNotes
-          ? filtered
+          ? filteredTransactions
           .where(
             (transaction) =>
         transaction.note != null &&
@@ -79,35 +84,77 @@ class StatementService {
         }).toList();
 
       case StatementPeriod.lastMonth:
-        final previous =
-        DateTime(now.year, now.month - 1);
+        final previous = DateTime(now.year, now.month - 1);
 
         return transactions.where((transaction) {
-          return transaction.date.month ==
-              previous.month &&
-              transaction.date.year ==
-                  previous.year;
+          return transaction.date.month == previous.month &&
+              transaction.date.year == previous.year;
         }).toList();
 
       case StatementPeriod.last3Months:
-        final cutoff =
-        DateTime(now.year, now.month - 2);
+        final cutoff = DateTime(now.year, now.month - 2);
 
         return transactions.where((transaction) {
           return transaction.date.isAfter(cutoff) ||
-              transaction.date.isAtSameMomentAs(
-                cutoff,
-              );
+              transaction.date.isAtSameMomentAs(cutoff);
         }).toList();
 
       case StatementPeriod.thisYear:
         return transactions.where((transaction) {
-          return transaction.date.year ==
-              now.year;
+          return transaction.date.year == now.year;
         }).toList();
-
-      // case StatementPeriod.custom:
-      //   return transactions;
     }
+  }
+
+  List<Budget> _filterBudgets({
+    required List<Budget> budgets,
+    required StatementPeriod period,
+  }) {
+    final now = DateTime.now();
+
+    DateTime endDate;
+
+    switch (period) {
+      case StatementPeriod.thisMonth:
+        endDate = DateTime(
+          now.year,
+          now.month + 1,
+          0,
+          23,
+          59,
+          59,
+        );
+        break;
+
+      case StatementPeriod.lastMonth:
+        endDate = DateTime(
+          now.year,
+          now.month,
+          0,
+          23,
+          59,
+          59,
+        );
+        break;
+
+      case StatementPeriod.last3Months:
+        endDate = now;
+        break;
+
+      case StatementPeriod.thisYear:
+        endDate = DateTime(
+          now.year,
+          12,
+          31,
+          23,
+          59,
+          59,
+        );
+        break;
+    }
+
+    return budgets.where(
+          (budget) => !budget.createdAt.isAfter(endDate),
+    ).toList();
   }
 }
