@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/router/app_routes.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/constants/currencies.dart';
+import '../../../../core/features/services/local_notification_service.dart';
 import '../../../../core/features/utils/validators.dart';
 import '../../../../shared/components/buttons/pocket_button.dart';
 import '../../../../shared/components/dropdown/pocket_dropdown.dart';
@@ -62,12 +63,11 @@ class _SetupScreenState
       _selectedCurrency,
     );
 
-    final preferences =
-        notifier.preferences;
+    final permissionGranted =
+    await LocalNotificationService.instance
+        .isPermissionGranted();
 
-    if (!preferences
-        .notificationPermissionAsked) {
-
+    if (!permissionGranted) {
       if (!mounted) return;
 
       await showModalBottomSheet(
