@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -16,11 +17,13 @@ class PdfGenerator {
   Future<Uint8List> generate(
       StatementData statement,
       ) async {
-    final regularFont =
-    await PdfGoogleFonts.notoSansRegular();
+    final regularFont = pw.Font.ttf(
+      await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'),
+    );
 
-    final boldFont =
-    await PdfGoogleFonts.notoSansBold();
+    final boldFont = pw.Font.ttf(
+      await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'),
+    );
 
     final pdf = pw.Document(
       theme: pw.ThemeData.withFont(

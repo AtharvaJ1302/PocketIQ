@@ -79,6 +79,8 @@ flutter:
     - assets/icons/
     - assets/animations/
     - assets/images/branding/
+    - assets/fonts/NotoSans-Regular.ttf
+    - assets/fonts/NotoSans-Bold.ttf
 
 #flutter_launcher_icons:
 #  android: true
