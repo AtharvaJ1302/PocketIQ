@@ -6,6 +6,7 @@ import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/services/local_notification_service.dart';
 import '../../../../shared/components/buttons/pocket_button.dart';
 import '../../../../shared/components/inputs/pocket_text_field.dart';
+import '../../../setup/presentation/widgets/notification_permission_sheet.dart';
 import '../../domain/models/budget.dart';
 import '../providers/budget_provider.dart';
 
@@ -132,6 +133,24 @@ class _CreateBudgetSheetState
     _notificationsEnabled = true;
 
     _threshold = 90;
+
+    if (_notificationsEnabled) {
+      final permissionGranted =
+      await LocalNotificationService.instance
+          .isPermissionGranted();
+
+      if (!permissionGranted && mounted) {
+        await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          useSafeArea: true,
+          builder: (_) =>
+          const NotificationPermissionSheet(),
+        );
+      }
+    }
+
+    if (!mounted) return;
 
     Navigator.pop(context);
   }
