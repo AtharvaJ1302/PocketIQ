@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/features/constants/app_duration.dart';
-import '../../../../core/features/constants/app_spacing.dart';
-import '../../../../shared/components/buttons/pocket_button.dart';
-
-class OnboardingBottomBar extends StatelessWidget {
+class OnboardingBottomBar extends StatefulWidget {
   final bool isLastPage;
   final VoidCallback onNext;
   final VoidCallback onSkip;
@@ -17,55 +13,145 @@ class OnboardingBottomBar extends StatelessWidget {
   });
 
   @override
+  State<OnboardingBottomBar> createState() =>
+      _OnboardingBottomBarState();
+}
+
+class _OnboardingBottomBarState
+    extends State<OnboardingBottomBar> {
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.lg,
-          AppSpacing.lg,
-          AppSpacing.lg,
-          AppSpacing.xl,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (!isLastPage)
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: AppSpacing.xs,
-                ),
-                child: TextButton(
-                  onPressed: onSkip,
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    animationDuration: AppDuration.fast,
-                  ),
-                  child: const Text(
-                    'Skip →',
-                  ),
-                ),
-              ),
+    final width = MediaQuery.of(context).size.width;
 
-            if (!isLastPage) const Spacer(),
+    final buttonWidth = (width * .48).clamp(165.0, 240.0);
 
-            SizedBox(
-              width: 160,
-              child: AnimatedSwitcher(
-                duration: AppDuration.normal,
-                child: PocketButton(
-                  key: ValueKey(isLastPage),
-                  label: isLastPage
-                      ? 'Get Started →'
-                      : 'Next →',
-                  onPressed: onNext,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        28,
+        0,
+        28,
+        28,
+      ),
+      child: Row(
+        children: [
+          AnimatedOpacity(
+            opacity: widget.isLastPage ? 0 : 1,
+            duration: const Duration(milliseconds: 250),
+            child: IgnorePointer(
+              ignoring: widget.isLastPage,
+              child: TextButton(
+                onPressed: widget.onSkip,
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xff8C7DFF),
+                ),
+                child: const Text(
+                  "Skip",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+
+          const Spacer(),
+
+          GestureDetector(
+            onTapDown: (_) {
+              setState(() => _pressed = true);
+            },
+            onTapUp: (_) {
+              setState(() => _pressed = false);
+            },
+            onTapCancel: () {
+              setState(() => _pressed = false);
+            },
+            onTap: widget.onNext,
+            child: AnimatedScale(
+              scale: _pressed ? .96 : 1,
+              duration: const Duration(milliseconds: 120),
+              curve: Curves.easeOut,
+              child: SizedBox(
+                width: buttonWidth,
+                height: 62,
+                child: Material(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(22),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xff6D5BFF),
+                          Color(0xff7D6DFF),
+                          Color(0xff8C7DFF),
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xff6D5BFF)
+                              .withOpacity(0),
+                          blurRadius: 24,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(22),
+                      splashColor:
+                      Colors.white.withOpacity(.12),
+                      highlightColor:
+                      Colors.white.withOpacity(.05),
+                      onTap: widget.onNext,
+                      child: Center(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(
+                            milliseconds: 250,
+                          ),
+                          transitionBuilder:
+                              (child, animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin:
+                                  const Offset(.15, 0),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: child,
+                              ),
+                            );
+                          },
+                          child: Text(
+                            widget.isLastPage
+                                ? "Get Started →"
+                                : "Next →",
+                            key: ValueKey(
+                              widget.isLastPage,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight:
+                              FontWeight.w700,
+                              letterSpacing: .2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

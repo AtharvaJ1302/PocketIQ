@@ -7,6 +7,7 @@ import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/services/account_balance_service_provider.dart';
 import '../../../../core/features/utils/currency_formatter.dart';
 import '../../../accounts/presentation/providers/account_provider.dart';
+import '../../../analytics/presentation/providers/analytics_provider.dart';
 import '../../../setup/presentation/providers/preferences_provider.dart';
 import '../../../transactions/presentation/providers/transaction_provider.dart';
 
@@ -35,6 +36,9 @@ class BalanceCard extends ConsumerWidget {
     final transactionNotifier =
     ref.watch(transactionProvider);
 
+    final analytics =
+    ref.watch(analyticsProvider);
+
     final balanceService =
     ref.read(accountBalanceServiceProvider);
 
@@ -60,178 +64,218 @@ class BalanceCard extends ConsumerWidget {
           (sum, t) => sum + t.amount,
     );
 
+    final insight =
+    analytics.insights.isNotEmpty
+        ? analytics.insights.first
+        : null;
+
     return Padding(
-      padding: AppSpacing.screenPadding,
-      child: Container(
+        padding: AppSpacing.screenPadding,
+        child: SizedBox(
+          height: 270,
+          child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
         width: double.infinity,
-        padding: const EdgeInsets.all(
-          AppSpacing.xl,
-        ),
+        padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xl,
+        28,
+        AppSpacing.xl,
+        28,
+      ),
         decoration: BoxDecoration(
-          borderRadius:
-          AppRadius.borderRadiusXl,
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF2563EB),
-              Color(0xFF06B6D4),
-            ],
-          ),
+          borderRadius: BorderRadius.circular(28),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF7C3AED),
+                Color(0xFF5B4CFF),
+                Color(0xFF0D1B5E),
+              ],
+            ),
           boxShadow: [
             BoxShadow(
-              color: theme.colorScheme.primary
-                  .withValues(alpha: .25),
-              blurRadius: 24,
-              offset: const Offset(0, 12),
+              color: const Color(0xFF7C3AED)
+                  .withValues(alpha: .35),
+              blurRadius: 40,
+              spreadRadius: -8,
+              offset: const Offset(0, 18),
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment:
-          CrossAxisAlignment.start,
-          children: [
-            /// Header
-            Row(
+            child: Stack(
               children: [
-                Image.asset(
-                  AppAssets.logoLight,
-                  height: 50,
-                ),
-
-                const SizedBox(
-                  width: AppSpacing.sm,
-                ),
-
-                Text(
-                  'PocketIQ',
-                  style: theme
-                      .textTheme.titleMedium
-                      ?.copyWith(
-                    color: Colors.white,
-                    fontWeight:
-                    FontWeight.w700,
-                  ),
-                ),
-
-                const Spacer(),
-
-                InkWell(
-                  borderRadius:
-                  BorderRadius.circular(100),
-                  onTap: () async {
-                    await ref
-                        .read(
-                      preferencesProvider,
-                    )
-                        .toggleHideBalance();
-                  },
+                /// Purple glow
+                Positioned(
+                  right: -40,
+                  top: -40,
                   child: Container(
-                    padding:
-                    const EdgeInsets.all(8),
-                    decoration:
-                    BoxDecoration(
-                      color: Colors.white
-                          .withValues(
-                        alpha: .12,
+                    width: 190,
+                    height: 190,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          Color(0x55B388FF),
+                          Colors.transparent,
+                        ],
                       ),
-                      shape:
-                      BoxShape.circle,
                     ),
-                    child: Icon(
-                      hideBalance
-                          ? Icons
-                          .visibility_off_outlined
-                          : Icons
-                          .visibility_outlined,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                  ),
+                ),
+
+                /// Wallet
+                Positioned(
+                  top: 10,
+                  right: 0,
+                  child: Image.asset(
+                    AppAssets.walletIllustration,
+                    width: 120,
+                  ),
+                ),
+
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * .55,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      /// Header
+                      Row(
+                        children: [
+
+                          Text(
+                            "Total Balance",
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          InkWell(
+                            onTap: () async {
+                              await ref
+                                  .read(preferencesProvider)
+                                  .toggleHideBalance();
+                            },
+                            child: Icon(
+                              hideBalance
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      Text(
+                        _displayAmount(
+                          hideBalance,
+                          CurrencyFormatter.format(totalBalance),
+                        ),
+                        style: theme.textTheme.displayLarge?.copyWith(
+                          fontSize: 42,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          height: 1,
+                          letterSpacing: -1,
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      if (insight != null)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.green.withValues(alpha: .15),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+
+                              Icon(
+                                insight.icon,
+                                size: 16,
+                                color: const Color(0xFF4ADE80),
+                              ),
+
+                              const SizedBox(width: 6),
+
+                              Flexible(
+                                child: Text(
+                                  insight.title,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: const Color(0xFF4ADE80),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                      const Spacer(),
+
+                      Row(
+                        children: [
+
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: .08),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: _InfoTile(
+                                title: "Income",
+                                value: _displayAmount(
+                                  hideBalance,
+                                  CurrencyFormatter.format(totalIncome),
+                                ),
+                                icon: Icons.south_west_rounded,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 14),
+
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: .08),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: _InfoTile(
+                                title: "Expenses",
+                                value: _displayAmount(
+                                  hideBalance,
+                                  CurrencyFormatter.format(totalExpense),
+                                ),
+                                icon: Icons.north_east_rounded,
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-
-            const SizedBox(
-              height: AppSpacing.xl,
-            ),
-
-            /// Balance Label
-            Text(
-              'Total Balance',
-              style: theme
-                  .textTheme.bodyMedium
-                  ?.copyWith(
-                color: Colors.white70,
-              ),
-            ),
-
-            const SizedBox(
-              height: AppSpacing.sm,
-            ),
-
-            /// Balance
-            Text(
-              _displayAmount(
-                hideBalance,
-                CurrencyFormatter.format(
-                  totalBalance,
-                ),
-              ),
-              style: theme
-                  .textTheme.displaySmall
-                  ?.copyWith(
-                color: Colors.white,
-                fontWeight:
-                FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(
-              height: AppSpacing.xxl,
-            ),
-
-            /// Income / Expense
-            Row(
-              children: [
-                Expanded(
-                  child: _InfoTile(
-                    title: 'Income',
-                    value: _displayAmount(
-                      hideBalance,
-                      CurrencyFormatter
-                          .format(
-                        totalIncome,
-                      ),
-                    ),
-                    icon: Icons
-                        .south_west_rounded,
-                  ),
-                ),
-
-                const SizedBox(
-                  width: AppSpacing.xl,
-                ),
-
-                Expanded(
-                  child: _InfoTile(
-                    title: 'Expenses',
-                    value: _displayAmount(
-                      hideBalance,
-                      CurrencyFormatter
-                          .format(
-                        totalExpense,
-                      ),
-                    ),
-                    icon: Icons
-                        .north_east_rounded,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
+        ),
     );
   }
 }
@@ -255,13 +299,11 @@ class _InfoTile extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: Colors.white70,
-          size: 18,
+          color: Colors.white.withValues(alpha: .80),
+          size: 22,
         ),
 
-        const SizedBox(
-          width: AppSpacing.sm,
-        ),
+        const SizedBox(width: 12),
 
         Expanded(
           child: Column(
@@ -270,10 +312,9 @@ class _InfoTile extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: theme
-                    .textTheme.bodySmall
-                    ?.copyWith(
-                  color: Colors.white70,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.white.withValues(alpha: .70),
+                  fontWeight: FontWeight.w500,
                 ),
               ),
 
@@ -284,12 +325,9 @@ class _InfoTile extends StatelessWidget {
                 maxLines: 1,
                 overflow:
                 TextOverflow.ellipsis,
-                style: theme
-                    .textTheme.titleMedium
-                    ?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   color: Colors.white,
-                  fontWeight:
-                  FontWeight.w700,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ],

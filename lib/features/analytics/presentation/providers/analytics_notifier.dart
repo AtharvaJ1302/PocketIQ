@@ -81,4 +81,9 @@ class AnalyticsNotifier extends ChangeNotifier {
       transactions: filteredTransactions,
     );
   }
+
+  FinancialInsight? get heroInsight =>
+      _service.getHeroInsight(
+        filteredTransactions,
+      );
 }

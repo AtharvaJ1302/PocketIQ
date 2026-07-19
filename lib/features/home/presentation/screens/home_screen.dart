@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocketiq/shared/layouts/pocket_gradient_scaffold.dart';
 
 import '../../../../core/features/constants/app_spacing.dart';
 import '../widgets/accounts_section.dart';
@@ -12,9 +13,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return PocketGradientScaffold(
+      child: SafeArea(
         child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
           slivers: [
             const SliverToBoxAdapter(
               child: HomeAppBar(),

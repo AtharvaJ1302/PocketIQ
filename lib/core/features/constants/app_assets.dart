@@ -21,4 +21,7 @@ class AppAssets {
   static const wallet = 'assets/banks/wallet.png';
 
   static const defaultBank = 'assets/banks/default_bank.png';
+
+  static const walletIllustration =
+      'assets/images/home/setup_1.png';
 }

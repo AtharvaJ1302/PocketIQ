@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pocketiq/core/features/constants/app_duration.dart';
-
-import '../../../../core/features/constants/app_spacing.dart';
 
 class OnboardingIndicator extends StatelessWidget {
   final int currentPage;
@@ -15,35 +12,53 @@ class OnboardingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        totalPages,
-            (index) {
-          final selected = index == currentPage;
+    return SizedBox(
+      height: 26,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(totalPages, (index) {
+          final selected = currentPage == index;
 
-          return AnimatedContainer(
-            duration: AppDuration.normal,
-            curve: Curves.easeOut,
+          return AnimatedScale(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
+            scale: selected ? 1.0 : .9,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.easeOutCubic,
+              margin: const EdgeInsets.symmetric(horizontal: 5),
 
-            margin: const EdgeInsets.symmetric(horizontal: 5),
+              width: selected ? 36 : 9,
+              height: selected ? 10 : 9,
 
-            height: AppSpacing.indicatorHeight,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
 
-            width: selected ? AppSpacing.indicatorWidth
-                : AppSpacing.indicatorHeight,
+                gradient: selected
+                    ? const LinearGradient(
+                  colors: [
+                    Color(0xff6D5BFF),
+                    Color(0xff8C7DFF),
+                  ],
+                )
+                    : null,
 
-            decoration: BoxDecoration(
-              color: selected
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context)
-                  .colorScheme
-                  .outlineVariant,
+                color: selected ? null : Colors.white24,
 
-              borderRadius: BorderRadius.circular(100),
+                boxShadow: selected
+                    ? [
+                  BoxShadow(
+                    color: const Color(0xff6D5BFF)
+                        .withOpacity(.45),
+                    blurRadius: 18,
+                    spreadRadius: 1,
+                  ),
+                ]
+                    : [],
+              ),
             ),
           );
-        },
+        }),
       ),
     );
   }

@@ -33,6 +33,8 @@ class PocketTextField extends StatelessWidget {
 
   final List<TextInputFormatter>? inputFormatters;
 
+  final InputDecoration? decoration;
+
   const PocketTextField({
     super.key,
     required this.controller,
@@ -54,10 +56,56 @@ class PocketTextField extends StatelessWidget {
     this.onChanged,
     this.onFieldSubmitted,
     this.inputFormatters,
+    this.decoration,
   });
 
   @override
   Widget build(BuildContext context) {
+
+    final defaultDecoration = InputDecoration(
+      labelText: label,
+      hintText: hint,
+
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.lg,
+      ),
+
+      border: const OutlineInputBorder(
+        borderRadius: AppRadius.borderRadiusMd,
+      ),
+
+      enabledBorder: const OutlineInputBorder(
+        borderRadius: AppRadius.borderRadiusMd,
+      ),
+
+      focusedBorder: OutlineInputBorder(
+        borderRadius: AppRadius.borderRadiusMd,
+        borderSide: BorderSide(
+          color: Theme.of(context).colorScheme.primary,
+          width: 2,
+        ),
+      ),
+
+      errorBorder: OutlineInputBorder(
+        borderRadius: AppRadius.borderRadiusMd,
+        borderSide: BorderSide(
+          color: Theme.of(context).colorScheme.error,
+        ),
+      ),
+
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: AppRadius.borderRadiusMd,
+        borderSide: BorderSide(
+          color: Theme.of(context).colorScheme.error,
+          width: 2,
+        ),
+      ),
+    );
+
     return TextFormField(
       style: TextStyle(
         color: Theme.of(context).colorScheme.onSurface,
@@ -84,49 +132,7 @@ class PocketTextField extends StatelessWidget {
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,
 
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.lg,
-        ),
-
-        border: const OutlineInputBorder(
-          borderRadius: AppRadius.borderRadiusMd,
-        ),
-
-        enabledBorder: const OutlineInputBorder(
-          borderRadius: AppRadius.borderRadiusMd,
-        ),
-
-        focusedBorder: OutlineInputBorder(
-          borderRadius: AppRadius.borderRadiusMd,
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.primary,
-            width: 2,
-          ),
-        ),
-
-        errorBorder: OutlineInputBorder(
-          borderRadius: AppRadius.borderRadiusMd,
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.error,
-          ),
-        ),
-
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: AppRadius.borderRadiusMd,
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.error,
-            width: 2,
-          ),
-        ),
-      ),
+      decoration: decoration ?? defaultDecoration,
     );
   }
 }

@@ -43,4 +43,33 @@ class AppColors{
 
   static const statement =
   Color(0xFF7E57C2);
+
+  // ------------------------------------------------------
+// PocketIQ V2
+// ------------------------------------------------------
+
+// Brand
+  static const Color accent = Color(0xFF6D5BFF);
+  static const Color accentLight = Color(0xFF8A7CFF);
+
+// Dark Gradient
+  static const Color gradientDarkTop = Color(0xFF060B18);
+  static const Color gradientDarkMiddle = Color(0xFF0A1022);
+  static const Color gradientDarkBottom = Color(0xFF101938);
+
+// Light Gradient
+  static const Color gradientLightTop = Color(0xFFF8FAFF);
+  static const Color gradientLightMiddle = Color(0xFFEEF3FF);
+  static const Color gradientLightBottom = Color(0xFFE6EDFF);
+
+// Cards
+  static const Color cardDark = Color(0xFF18233A);
+  static const Color cardLight = Colors.white;
+
+// Borders
+  static const Color borderDark = Color(0xFF2D3650);
+  static const Color borderLight = Color(0xFFD8E2F2);
+
+// Shadows
+  static const Color glow = Color(0x556D5BFF);
 }

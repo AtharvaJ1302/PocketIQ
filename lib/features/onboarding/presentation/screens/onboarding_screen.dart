@@ -21,16 +21,37 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState
     extends ConsumerState<OnboardingScreen> {
   late final PageController _pageController;
+  late final ValueNotifier<double> _pageOffset;
 
   @override
   void initState() {
     super.initState();
+
     _pageController = PageController();
+
+    _pageOffset = ValueNotifier(0);
+
+    _pageController.addListener(() {
+      _pageOffset.value = _pageController.page ?? 0;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    for (final item in onboardingItems) {
+      precacheImage(
+        AssetImage(item.image),
+        context,
+      );
+    }
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _pageOffset.dispose();
     super.dispose();
   }
 
@@ -38,9 +59,7 @@ class _OnboardingScreenState
     final notifier = ref.read(onboardingProvider);
 
     if (notifier.isLastPage) {
-      context.go(
-        AppRoutes.setup,
-      );
+      context.go(AppRoutes.setup);
       return;
     }
 
@@ -63,29 +82,45 @@ class _OnboardingScreenState
     final notifier = ref.watch(onboardingProvider);
 
     return Scaffold(
-      body: SafeArea(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xff060B18),
+                Color(0xff0A1022),
+                Color(0xff101938),
+              ],
+            ),
+          ),
+          child: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
+                physics: const BouncingScrollPhysics(),
                 itemCount: onboardingItems.length,
                 onPageChanged: notifier.updatePage,
                 itemBuilder: (_, index) {
                   return OnboardingPage(
                     item: onboardingItems[index],
+                    index: index,
+                    pageOffset: _pageOffset,
                   );
                 },
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10, top: 8),
-              child: OnboardingIndicator(
-                currentPage: notifier.currentPage,
-                totalPages: onboardingItems.length,
-              ),
+            const SizedBox(height: 8),
+
+            OnboardingIndicator(
+              currentPage: notifier.currentPage,
+              totalPages: onboardingItems.length,
             ),
+
+            const SizedBox(height: 18),
 
             OnboardingBottomBar(
               isLastPage: notifier.isLastPage,
@@ -95,6 +130,7 @@ class _OnboardingScreenState
           ],
         ),
       ),
+        ),
     );
   }
 }

@@ -1,11 +1,11 @@
 class OnboardingItem {
-  final String animation;
+  final String image;
   final String category;
   final String title;
   final String description;
 
   const OnboardingItem({
-    required this.animation,
+    required this.image,
     required this.category,
     required this.title,
     required this.description,

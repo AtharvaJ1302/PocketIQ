@@ -434,4 +434,67 @@ class FinancialInsightsService {
 
     return result;
   }
+
+  FinancialInsight? getHeroInsight(
+      List<Transaction> transactions,
+      ) {
+    if (transactions.isEmpty) {
+      return null;
+    }
+
+    final income = getTotalIncome(transactions);
+    final expense = getTotalExpense(transactions);
+
+    if (income > 0) {
+      final savingsRate =
+          ((income - expense) / income) * 100;
+
+      if (savingsRate >= 40) {
+        return FinancialInsight(
+          icon: Icons.emoji_events_rounded,
+          title: 'Excellent Saving',
+          description:
+          'You saved ${savingsRate.toStringAsFixed(0)}% of your income this month.',
+        );
+      }
+
+      if (savingsRate >= 20) {
+        return FinancialInsight(
+          icon: Icons.trending_up_rounded,
+          title: 'Healthy Savings',
+          description:
+          'Great job! You saved ${savingsRate.toStringAsFixed(0)}% this month.',
+        );
+      }
+
+      if (savingsRate <= 0) {
+        return const FinancialInsight(
+          icon: Icons.warning_amber_rounded,
+          title: 'Overspending',
+          description:
+          'Your expenses exceeded your income this month.',
+        );
+      }
+    }
+
+    final categories = getCategorySummary(transactions);
+
+    if (categories.isNotEmpty) {
+      final top = categories.first;
+
+      return FinancialInsight(
+        icon: Icons.pie_chart_rounded,
+        title: 'Top Spending',
+        description:
+        '${top.category} makes up ${(top.percentage * 100).toStringAsFixed(0)}% of your expenses.',
+      );
+    }
+
+    return const FinancialInsight(
+      icon: Icons.auto_graph_rounded,
+      title: 'Keep Going',
+      description:
+      'Keep adding transactions to unlock more insights.',
+    );
+  }
 }
