@@ -72,7 +72,7 @@ class BalanceCard extends ConsumerWidget {
     return Padding(
         padding: AppSpacing.screenPadding,
         child: SizedBox(
-          height: 270,
+          height: 290,
           child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         width: double.infinity,
@@ -104,19 +104,20 @@ class BalanceCard extends ConsumerWidget {
           ],
         ),
             child: Stack(
+              clipBehavior: Clip.none,
               children: [
                 /// Purple glow
                 Positioned(
                   right: -40,
                   top: -40,
                   child: Container(
-                    width: 190,
-                    height: 190,
+                    width: 260,
+                    height: 260,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient: RadialGradient(
+                      gradient: const RadialGradient(
                         colors: [
-                          Color(0x55B388FF),
+                          Color(0x60D7B8FF),
                           Colors.transparent,
                         ],
                       ),
@@ -126,16 +127,17 @@ class BalanceCard extends ConsumerWidget {
 
                 /// Wallet
                 Positioned(
-                  top: 10,
-                  right: 0,
+                  top: -10,
+                  right: -120,
                   child: Image.asset(
                     AppAssets.walletIllustration,
-                    width: 120,
+                    width: 300,
+                    fit: BoxFit.contain,
                   ),
                 ),
 
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * .55,
+                  width: MediaQuery.of(context).size.width * .70,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -181,7 +183,7 @@ class BalanceCard extends ConsumerWidget {
                         style: theme.textTheme.displayLarge?.copyWith(
                           fontSize: 42,
                           color: Colors.white,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w900,
                           height: 1,
                           letterSpacing: -1,
                         ),
@@ -233,7 +235,10 @@ class BalanceCard extends ConsumerWidget {
                             child: Container(
                               padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: .08),
+                                color: Colors.white.withValues(alpha: .06),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: .05),
+                                ),
                                 borderRadius: BorderRadius.circular(18),
                               ),
                               child: _InfoTile(
@@ -253,11 +258,14 @@ class BalanceCard extends ConsumerWidget {
                             child: Container(
                               padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: .08),
+                                color: Colors.white.withValues(alpha: .06),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: .05),
+                                ),
                                 borderRadius: BorderRadius.circular(18),
                               ),
                               child: _InfoTile(
-                                title: "Expenses",
+                                title: "Expense",
                                 value: _displayAmount(
                                   hideBalance,
                                   CurrencyFormatter.format(totalExpense),
@@ -297,10 +305,22 @@ class _InfoTile extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(
-          icon,
-          color: Colors.white.withValues(alpha: .80),
-          size: 22,
+        Container(
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            color: title == "Income"
+                ? const Color(0xFF22C55E).withValues(alpha: .18)
+                : const Color(0xFFEF4444).withValues(alpha: .18),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            size: 18,
+            color: title == "Income"
+                ? const Color(0xFF22C55E)
+                : const Color(0xFFEF4444),
+          ),
         ),
 
         const SizedBox(width: 12),
