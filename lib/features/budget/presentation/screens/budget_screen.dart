@@ -95,25 +95,26 @@ class _BudgetScreenState
             : _NoAccountBudgetState(),
       ),
       floatingActionButton: hasAccounts
-          ? FloatingActionButton.extended(
-        onPressed: () async {
-          await showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            useSafeArea: true,
-            builder: (_) =>
-            const CreateBudgetSheet(),
-          );
+          ? Padding(
+        // Keeps the button above the floating navigation bar
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).padding.bottom + 88,
+        ),
+        child: FloatingActionButton.extended(
+          onPressed: () async {
+            await showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              useSafeArea: true,
+              builder: (_) => const CreateBudgetSheet(),
+            );
 
-          if (!mounted) return;
+            if (!mounted) return;
 
-          await ref
-              .read(budgetProvider)
-              .loadBudgets();
-        },
-        icon: const Icon(Icons.add),
-        label: const Text(
-          'Add Budget',
+            await ref.read(budgetProvider).loadBudgets();
+          },
+          icon: const Icon(Icons.add),
+          label: const Text('Add Budget'),
         ),
       )
           : null,

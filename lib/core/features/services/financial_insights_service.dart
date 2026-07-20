@@ -453,6 +453,7 @@ class FinancialInsightsService {
         return FinancialInsight(
           icon: Icons.emoji_events_rounded,
           title: 'Excellent Saving',
+          badge: '↑ ${savingsRate.toStringAsFixed(1)}%',
           description:
           'You saved ${savingsRate.toStringAsFixed(0)}% of your income this month.',
         );
@@ -462,6 +463,7 @@ class FinancialInsightsService {
         return FinancialInsight(
           icon: Icons.trending_up_rounded,
           title: 'Healthy Savings',
+          badge: '↑ ${savingsRate.toStringAsFixed(1)}%',
           description:
           'Great job! You saved ${savingsRate.toStringAsFixed(0)}% this month.',
         );
@@ -471,6 +473,7 @@ class FinancialInsightsService {
         return const FinancialInsight(
           icon: Icons.warning_amber_rounded,
           title: 'Overspending',
+          badge: '↓',
           description:
           'Your expenses exceeded your income this month.',
         );
@@ -485,6 +488,8 @@ class FinancialInsightsService {
       return FinancialInsight(
         icon: Icons.pie_chart_rounded,
         title: 'Top Spending',
+        badge:
+        '${(top.percentage * 100).toStringAsFixed(0)}%',
         description:
         '${top.category} makes up ${(top.percentage * 100).toStringAsFixed(0)}% of your expenses.',
       );

@@ -75,25 +75,31 @@ class _MainScreenState
   }
 
   @override
-  Widget build(
-      BuildContext context,
-      ) {
-    final navigation = ref.watch(
-      navigationProvider,
-    );
+  Widget build(BuildContext context) {
+    final navigation = ref.watch(navigationProvider);
 
     return Scaffold(
-      body: IndexedStack(
-        index: navigation.currentIndex,
-        children: const [
-          HomeScreen(),
-          AnalyticsScreen(),
-          BudgetScreen(),
-          SettingsScreen(),
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: IndexedStack(
+              index: navigation.currentIndex,
+              children: const [
+                HomeScreen(),
+                AnalyticsScreen(),
+                BudgetScreen(),
+                SettingsScreen(),
+              ],
+            ),
+          ),
+
+          const Align(
+            alignment: Alignment.bottomCenter,
+            child: PocketBottomNavBar(),
+          ),
         ],
       ),
-      bottomNavigationBar:
-      const PocketBottomNavBar(),
     );
   }
 }

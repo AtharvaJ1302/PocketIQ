@@ -12,6 +12,7 @@ class OnboardingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
       height: 26,
       child: Row(
@@ -43,13 +44,18 @@ class OnboardingIndicator extends StatelessWidget {
                 )
                     : null,
 
-                color: selected ? null : Colors.white24,
+                color: selected
+                    ? null
+                    : (isDark
+                    ? Colors.white24
+                    : const Color(0xFFD6CCFF)),
 
                 boxShadow: selected
                     ? [
                   BoxShadow(
-                    color: const Color(0xff6D5BFF)
-                        .withOpacity(.45),
+                    color: const Color(0xff6D5BFF).withOpacity(
+                      isDark ? .45 : .25,
+                    ),
                     blurRadius: 18,
                     spreadRadius: 1,
                   ),

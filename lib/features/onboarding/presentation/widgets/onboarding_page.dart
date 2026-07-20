@@ -40,14 +40,14 @@ class _OnboardingPageState extends State<OnboardingPage>
     super.dispose();
   }
 
-  Widget _buildTitle(double fontSize) {
+Widget _buildTitle(double fontSize, bool isDark) {
     final words = widget.item.title.split(" ");
 
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
         style: TextStyle(
-          color: Colors.white,
+          color: isDark ? Colors.white : const Color(0xFF1E293B),
           fontWeight: FontWeight.w700,
           fontSize: fontSize,
           height: 1.15,
@@ -59,11 +59,17 @@ class _OnboardingPageState extends State<OnboardingPage>
           WidgetSpan(
             child: ShaderMask(
               shaderCallback: (bounds) {
-                return const LinearGradient(
-                  colors: [
+                return LinearGradient(
+                  colors: isDark
+                      ? const [
                     Color(0xff6D5BFF),
                     Color(0xff8C7DFF),
                     Colors.white,
+                  ]
+                      : const [
+                    Color(0xff6D5BFF),
+                    Color(0xff8C7DFF),
+                    Color(0xff4338CA),
                   ],
                 ).createShader(bounds);
               },
@@ -71,7 +77,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                 words.last,
                 style: TextStyle(
                   fontSize: fontSize,
-                  color: Colors.white,
+                  color: isDark ? Colors.white : const Color(0xFF1E293B),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -109,6 +115,7 @@ class _OnboardingPageState extends State<OnboardingPage>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
         final compact = constraints.maxHeight < 700;
 
         final imageHeight =
@@ -249,8 +256,10 @@ class _OnboardingPageState extends State<OnboardingPage>
                             children: [
                               Text(
                                 widget.item.category,
-                                style: const TextStyle(
-                                  color: Color(0xffA798FF),
+                                style: TextStyle(
+                                  color: isDark
+                                      ? const Color(0xffA798FF)
+                                      : const Color(0xff6D5BFF),
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 2.5,
                                 ),
@@ -258,7 +267,7 @@ class _OnboardingPageState extends State<OnboardingPage>
 
                               const SizedBox(height: 16),
 
-                              _buildTitle(titleSize),
+                              _buildTitle(titleSize, isDark),
 
                               const SizedBox(height: 18),
 
@@ -270,7 +279,9 @@ class _OnboardingPageState extends State<OnboardingPage>
                                   widget.item.description,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: Colors.white70,
+                                    color: isDark
+                                        ? Colors.white70
+                                        : const Color(0xFF64748B),
                                     fontSize: descriptionSize,
                                     height: 1.7,
                                   ),

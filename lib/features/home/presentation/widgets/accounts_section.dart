@@ -39,7 +39,7 @@ class AccountsSection extends ConsumerWidget {
           },
         ),
 
-        const SizedBox(height: AppSpacing.md),
+        // const SizedBox(height: 2),
 
         if (accountNotifier.accounts.isEmpty)
           const Padding(
@@ -48,7 +48,7 @@ class AccountsSection extends ConsumerWidget {
           )
         else
           SizedBox(
-            height: 240,
+            height: 215,
             child: ListView.separated(
               padding: AppSpacing.screenPadding,
               scrollDirection: Axis.horizontal,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocketiq/shared/layouts/pocket_gradient_background.dart';
 
 import '../../../app/theme/colors/app_gradients.dart';
 
@@ -20,17 +21,24 @@ class PocketGradientScaffold extends StatelessWidget {
             Brightness.dark;
 
     return Scaffold(
-      resizeToAvoidBottomInset:
-      resizeToAvoidBottomInset,
       backgroundColor: Colors.transparent,
-      body: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: dark
-              ? AppGradients.darkBackground
-              : AppGradients.lightBackground,
-        ),
+      body: PocketGradientBackground(
         child: child,
       ),
     );
+
+    // return Scaffold(
+    //   resizeToAvoidBottomInset:
+    //   resizeToAvoidBottomInset,
+    //   backgroundColor: Colors.transparent,
+    //   body: DecoratedBox(
+    //     decoration: BoxDecoration(
+    //       gradient: dark
+    //           ? AppGradients.darkBackground
+    //           : AppGradients.lightBackground,
+    //     ),
+    //     child: child,
+    //   ),
+    // );
   }
 }

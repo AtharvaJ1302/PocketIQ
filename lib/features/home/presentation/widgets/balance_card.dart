@@ -64,10 +64,7 @@ class BalanceCard extends ConsumerWidget {
           (sum, t) => sum + t.amount,
     );
 
-    final insight =
-    analytics.insights.isNotEmpty
-        ? analytics.insights.first
-        : null;
+    final insight = analytics.heroInsight;
 
     return Padding(
         padding: AppSpacing.screenPadding,
@@ -127,7 +124,7 @@ class BalanceCard extends ConsumerWidget {
 
                 /// Wallet
                 Positioned(
-                  top: -10,
+                  top: -20,
                   right: -120,
                   child: Image.asset(
                     AppAssets.walletIllustration,
@@ -214,13 +211,30 @@ class BalanceCard extends ConsumerWidget {
                               const SizedBox(width: 6),
 
                               Flexible(
-                                child: Text(
-                                  insight.title,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: const Color(0xFF4ADE80),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (insight.badge != null)
+                                      Text(
+                                        insight.badge!,
+                                        style: theme.textTheme.bodySmall?.copyWith(
+                                          color: const Color(0xFF4ADE80),
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+
+                                    if (insight.badge != null)
+                                      const SizedBox(width: 5),
+
+                                    Text(
+                                      insight.title,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: const Color(0xFF4ADE80),
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ),
                             ],
                           ),

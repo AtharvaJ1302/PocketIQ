@@ -13,11 +13,11 @@ class AppColors{
   static const Color error = Color(0xFFEF4444);
 
   //Light Theme
-  static const Color backgroundLight = Color(0xFFF8FAFC);
+  static const Color backgroundLight = Color(0xFFF7F4FF);
   static const Color surfaceLight = Colors.white;
 
   //Dark Theme
-  static const Color backgroundDark = Color(0xFF0F172A);
+  static const Color backgroundDark = Color(0xFF111425);
   static const Color surfaceDark = Color(0xFF1E293B);
 
   //Text
@@ -53,14 +53,14 @@ class AppColors{
   static const Color accentLight = Color(0xFF8A7CFF);
 
 // Dark Gradient
-  static const Color gradientDarkTop = Color(0xFF060B18);
-  static const Color gradientDarkMiddle = Color(0xFF0A1022);
-  static const Color gradientDarkBottom = Color(0xFF101938);
+  static const Color gradientDarkTop = Color(0xFF0A0D1A);
+  static const Color gradientDarkMiddle = Color(0xFF11162A);
+  static const Color gradientDarkBottom = Color(0xFF181F38);
 
 // Light Gradient
-  static const Color gradientLightTop = Color(0xFFF8FAFF);
-  static const Color gradientLightMiddle = Color(0xFFEEF3FF);
-  static const Color gradientLightBottom = Color(0xFFE6EDFF);
+  static const Color gradientLightTop = Color(0xFFF9F7FF);
+  static const Color gradientLightMiddle = Color(0xFFF3EEFF);
+  static const Color gradientLightBottom = Color(0xFFECE6FF);
 
 // Cards
   static const Color cardDark = Color(0xFF18233A);

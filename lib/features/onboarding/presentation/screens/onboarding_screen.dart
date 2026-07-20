@@ -80,17 +80,24 @@ class _OnboardingScreenState
   @override
   Widget build(BuildContext context) {
     final notifier = ref.watch(onboardingProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
         body: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
+              colors: isDark
+                  ? const [
                 Color(0xff060B18),
                 Color(0xff0A1022),
                 Color(0xff101938),
+              ]
+                  : const [
+                Color(0xFFFCFAFF),
+                Color(0xFFF7F4FF),
+                Color(0xFFEFE7FF),
               ],
             ),
           ),

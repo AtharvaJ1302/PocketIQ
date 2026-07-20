@@ -53,16 +53,6 @@ class HomeAppBar extends ConsumerWidget {
                 ),
 
                 const SizedBox(height: 6),
-
-                // Text(
-                //   heroInsight?.description ??
-                //       "Let's keep your finances healthy today.",
-                //   maxLines: 2,
-                //   overflow: TextOverflow.ellipsis,
-                //   style: theme.textTheme.bodyMedium?.copyWith(
-                //     color: theme.colorScheme.onSurfaceVariant,
-                //   ),
-                // )
               ],
             ),
           ),

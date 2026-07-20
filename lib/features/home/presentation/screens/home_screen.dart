@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
 
             const SliverToBoxAdapter(
               child: SizedBox(
-                height: AppSpacing.xl,
+                height: AppSpacing.lg,
               ),
             ),
 
@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
 
             const SliverToBoxAdapter(
               child: SizedBox(
-                height: AppSpacing.xl,
+                height: AppSpacing.md,
               ),
             ),
 
@@ -58,7 +58,7 @@ class HomeScreen extends StatelessWidget {
 
             const SliverToBoxAdapter(
               child: SizedBox(
-                height: AppSpacing.xxxl,
+                height: 140,
               ),
             ),
           ],

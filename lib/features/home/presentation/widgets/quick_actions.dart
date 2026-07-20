@@ -17,69 +17,77 @@ class QuickActions extends StatelessWidget {
     return Column(
       children: [
         const SectionHeader(
-          title: 'Actions',
+          title: 'Quick Actions',
         ),
 
-        const SizedBox(height: AppSpacing.md),
+        const SizedBox(height: 5),
 
         Padding(
-          padding: AppSpacing.screenPadding,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
-              QuickActionItem(
-                icon: Icons.remove_circle_outline,
-                label: 'Expense',
-                iconColor: AppColors.expense,
-                onPressed: () {
-                  context.push(
-                    AppRoutes.addTransaction,
-                    extra: const TransactionFormArgs(
-                      initialType: TransactionType.expense,
-                    ),
-                  );
-                },
+              Expanded(
+                child: QuickActionItem(
+                  icon: Icons.add_rounded,
+                  title: "Add",
+                  subtitle: "Income",
+                  iconColor: const Color(0xFFE74C3C),
+                  onPressed: () {
+                    context.push(
+                      AppRoutes.addTransaction,
+                      extra: const TransactionFormArgs(
+                        initialType: TransactionType.income,
+                      ),
+                    );
+                  },
+                ),
               ),
 
-              const SizedBox(width: AppSpacing.md),
+              const SizedBox(width: 6),
 
-              QuickActionItem(
-                icon: Icons.add_circle_outline,
-                label: 'Income',
-                iconColor: AppColors.income,
-                onPressed: () {
-                  context.push(
-                    AppRoutes.addTransaction,
-                    extra: const TransactionFormArgs(
-                      initialType: TransactionType.income,
-                    ),
-                  );
-                },
+              Expanded(
+                child: QuickActionItem(
+                  icon: Icons.add_rounded,
+                  title: "Add",
+                  subtitle: "Expense",
+                  iconColor: const Color(0xFF22C55E),
+                  onPressed: () {
+                    context.push(
+                      AppRoutes.addTransaction,
+                      extra: const TransactionFormArgs(
+                        initialType: TransactionType.expense,
+                      ),
+                    );
+                  },
+                ),
               ),
 
-              const SizedBox(width: AppSpacing.md),
+              const SizedBox(width: 6),
 
-              QuickActionItem(
-                icon: Icons.account_balance_outlined,
-                label: 'Account',
-                iconColor: AppColors.account,
-                onPressed: () {
-                  context.push(
-                    AppRoutes.accounts,
-                  );
-                },
+              Expanded(
+                child: QuickActionItem(
+                  icon: Icons.account_balance_rounded,
+                  title: "Accounts",
+                  subtitle: "Manage",
+                  iconColor: const Color(0xFF3B82F6),
+                  onPressed: () {
+                    context.push(AppRoutes.accounts);
+                  },
+                ),
               ),
 
-              const SizedBox(width: AppSpacing.md),
+              const SizedBox(width: 6),
 
-              QuickActionItem(
-                icon: Icons.picture_as_pdf_outlined,
-                label: 'Reports',
-                iconColor: AppColors.statement,
-                onPressed: () {
-                  context.push(
-                    AppRoutes.statement,
-                  );
-                },
+              Expanded(
+                child: QuickActionItem(
+                  icon: Icons.bar_chart_rounded,
+                  title: "Statement",
+                  subtitle: "Reports",
+                  iconColor: const Color(0xFF8B5CF6),
+                  onPressed: () {
+                    context.push(AppRoutes.statement);
+                  },
+                ),
               ),
             ],
           ),

@@ -19,6 +19,7 @@ class AccountsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('My Accounts')),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'accountsFab',
         onPressed: () {
           context.push(AppRoutes.addAccount);
         },
