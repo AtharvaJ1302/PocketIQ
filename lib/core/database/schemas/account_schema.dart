@@ -10,7 +10,8 @@ class AccountSchema {
       ${AccountColumns.accountName} TEXT NOT NULL,
       ${AccountColumns.accountType} TEXT NOT NULL,
       ${AccountColumns.accountNumber} TEXT NOT NULL,
-      ${AccountColumns.openingBalance} REAL NOT NULL
+      ${AccountColumns.openingBalance} REAL NOT NULL,
+      ${AccountColumns.createdAt} INTEGER NOT NULL
     )
   ''';
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/theme/colors/app_gradients.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../models/transaction_form_args.dart';
 import '../providers/transaction_provider.dart';
@@ -139,29 +140,54 @@ class _TransactionFormScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            (widget.args?.isEditing ?? false)
-                ? 'Edit Transaction'
-                : 'Add Transaction',
-          ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: isDark
+              ? AppGradients.screenBackground
+              : AppGradients.screenBackgroundLight,
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: AppSpacing.screenPadding,
-            child: TransactionForm(
-              formKey: _formKey,
-              amountController: _amountController,
-              notesController: _notesController,
-              amountFocus: _amountFocus,
-              notesFocus: _notesFocus,
-              onSave: _saveTransaction,
-              isEditing: widget.args?.isEditing ?? false,
-              accountLocked:
-              widget.args?.lockAccount ?? false,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+
+            title: Text(
+              (widget.args?.isEditing ?? false)
+                  ? 'Edit Transaction'
+                  : 'Add Transaction',
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall
+                  ?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: AppSpacing.screenPadding,
+              child: TransactionForm(
+                formKey: _formKey,
+                amountController: _amountController,
+                notesController: _notesController,
+                amountFocus: _amountFocus,
+                notesFocus: _notesFocus,
+                onSave: _saveTransaction,
+                isEditing: widget.args?.isEditing ?? false,
+                accountLocked:
+                widget.args?.lockAccount ?? false,
+              ),
             ),
           ),
         ),

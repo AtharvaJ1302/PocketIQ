@@ -42,6 +42,7 @@ class AddAccountNotifier extends ChangeNotifier {
         accountName: accountName,
         accountNumber: accountNumber,
         openingBalance: 0,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
       );
 
       await _repository.addAccount(account);
@@ -66,9 +67,8 @@ class AddAccountNotifier extends ChangeNotifier {
         accountType: selectedAccountType!,
         accountName: accountName,
         accountNumber: accountNumber,
-
-        // Preserve the existing value in the database
         openingBalance: account.openingBalance,
+        createdAt: account.createdAt,
       );
 
       await _repository.updateAccount(updatedAccount);

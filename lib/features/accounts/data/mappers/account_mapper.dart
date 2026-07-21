@@ -12,6 +12,7 @@ class AccountMapper {
       AccountColumns.accountType: account.accountType,
       AccountColumns.accountNumber: account.accountNumber,
       AccountColumns.openingBalance: account.openingBalance,
+      AccountColumns.createdAt: account.createdAt,
     };
   }
 
@@ -25,6 +26,7 @@ class AccountMapper {
       accountType: map[AccountColumns.accountType],
       accountNumber: map[AccountColumns.accountNumber],
       openingBalance: map[AccountColumns.openingBalance],
+      createdAt: map[AccountColumns.createdAt],
     );
   }
 }

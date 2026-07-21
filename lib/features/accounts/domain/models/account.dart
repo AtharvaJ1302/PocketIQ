@@ -11,6 +11,8 @@ class Account {
 
   final double openingBalance;
 
+  final int createdAt;
+
   const Account({
     required this.id,
     required this.bankCode,
@@ -18,6 +20,7 @@ class Account {
     required this.accountType,
     required this.accountNumber,
     required this.openingBalance,
+    required this.createdAt,
   });
 
   String get lastFourDigits {
@@ -37,6 +40,7 @@ class Account {
     String? accountType,
     String? accountNumber,
     double? openingBalance,
+    int? createdAt,
   }) {
     return Account(
       id: id ?? this.id,
@@ -45,6 +49,7 @@ class Account {
       accountType: accountType ?? this.accountType,
       accountNumber: accountNumber ?? this.accountNumber,
       openingBalance: openingBalance ?? this.openingBalance,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 

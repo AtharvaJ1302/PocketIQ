@@ -23,7 +23,7 @@ class SplashFooter extends StatelessWidget {
             curve: AppAnimation.footerInterval,
           ),
           child: Text(
-            'Version 0.1.0',
+            'Version 1.0.0',
             style: theme.textTheme.labelMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .75),
             ),

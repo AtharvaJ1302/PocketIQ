@@ -22,7 +22,7 @@ class AccountRepositoryImpl implements AccountRepository {
 
     final result = await db.query(
       DatabaseTables.accounts,
-      orderBy: AccountColumns.accountName,
+      orderBy: '${AccountColumns.createdAt} DESC',
     );
 
     return result

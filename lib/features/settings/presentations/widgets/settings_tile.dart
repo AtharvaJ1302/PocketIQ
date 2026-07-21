@@ -5,80 +5,99 @@ import '../../../../core/features/constants/app_spacing.dart';
 
 class SettingsTile extends StatelessWidget {
   final IconData icon;
-
   final String title;
-
-  /// Value displayed on the right
+  final String? subtitle;
   final String? value;
-
   final VoidCallback? onTap;
-
-  /// If false, no ripple, no chevron, no tap
   final bool enabled;
+  final Color? accentColor;
 
   const SettingsTile({
     super.key,
     required this.icon,
     required this.title,
+    this.subtitle,
     this.value,
     this.onTap,
     this.enabled = true,
+    this.accentColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final accent = accentColor ?? theme.colorScheme.primary;
+
     return InkWell(
-      borderRadius: AppRadius.borderRadiusMd,
       onTap: enabled ? onTap : null,
+      borderRadius: AppRadius.borderRadiusLg,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md,
+          horizontal: 20,
+          vertical: 18,
         ),
         child: Row(
           children: [
             Container(
-              width: 42,
-              height: 42,
+              width: 56,
+              height: 56,
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary
-                    .withValues(alpha: .10),
-                borderRadius: BorderRadius.circular(12),
+                color: accent.withValues(alpha: .12),
+                borderRadius: BorderRadius.circular(18),
               ),
               child: Icon(
                 icon,
-                color: theme.colorScheme.primary,
+                color: accent,
+                size: 28,
               ),
             ),
 
-            const SizedBox(width: AppSpacing.md),
+            const SizedBox(width: 18),
 
             Expanded(
-              child: Text(
-                title,
-                style: theme.textTheme.titleMedium,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 4),
+
+                    Text(
+                      subtitle!,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
 
             if (value != null)
-              Text(
-                value!,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w500,
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Text(
+                  value!,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
 
-            if (enabled) ...[
-              const SizedBox(width: AppSpacing.sm),
-
+            if (enabled)
               Icon(
                 Icons.chevron_right_rounded,
-                color: theme.colorScheme.onSurfaceVariant,
+                size: 24,
+                color: theme.colorScheme.outline,
               ),
-            ],
           ],
         ),
       ),

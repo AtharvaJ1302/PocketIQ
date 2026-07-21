@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
+import '../../../../app/theme/colors/app_gradients.dart';
 import '../models/transaction_form_args.dart';
 import '../models/transactions_screen_args.dart';
 import '../providers/transaction_provider.dart';
@@ -59,21 +60,9 @@ class _TransactionsScreenState
 
     return Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: isDark
-                ? const [
-              Color(0xFF060B18),
-              Color(0xFF0A1022),
-              Color(0xFF101938),
-            ]
-                : const [
-              Color(0xFFFCFAFF),
-              Color(0xFFF7F4FF),
-              Color(0xFFEFE7FF),
-            ],
-          ),
+          gradient: isDark
+              ? AppGradients.screenBackground
+              : AppGradients.screenBackgroundLight,
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,

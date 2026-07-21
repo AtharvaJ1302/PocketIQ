@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme/colors/app_colors.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../shared/components/buttons/pocket_button.dart';
 import '../../../../shared/layouts/form_section.dart';
@@ -48,70 +49,106 @@ class TransactionForm extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          /// Date
+          DatePickerTile(
+            date: notifier.selectedDate,
+            onTap: () {
+              notifier.pickDate(context);
+            },
+          ),
+
+          const SizedBox(height: 40),
+
+          /// Amount
+          Center(
+            child: AmountField(
+              controller: amountController,
+              focusNode: amountFocus,
+              onFieldSubmitted: (_) {
+                notesFocus.requestFocus();
+              },
+            ),
+          ),
+
+          const SizedBox(height: 40),
+
+          /// Account
+          const _SectionTitle("Account"),
+
+          const SizedBox(height: 12),
+
+          AccountDropdown(
+            value: notifier.selectedAccountId,
+            onChanged: notifier.setAccount,
+            enabled: !accountLocked,
+          ),
+
+          const SizedBox(height: 28),
+
+          /// Transaction Type
+          const _SectionTitle("Transaction Type"),
+
+          const SizedBox(height: 12),
+
           TransactionTypeToggle(
             selectedType: notifier.selectedType,
             onChanged: notifier.setType,
           ),
 
-          const SizedBox(height: AppSpacing.xl),
+          const SizedBox(height: 28),
 
-          FormSection(
-            title: 'Transaction Information',
-            children: [
-              AmountField(
-                controller: amountController,
-                focusNode: amountFocus,
-                onFieldSubmitted: (_) {
-                  notesFocus.requestFocus();
-                },
-              ),
+          /// Category
+          const _SectionTitle("Category"),
 
-              const SizedBox(height: AppSpacing.lg),
+          const SizedBox(height: 12),
 
-              AccountDropdown(
-                value: notifier.selectedAccountId,
-                onChanged: notifier.setAccount,
-                enabled: !accountLocked,
-              ),
-
-              const SizedBox(height: AppSpacing.lg),
-
-              CategoryDropdown(
-                type: notifier.selectedType,
-                value: notifier.selectedCategory,
-                onChanged: notifier.setCategory,
-              ),
-
-              const SizedBox(height: AppSpacing.lg),
-
-              DatePickerTile(
-                date: notifier.selectedDate,
-                onTap: () {
-                  notifier.pickDate(context);
-                },
-              ),
-
-              const SizedBox(height: AppSpacing.lg),
-
-              NotesField(
-                controller: notesController,
-                focusNode: notesFocus,
-              ),
-            ],
+          CategoryDropdown(
+            type: notifier.selectedType,
+            value: notifier.selectedCategory,
+            onChanged: notifier.setCategory,
           ),
 
-          const SizedBox(height: AppSpacing.xxxl),
+          const SizedBox(height: 28),
+
+          /// Notes
+          NotesField(
+            controller: notesController,
+          ),
+
+          const SizedBox(height: 40),
 
           PocketButton(
             label: isEditing
-                ? 'Update Transaction'
+                ? "Update Transaction"
                 : notifier.selectedType.isExpense
-                ? 'Add Expense'
-                : 'Add Income',
+                ? "Save Expense"
+                : "Save Income",
             loading: notifier.loading,
+            icon: isEditing
+                ? Icons.edit_rounded
+                : notifier.selectedType.isExpense
+                ? Icons.arrow_upward_rounded
+                : Icons.arrow_downward_rounded,
             onPressed: onSave,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SectionTitle extends StatelessWidget {
+  final String title;
+
+  const _SectionTitle(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+        fontWeight: FontWeight.w700,
+        letterSpacing: .2,
       ),
     );
   }

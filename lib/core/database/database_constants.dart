@@ -3,7 +3,7 @@ class DatabaseConstants {
 
   static const databaseName = 'pocketiq.db';
 
-  static const databaseVersion = 4;
+  static const databaseVersion = 5;
 }
 
 class DatabaseTables {
@@ -32,6 +32,8 @@ class AccountColumns {
   static const accountNumber = 'accountNumber';
 
   static const openingBalance = 'balance';
+
+  static const createdAt = 'createdAt';
 }
 
 class TransactionColumns {

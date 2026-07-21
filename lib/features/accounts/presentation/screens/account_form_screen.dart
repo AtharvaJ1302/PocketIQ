@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../app/theme/colors/app_gradients.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/finance/account_types.dart';
 import '../../../../core/features/finance/bank_info.dart';
@@ -15,23 +16,22 @@ import '../providers/add_account_notifier.dart';
 import '../providers/account_form_provider.dart';
 import 'package:flutter/services.dart';
 import '../../domain/models/account.dart';
+import '../widgets/account_bottom_bar.dart';
+import '../widgets/account_details_section.dart';
+import '../widgets/account_form_header.dart';
+import '../widgets/account_information_section.dart';
+import '../widgets/account_section_title.dart';
 
 class AccountFormScreen extends ConsumerStatefulWidget {
   final Account? account;
 
-  const AccountFormScreen({
-    super.key,
-    this.account,
-  });
+  const AccountFormScreen({super.key, this.account});
 
   @override
-  ConsumerState<AccountFormScreen> createState() =>
-      _AccountFormScreenState();
+  ConsumerState<AccountFormScreen> createState() => _AccountFormScreenState();
 }
 
-class _AccountFormScreenState
-    extends ConsumerState<AccountFormScreen> {
-
+class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _accountNameController;
@@ -81,9 +81,7 @@ class _AccountFormScreenState
     super.dispose();
   }
 
-  Future<void> _saveAccount(
-      AddAccountNotifier notifier,
-      ) async {
+  Future<void> _saveAccount(AddAccountNotifier notifier) async {
     FocusScope.of(context).unfocus();
 
     if (!_formKey.currentState!.validate()) {
@@ -91,19 +89,15 @@ class _AccountFormScreenState
     }
 
     if (notifier.selectedBank == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select a bank.'),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select a bank.')));
       return;
     }
 
     if (notifier.selectedAccountType == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select an account type.'),
-        ),
+        const SnackBar(content: Text('Please select an account type.')),
       );
       return;
     }
@@ -130,177 +124,92 @@ class _AccountFormScreenState
 
   @override
   Widget build(BuildContext context) {
-
     final notifier = ref.watch(addAccountProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            widget.account == null
-                ? 'Add Account'
-                : 'Edit Account',
-          ),
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: AppSpacing.screenPadding,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-
-                  FormSection(
-                    title: 'Account Information',
-                    children: [
-
-                      if (widget.account == null) ...[
-                        PocketDropdown<String>(
-                          label: 'Bank',
-                          prefixIcon: const Icon(
-                            Icons.account_balance_outlined,
-                          ),
-                          value: notifier.selectedBank,
-                          validator: Validators.dropdown,
-                          onChanged: notifier.setBank,
-                          items: BankInfo.supportedBanks
-                              .map(
-                                (bank) => DropdownMenuItem(
-                              value: bank,
-                              child: Text(
-                                BankInfo.getName(bank),
-                              ),
-                            ),
-                          )
-                              .toList(),
-                        ),
-
-                        const SizedBox(height: AppSpacing.lg),
-
-                        PocketDropdown<String>(
-                          label: 'Account Type',
-                          prefixIcon: const Icon(
-                            Icons.credit_card_outlined,
-                          ),
-                          value: notifier.selectedAccountType,
-                          validator: Validators.dropdown,
-                          onChanged: notifier.setAccountType,
-                          items: AccountTypes.values
-                              .map(
-                                (type) => DropdownMenuItem(
-                              value: type,
-                              child: Text(type),
-                            ),
-                          )
-                              .toList(),
-                        ),
-                      ] else ...[
-                        InfoTile(
-                          icon: Icons.account_balance_outlined,
-                          label: 'Bank',
-                          value: BankInfo.getName(
-                            widget.account!.bankCode,
-                          ),
-                        ),
-
-                        const SizedBox(height: AppSpacing.md),
-
-                        InfoTile(
-                          icon: Icons.credit_card_outlined,
-                          label: 'Account Type',
-                          value: widget.account!.accountType,
-                        ),
-
-                        const SizedBox(height: AppSpacing.md),
-
-                        InfoTile(
-                          icon: Icons.pin_outlined,
-                          label: 'Account Number',
-                          value: '•••• ${widget.account!.lastFourDigits}',
-                        ),
-                      ],
-
-                      const SizedBox(height: AppSpacing.lg),
-
-                      PocketTextField(
-                        controller: _accountNameController,
-                        focusNode: _accountNameFocusNode,
-                        prefixIcon: const Icon(
-                          Icons.badge_outlined,
-                        ),
-                        label: 'Account Alias',
-                        hint: 'Salary Account',
-                        validator: Validators.requiredField,
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (_) {
-                          if (widget.account == null) {
-                            _accountNumberFocusNode.requestFocus();
-                          } else {
-                            // _balanceFocusNode.requestFocus();
-                          }
-                        },
+        resizeToAvoidBottomInset: true,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: isDark
+                  ? AppGradients.screenBackground
+                  : AppGradients.screenBackgroundLight,
+            ),
+            child: SafeArea(
+              child: Form(
+                key: _formKey,
+                child: CustomScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: AccountFormHeader(
+                        isEditing: widget.account != null,
                       ),
+                    ),
 
-                      const SizedBox(height: AppSpacing.lg),
+                    SliverPadding(
+                      padding: AppSpacing.screenPadding,
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate([
+                          const AccountSectionTitle(title: "Account Details"),
 
-                      if (widget.account == null) ...[
-                        PocketTextField(
-                          controller: _accountNumberController,
-                          focusNode: _accountNumberFocusNode,
-                          prefixIcon: const Icon(
-                            Icons.pin_outlined,
+                          AccountDetailsSection(
+                            isEditing: widget.account != null,
+
+                            selectedBank: notifier.selectedBank,
+
+                            selectedAccountType: notifier.selectedAccountType,
+
+                            onBankChanged: notifier.setBank,
+
+                            onAccountTypeChanged: notifier.setAccountType,
+
+                            bankCode: widget.account?.bankCode,
+
+                            accountType: widget.account?.accountType,
+
+                            lastFourDigits: widget.account?.lastFourDigits,
                           ),
-                          label: 'Account Number',
-                          keyboardType: TextInputType.number,
-                          validator: Validators.accountNumber,
-                          textInputAction: TextInputAction.next,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          onFieldSubmitted: (_) {
-                            // _balanceFocusNode.requestFocus();
-                          },
-                        ),
 
-                        const SizedBox(height: AppSpacing.lg),
-                      ],
+                          const SizedBox(height: AppSpacing.xxxl),
 
-                      // PocketTextField(
-                      //   controller: _balanceController,
-                      //   focusNode: _balanceFocusNode,
-                      //   prefixIcon: const Icon(
-                      //     Icons.currency_rupee,
-                      //   ),
-                      //   label: widget.account == null
-                      //       ? 'Opening Balance'
-                      //       : 'Current Balance',
-                      //   keyboardType: const TextInputType.numberWithOptions(
-                      //     decimal: true,
-                      //   ),
-                      //   validator: Validators.amount,
-                      //   textInputAction: TextInputAction.done,
-                      //   inputFormatters: [
-                      //     FilteringTextInputFormatter.allow(
-                      //       RegExp(r'^\d*\.?\d{0,2}'),
-                      //     ),
-                      //   ],
-                      //   onFieldSubmitted: (_) => _saveAccount(notifier),
-                      // ),
-                    ],
-                  ),
+                          const AccountSectionTitle(
+                            title: "Account Information",
+                          ),
 
-                  const SizedBox(height: AppSpacing.xxxl),
+                          AccountInformationSection(
+                            isEditing: widget.account != null,
 
-                  PocketButton(
-                    label: widget.account == null
-                        ? 'Add Account'
-                        : 'Update Account',
-                    loading: notifier.loading,
-                    onPressed: () => _saveAccount(notifier),
-                  ),
-                ],
+                            accountNameController: _accountNameController,
+
+                            accountNumberController: _accountNumberController,
+
+                            accountNameFocusNode: _accountNameFocusNode,
+
+                            accountNumberFocusNode: _accountNumberFocusNode,
+                          ),
+
+                          const SizedBox(height: AppSpacing.xxxl),
+
+                          PocketButton(
+                            label: widget.account == null
+                                ? 'Add Account'
+                                : 'Update Account',
+                            loading: notifier.loading,
+                            onPressed: () => _saveAccount(notifier),
+                          ),
+
+                          const SizedBox(height: AppSpacing.xxxl),
+                        ]),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

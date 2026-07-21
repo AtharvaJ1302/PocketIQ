@@ -30,27 +30,8 @@ class QuickActions extends StatelessWidget {
                 child: QuickActionItem(
                   icon: Icons.add_rounded,
                   title: "Add",
-                  subtitle: "Income",
+                  subtitle: "Transaction",
                   iconColor: const Color(0xFFE74C3C),
-                  onPressed: () {
-                    context.push(
-                      AppRoutes.addTransaction,
-                      extra: const TransactionFormArgs(
-                        initialType: TransactionType.income,
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              const SizedBox(width: 6),
-
-              Expanded(
-                child: QuickActionItem(
-                  icon: Icons.add_rounded,
-                  title: "Add",
-                  subtitle: "Expense",
-                  iconColor: const Color(0xFF22C55E),
                   onPressed: () {
                     context.push(
                       AppRoutes.addTransaction,
@@ -61,6 +42,25 @@ class QuickActions extends StatelessWidget {
                   },
                 ),
               ),
+
+              // const SizedBox(width: 6),
+              //
+              // Expanded(
+              //   child: QuickActionItem(
+              //     icon: Icons.add_rounded,
+              //     title: "Add",
+              //     subtitle: "Expense",
+              //     iconColor: const Color(0xFF22C55E),
+              //     onPressed: () {
+              //       context.push(
+              //         AppRoutes.addTransaction,
+              //         extra: const TransactionFormArgs(
+              //           initialType: TransactionType.expense,
+              //         ),
+              //       );
+              //     },
+              //   ),
+              // ),
 
               const SizedBox(width: 6),
 

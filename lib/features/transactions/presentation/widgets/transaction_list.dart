@@ -15,36 +15,6 @@ class TransactionList extends StatelessWidget {
     required this.transactions,
   });
 
-  // String _headerForDate(DateTime date) {
-  //   final now = DateTime.now();
-  //
-  //   final today = DateTime(
-  //     now.year,
-  //     now.month,
-  //     now.day,
-  //   );
-  //
-  //   final yesterday = today.subtract(
-  //     const Duration(days: 1),
-  //   );
-  //
-  //   final transactionDay = DateTime(
-  //     date.year,
-  //     date.month,
-  //     date.day,
-  //   );
-  //
-  //   if (transactionDay == today) {
-  //     return "Today";
-  //   }
-  //
-  //   if (transactionDay == yesterday) {
-  //     return "Yesterday";
-  //   }
-  //
-  //   return DateFormat("dd MMM yyyy").format(date);
-  // }
-
   bool _shouldShowHeader(
       int index,
       List<Transaction> transactions,

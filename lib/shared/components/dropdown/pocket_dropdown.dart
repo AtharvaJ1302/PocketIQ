@@ -24,6 +24,8 @@ class PocketDropdown<T> extends StatelessWidget {
   /// If null, the default Pocket decoration is used.
   final InputDecoration? decoration;
 
+  final double? minHeight;
+
   const PocketDropdown({
     super.key,
     required this.label,
@@ -35,6 +37,7 @@ class PocketDropdown<T> extends StatelessWidget {
     this.enabled = true,
     this.selectedItemBuilder,
     this.decoration,
+    this.minHeight,
   });
 
   @override
@@ -83,16 +86,21 @@ class PocketDropdown<T> extends StatelessWidget {
       ),
     );
 
-    return DropdownButtonFormField<T>(
-      value: value,
-      items: items,
-      selectedItemBuilder: selectedItemBuilder,
-      onChanged: enabled ? onChanged : null,
-      validator: validator,
-      isExpanded: true,
-      style: theme.textTheme.bodyLarge,
-      icon: const Icon(Icons.keyboard_arrow_down_rounded),
-      decoration: decoration ?? defaultDecoration,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minHeight: minHeight ?? 56,
+      ),
+      child: DropdownButtonFormField<T>(
+        value: value,
+        items: items,
+        selectedItemBuilder: selectedItemBuilder,
+        onChanged: enabled ? onChanged : null,
+        validator: validator,
+        isExpanded: true,
+        style: theme.textTheme.bodyLarge,
+        icon: const Icon(Icons.keyboard_arrow_down_rounded),
+        decoration: decoration ?? defaultDecoration,
+      ),
     );
   }
 }
