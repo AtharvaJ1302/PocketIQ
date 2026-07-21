@@ -10,28 +10,54 @@ class TransactionEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.receipt_long_outlined,
-            size: 72,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'No transactions yet',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+    final theme = Theme.of(context);
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 32,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 92,
+              height: 92,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary
+                    .withValues(alpha: .10),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.receipt_long_rounded,
+                size: 42,
+                color: theme.colorScheme.primary,
+              ),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Tap + to add your first transaction.',
-            textAlign: TextAlign.center,
-          ),
-        ],
+
+            const SizedBox(height: 32),
+
+            Text(
+              "No Transactions Yet",
+              textAlign: TextAlign.center,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            Text(
+              message ??
+                  "Start tracking your income and expenses to gain better insights into your finances.",
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

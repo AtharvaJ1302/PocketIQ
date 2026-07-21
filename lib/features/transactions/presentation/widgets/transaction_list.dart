@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:pocketiq/features/transactions/presentation/widgets/transaction_date_header.dart';
 
 import '../../../../core/features/constants/app_spacing.dart';
+import '../../../../core/features/utils/transaction_date_formatter.dart';
 import '../../domain/models/transaction.dart';
 import 'transaction_card.dart';
 
@@ -12,25 +15,87 @@ class TransactionList extends StatelessWidget {
     required this.transactions,
   });
 
+  // String _headerForDate(DateTime date) {
+  //   final now = DateTime.now();
+  //
+  //   final today = DateTime(
+  //     now.year,
+  //     now.month,
+  //     now.day,
+  //   );
+  //
+  //   final yesterday = today.subtract(
+  //     const Duration(days: 1),
+  //   );
+  //
+  //   final transactionDay = DateTime(
+  //     date.year,
+  //     date.month,
+  //     date.day,
+  //   );
+  //
+  //   if (transactionDay == today) {
+  //     return "Today";
+  //   }
+  //
+  //   if (transactionDay == yesterday) {
+  //     return "Yesterday";
+  //   }
+  //
+  //   return DateFormat("dd MMM yyyy").format(date);
+  // }
+
+  bool _shouldShowHeader(
+      int index,
+      List<Transaction> transactions,
+      ) {
+    if (index == 0) {
+      return true;
+    }
+
+    final current = transactions[index].date;
+    final previous = transactions[index - 1].date;
+
+    return current.year != previous.year ||
+        current.month != previous.month ||
+        current.day != previous.day;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: AppSpacing.screenPadding,
       itemCount: transactions.length,
-      separatorBuilder: (_, __) =>
-      const SizedBox(height: AppSpacing.md),
       itemBuilder: (_, index) {
         final transaction = transactions[index];
 
-        return GestureDetector(
-          onTap: () {
-            // TODO:
-            // Navigate to Transaction Details Screen
-          },
-          child: TransactionCard(
-            transaction: transaction,
-          ),
+        return Column(
+          crossAxisAlignment:
+          CrossAxisAlignment.start,
+          children: [
+            if (_shouldShowHeader(
+              index,
+              transactions,
+            ))
+              TransactionDateHeader(
+                title: TransactionDateFormatter.header(
+                  transaction.date,
+                ),
+              ),
+
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: AppSpacing.md,
+              ),
+              child: TransactionCard(
+                transaction: transaction,
+                onTap: () {
+                  // TODO
+                },
+              ),
+            ),
+          ],
         );
       },
     );

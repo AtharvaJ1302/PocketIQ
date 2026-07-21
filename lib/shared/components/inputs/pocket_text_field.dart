@@ -7,7 +7,7 @@ import '../../../core/features/constants/app_spacing.dart';
 class PocketTextField extends StatelessWidget {
   final TextEditingController controller;
 
-  final String label;
+  final String? label;
   final String? hint;
 
   final TextInputType keyboardType;
@@ -35,10 +35,11 @@ class PocketTextField extends StatelessWidget {
 
   final InputDecoration? decoration;
 
+
   const PocketTextField({
     super.key,
     required this.controller,
-    required this.label,
+    // required this.label,
     this.hint,
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
@@ -57,6 +58,7 @@ class PocketTextField extends StatelessWidget {
     this.onFieldSubmitted,
     this.inputFormatters,
     this.decoration,
+    this.label,
   });
 
   @override
@@ -107,7 +109,7 @@ class PocketTextField extends StatelessWidget {
     );
 
     return TextFormField(
-      style: TextStyle(
+      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
         color: Theme.of(context).colorScheme.onSurface,
       ),
 
@@ -132,7 +134,30 @@ class PocketTextField extends StatelessWidget {
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,
 
-      decoration: decoration ?? defaultDecoration,
+      decoration: defaultDecoration.copyWith(
+        // labelText: decoration?.labelText,
+        hintText: decoration?.hintText,
+        helperText: decoration?.helperText,
+        errorText: decoration?.errorText,
+
+        prefixIcon: decoration?.prefixIcon,
+        suffixIcon: decoration?.suffixIcon,
+
+        border: decoration?.border,
+        enabledBorder: decoration?.enabledBorder,
+        focusedBorder: decoration?.focusedBorder,
+        errorBorder: decoration?.errorBorder,
+        focusedErrorBorder: decoration?.focusedErrorBorder,
+
+        filled: decoration?.filled,
+        fillColor: decoration?.fillColor,
+
+        contentPadding: decoration?.contentPadding,
+
+        counterText: decoration?.counterText,
+
+        labelText: label,
+      ),
     );
   }
 }

@@ -40,6 +40,9 @@ class _TransactionsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
+
     final notifier = ref.watch(transactionProvider);
 
     var transactions = notifier.transactions;
@@ -54,13 +57,46 @@ class _TransactionsScreenState
           .toList();
     }
 
-    return Scaffold(
-      appBar: AppBar(
+    return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: isDark
+                ? const [
+              Color(0xFF060B18),
+              Color(0xFF0A1022),
+              Color(0xFF101938),
+            ]
+                : const [
+              Color(0xFFFCFAFF),
+              Color(0xFFF7F4FF),
+              Color(0xFFEFE7FF),
+            ],
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+        centerTitle: false,
         title: Text(
-          widget.args?.screenTitle ?? 'Transactions',
+          widget.args?.screenTitle ?? "Transactions",
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'transactionsFab',
+        tooltip: 'Add Transaction',
         onPressed: () async {
           await context.push(
             AppRoutes.addTransaction,
@@ -76,11 +112,20 @@ class _TransactionsScreenState
               .read(transactionProvider)
               .refresh();
         },
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add_rounded,
+          size: 28,
+        ),
       ),
       body: notifier.loading
           ? const Center(
-        child: CircularProgressIndicator(),
+        child: SizedBox(
+          width: 34,
+          height: 34,
+          child: CircularProgressIndicator(
+            strokeWidth: 3,
+          ),
+        ),
       )
           : RefreshIndicator(
         onRefresh: _refresh,
@@ -94,6 +139,7 @@ class _TransactionsScreenState
           transactions: transactions,
         ),
       ),
+        ),
     );
   }
 }

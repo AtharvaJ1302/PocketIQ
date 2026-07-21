@@ -21,6 +21,7 @@ class PocketGradientScaffold extends StatelessWidget {
             Brightness.dark;
 
     return Scaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       backgroundColor: Colors.transparent,
       body: PocketGradientBackground(
         child: child,
