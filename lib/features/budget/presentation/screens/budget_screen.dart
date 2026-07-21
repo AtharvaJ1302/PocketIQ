@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
+import '../../../../app/theme/colors/app_gradients.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/services/deep_link_manager.dart';
 import '../../../accounts/presentation/providers/account_provider.dart';
@@ -83,21 +84,41 @@ class _BudgetScreenState
         accountNotifier.accounts.isNotEmpty;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+
+        titleSpacing: AppSpacing.lg,
+
         title: const Text('Budget'),
       ),
-      body: SafeArea(
-        child: hasAccounts
-            ? SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            AppSpacing.lg,
-            AppSpacing.lg,
-            AppSpacing.lg,
-            MediaQuery.of(context).padding.bottom + 180,
-          ),
-          child: const BudgetList(),
-        )
-            : const _NoAccountBudgetState(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: Theme.of(context).brightness == Brightness.dark
+              ? AppGradients.screenBackground
+              : AppGradients.screenBackgroundLight,
+        ),
+        child: SafeArea(
+          child: hasAccounts
+              ? SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.lg,
+              MediaQuery.of(context).padding.bottom + 180,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const BudgetList(),
+              ],
+            ),
+          )
+              : const _NoAccountBudgetState(),
+        ),
       ),
       floatingActionButton: hasAccounts
           ? Padding(
@@ -116,13 +137,13 @@ class _BudgetScreenState
                   Color(0xFF5B4DFF),
                 ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF7C5CFF).withValues(alpha: .35),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: const Color(0xFF7C5CFF).withValues(alpha: .35),
+              //     blurRadius: 20,
+              //     offset: const Offset(0, 8),
+              //   ),
+              // ],
             ),
             child: FloatingActionButton.extended(
               elevation: 0,
@@ -136,6 +157,7 @@ class _BudgetScreenState
                   context: context,
                   isScrollControlled: true,
                   useSafeArea: true,
+                  showDragHandle: false,
                   builder: (_) => const CreateBudgetSheet(),
                 );
 

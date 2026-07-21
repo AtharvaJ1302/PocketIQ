@@ -126,7 +126,7 @@ final ThemeData darkTheme = ThemeData(
   ),
 
   bottomSheetTheme: const BottomSheetThemeData(
-    showDragHandle: true,
+    // showDragHandle: true,
     elevation: 0,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(

@@ -80,6 +80,7 @@ flutter:
     - assets/images/setup/
     - assets/images/home/
     - assets/images/onboarding/
+    - assets/images/budget/
     - assets/animations/
     - assets/fonts/NotoSans-Regular.ttf
     - assets/fonts/NotoSans-Bold.ttf
