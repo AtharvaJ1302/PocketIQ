@@ -83,100 +83,96 @@ class _BudgetScreenState
     final hasAccounts =
         accountNotifier.accounts.isNotEmpty;
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
+    return Container(
+      decoration: BoxDecoration(
+        gradient: Theme.of(context).brightness == Brightness.dark
+            ? AppGradients.screenBackground
+            : AppGradients.screenBackgroundLight,
+      ),
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          surfaceTintColor: Colors.transparent,
 
-        titleSpacing: AppSpacing.lg,
+          titleSpacing: AppSpacing.lg,
 
-        title: const Text('Budget'),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: Theme.of(context).brightness == Brightness.dark
-              ? AppGradients.screenBackground
-              : AppGradients.screenBackgroundLight,
+          title: const Text('Budget'),
         ),
-        child: SafeArea(
-          child: hasAccounts
-              ? SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              AppSpacing.lg,
-              AppSpacing.lg,
-              MediaQuery.of(context).padding.bottom + 180,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const BudgetList(),
-              ],
-            ),
-          )
-              : const _NoAccountBudgetState(),
-        ),
-      ),
-      floatingActionButton: hasAccounts
-          ? Padding(
-        // Keeps the button above the floating navigation bar
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).padding.bottom + 88,
-        ),
-          child:Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF7C5CFF),
-                  Color(0xFF5B4DFF),
+        body: Container(
+          child: SafeArea(
+            child: hasAccounts
+                ? SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.lg,
+                AppSpacing.lg,
+                MediaQuery.of(context).padding.bottom + 180,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const BudgetList(),
                 ],
               ),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: const Color(0xFF7C5CFF).withValues(alpha: .35),
-              //     blurRadius: 20,
-              //     offset: const Offset(0, 8),
-              //   ),
-              // ],
-            ),
-            child: FloatingActionButton.extended(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
+            )
+                : const _NoAccountBudgetState(),
+          ),
+        ),
+        floatingActionButton: hasAccounts
+            ? Padding(
+          // Keeps the button above the floating navigation bar
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).padding.bottom + 88,
+          ),
+            child:Container(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
-              ),
-              onPressed: () async {
-                await showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  showDragHandle: false,
-                  builder: (_) => const CreateBudgetSheet(),
-                );
-
-                if (!mounted) return;
-
-                await ref.read(budgetProvider).loadBudgets();
-              },
-              icon: const Icon(Icons.add),
-              label: const Text(
-                'Add Budget',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF7C5CFF),
+                    Color(0xFF5B4DFF),
+                  ],
                 ),
               ),
-            ),
-          )
-      )
-          : null,
-      );
+              child: FloatingActionButton.extended(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                onPressed: () async {
+                  await showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    showDragHandle: false,
+                    builder: (_) => const CreateBudgetSheet(),
+                  );
+
+                  if (!mounted) return;
+
+                  await ref.read(budgetProvider).loadBudgets();
+                },
+                icon: const Icon(Icons.add),
+                label: const Text(
+                  'Add Budget',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            )
+        )
+            : null,
+        ),
+    );
   }
 }
 
@@ -227,19 +223,53 @@ class _NoAccountBudgetState
               height: AppSpacing.xxxl,
             ),
 
-            FilledButton.icon(
-              onPressed: () {
-                context.push(
-                  AppRoutes.accounts,
-                );
-              },
-              icon: const Icon(
-                Icons.add,
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF7C5CFF),
+                    Color(0xFF5B4DFF),
+                  ],
+                ),
               ),
-              label: const Text(
-                'Create Account',
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(18),
+                  onTap: () {
+                    context.push(AppRoutes.accounts);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 14,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Create Account',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),
