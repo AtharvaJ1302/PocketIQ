@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pocketiq/features/analytics/presentation/widgets/cash_flow/cash_flow_card.dart';
 
+import '../../../../app/theme/colors/app_gradients.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../../widgets/financial_insights.dart';
 import '../../widgets/monthly_trend.dart';
 import '../widgets/analytics_header.dart';
 import '../widgets/budget_health.dart';
+import '../widgets/expense_breakdown/analytics_overview_card.dart';
 import '../widgets/expense_breakdown/expense_breakdown_card.dart';
 import '../widgets/summary_cards.dart';
 
@@ -16,52 +18,46 @@ class AnalyticsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: Theme.of(context).brightness == Brightness.dark
+              ? AppGradients.screenBackground
+              : AppGradients.screenBackgroundLight,
+        ),
+        child: const SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
 
-              SizedBox(
-                height: 20,
-              ),
+                SizedBox(height: 20),
 
-              AnalyticsHeader(),
+                AnalyticsHeader(),
 
-              SizedBox(
-                height: 24,
-              ),
+                SizedBox(height: 24),
 
-              SummaryCards(),
+                AnalyticsOverviewCard(),
 
-              SizedBox(
-                height: AppSpacing.section,
-              ),
+                SizedBox(height: AppSpacing.section),
 
-              BudgetHealth(),
+                BudgetHealth(),
 
-              SizedBox(
-                height: AppSpacing.section,
-              ),
+                SizedBox(height: AppSpacing.section),
 
-              ExpenseBreakdownCard(),
+                ExpenseBreakdownCard(),
 
-              SizedBox(
-                height: AppSpacing.section,
-              ),
+                SizedBox(height: AppSpacing.section),
 
-              CashFlowCard(),
+                CashFlowCard(),
 
-              SizedBox(
-                height: AppSpacing.section,
-              ),
+                SizedBox(height: AppSpacing.section),
 
-              FinancialInsights(),
+                FinancialInsights(),
 
-              SizedBox(
-                height: AppSpacing.section,
-              ),
-            ],
+                SizedBox(height: AppSpacing.section),
+              ],
+            ),
           ),
         ),
       ),

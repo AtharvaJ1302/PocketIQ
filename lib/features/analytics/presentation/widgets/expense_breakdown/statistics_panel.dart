@@ -67,70 +67,126 @@ class StatisticsPanel extends ConsumerWidget {
     return Column(
       children: [
 
-        Row(
-          children: [
-
-            Expanded(
-              child: StatTile(
-                icon: Icons.emoji_events_rounded,
-                title: 'Largest',
-                value: largestCategory.category,
-                subtitle:
-                '${(largestCategory.percentage * 100).toStringAsFixed(0)}%',
-              ),
-            ),
-
-            const SizedBox(
-              width: AppSpacing.md,
-            ),
-
-            Expanded(
-              child: StatTile(
-                icon: Icons.trending_up_rounded,
-                title: 'Biggest',
-                value:
-                '₹${biggestExpense.amount.toStringAsFixed(0)}',
-                subtitle:
-                biggestExpense.category,
-              ),
-            ),
-          ],
-        ),
+        const Divider(),
 
         const SizedBox(
-          height: AppSpacing.md,
+          height: AppSpacing.lg,
         ),
 
-        Row(
-          children: [
+        _InsightRow(
+          icon: Icons.emoji_events_rounded,
+          iconColor: Colors.amber,
+          title: 'Largest Category',
+          value: largestCategory.category,
+          trailing:
+          '${(largestCategory.percentage * 100).toStringAsFixed(0)}%',
+        ),
 
-            Expanded(
-              child: StatTile(
-                icon:
-                Icons.calendar_today_rounded,
-                title: 'Avg / Day',
-                value:
-                '₹${average.toStringAsFixed(0)}',
-                subtitle: 'Daily',
+        const SizedBox(height: AppSpacing.lg),
+
+        _InsightRow(
+          icon: Icons.payments_rounded,
+          iconColor: Colors.red,
+          title: 'Biggest Expense',
+          value:
+          '₹${biggestExpense.amount.toStringAsFixed(0)}',
+          trailing: biggestExpense.category,
+        ),
+
+        const SizedBox(height: AppSpacing.lg),
+
+        _InsightRow(
+          icon: Icons.calendar_today_rounded,
+          iconColor: Colors.blue,
+          title: 'Daily Average',
+          value:
+          '₹${average.toStringAsFixed(0)}',
+          trailing: 'Per Day',
+        ),
+
+        const SizedBox(height: AppSpacing.lg),
+
+        _InsightRow(
+          icon: Icons.receipt_long_rounded,
+          iconColor: Colors.green,
+          title: 'Transactions',
+          value: '${expenses.length}',
+          trailing: 'Expenses',
+        ),
+      ],
+    );
+  }
+}
+
+class _InsightRow extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String value;
+  final String trailing;
+
+  const _InsightRow({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.value,
+    required this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Row(
+      children: [
+
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: iconColor.withValues(alpha: .10),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Icon(
+            icon,
+            color: iconColor,
+            size: 22,
+          ),
+        ),
+
+        const SizedBox(width: 14),
+
+        Expanded(
+          child: Column(
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
+            children: [
+
+              Text(
+                title,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
-            ),
 
-            const SizedBox(
-              width: AppSpacing.md,
-            ),
+              const SizedBox(height: 4),
 
-            Expanded(
-              child: StatTile(
-                icon:
-                Icons.receipt_long_rounded,
-                title: 'Expenses',
-                value:
-                '${expenses.length}',
-                subtitle:
-                'Transactions',
+              Text(
+                value,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+        ),
+
+        Text(
+          trailing,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: theme.colorScheme.primary,
+          ),
         ),
       ],
     );

@@ -49,230 +49,241 @@ class _ExpensePieChartState
           (sum, transaction) => sum + transaction.amount,
     );
 
-    return Padding(
-      padding: AppSpacing.screenPadding,
-      child: SizedBox(
-        height: 300,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            if (_selectedIndex != -1) {
-              setState(() {
-                _selectedIndex = -1;
-              });
-            }
-          },
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
+    return SizedBox(
+      height: 340,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          if (_selectedIndex != -1) {
+            setState(() {
+              _selectedIndex = -1;
+            });
+          }
+        },
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
 
-              PieChart(
-                duration: const Duration(
-                  milliseconds: 250,
-                ),
-                curve: Curves.easeOutCubic,
-                PieChartData(
-                  centerSpaceRadius: 75,
-                  sectionsSpace: 3,
-
-                  pieTouchData: PieTouchData(
-                      enabled: true,
-                    touchCallback: (event, response) {
-                      if (response?.touchedSection == null) {
-                        return;
-                      }
-
-                      // Only react to a completed tap
-                      if (event is! FlTapUpEvent) {
-                        return;
-                      }
-
-                      final tappedIndex =
-                          response!.touchedSection!.touchedSectionIndex;
-
-                      setState(() {
-                        if (_selectedIndex == tappedIndex) {
-                          _selectedIndex = -1;
-                        } else {
-                          _selectedIndex = tappedIndex;
-                        }
-                      });
-                    },
-                  ),
-
-                  sections: List.generate(
-                    categories.length,
-                        (index) {
-                      final category =
-                      categories[index];
-
-                      return PieChartSectionData(
-                        value: category.percentage * 100,
-
-                        title: category.percentage >= 0.05
-                            ? '${(category.percentage * 100).toStringAsFixed(0)}%'
-                            : '',
-
-                        titleStyle: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                        ),
-
-                        radius: _selectedIndex == index
-                            ? 88
-                            : 75,
-
-                        badgePositionPercentageOffset: 1.15,
-                        color: AppChartColors
-                            .gradients[index %
-                            AppChartColors.gradients.length]
-                            .colors
-                            .first
-                            .withValues(
-                          alpha: _selectedIndex == -1 ||
-                              _selectedIndex == index
-                              ? 1.0
-                              : 0.35,
-                        ),
-                      );
-                    },
-                  ),
-                ),
+            PieChart(
+              duration: const Duration(
+                milliseconds: 250,
               ),
+              curve: Curves.easeOutCubic,
+              PieChartData(
+                centerSpaceRadius: 82,
+                sectionsSpace: 4,
 
-              AnimatedSwitcher(
-                duration: const Duration(
-                  milliseconds: 300,
+                pieTouchData: PieTouchData(
+                    enabled: true,
+                  touchCallback: (event, response) {
+                    if (response?.touchedSection == null) {
+                      return;
+                    }
+
+                    // Only react to a completed tap
+                    if (event is! FlTapUpEvent) {
+                      return;
+                    }
+
+                    final tappedIndex =
+                        response!.touchedSection!.touchedSectionIndex;
+
+                    setState(() {
+                      if (_selectedIndex == tappedIndex) {
+                        _selectedIndex = -1;
+                      } else {
+                        _selectedIndex = tappedIndex;
+                      }
+                    });
+                  },
                 ),
-                switchInCurve: Curves.easeOutBack,
-                switchOutCurve: Curves.easeIn,
 
-                transitionBuilder: (
-                    child,
-                    animation,
-                    ) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: ScaleTransition(
-                      scale: Tween<double>(
-                        begin: .92,
-                        end: 1,
-                      ).animate(animation),
-                      child: child,
-                    ),
-                  );
-                },
-
-                child: _selectedIndex == -1
-                    ? Column(
-                  key: const ValueKey(
-                    'total',
-                  ),
-                  mainAxisSize:
-                  MainAxisSize.min,
-                  children: [
-
-                    Icon(
-                      Icons.account_balance_wallet_rounded,
-                      size: 30,
-                      color: theme.colorScheme.primary,
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    Text(
-                      'Total Expenses',
-                      style: theme.textTheme.bodyMedium,
-                    ),
-
-                    const SizedBox(
-                      height: 6,
-                    ),
-
-                    Text(
-                      '₹${totalExpense.toStringAsFixed(0)}',
-                      style: theme
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(
-                        fontWeight:
-                        FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                )
-                    : Builder(
-                  builder: (_) {
+                sections: List.generate(
+                  categories.length,
+                      (index) {
                     final category =
-                    categories[
-                    _selectedIndex];
+                    categories[index];
 
-                    return Column(
-                      key: ValueKey(
-                        category.category,
+                    return PieChartSectionData(
+                      value: category.percentage * 100,
+
+                      title: category.percentage >= 0.05
+                          ? '${(category.percentage * 100).toStringAsFixed(0)}%'
+                          : '',
+
+                      titleStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
                       ),
-                      mainAxisSize:
-                      MainAxisSize.min,
-                      children: [
 
-                        Icon(
-                          _getCategoryIcon(
-                            category.category,
-                          ),
-                          size: 30,
-                          color: theme.colorScheme.primary,
-                        ),
+                      radius: _selectedIndex == index
+                          ? 96
+                          : 84,
 
-                        const SizedBox(height: 8),
-
-                        Text(
-                          category.category,
-                          textAlign:
-                          TextAlign.center,
-                          style: theme
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                            fontWeight:
-                            FontWeight.bold,
-                          ),
-                        ),
-
-                        const SizedBox(
-                          height: 6,
-                        ),
-
-                        Text(
-                          '₹${category.amount.toStringAsFixed(0)}',
-                          style: theme
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(
-                            fontWeight:
-                            FontWeight.bold,
-                          ),
-                        ),
-
-                        const SizedBox(
-                          height: 4,
-                        ),
-
-                        Text(
-                          '${(category.percentage * 100).toStringAsFixed(1)}% of expenses',
-                          style: theme
-                              .textTheme
-                              .bodyMedium,
-                        ),
-                      ],
+                      badgePositionPercentageOffset: 1.15,
+                      color: AppChartColors
+                          .gradients[index %
+                          AppChartColors.gradients.length]
+                          .colors
+                          .first
+                          .withValues(
+                        alpha: _selectedIndex == -1 ||
+                            _selectedIndex == index
+                            ? 1.0
+                            : 0.35,
+                      ),
                     );
                   },
                 ),
               ),
+            ),
 
+      AnimatedScale(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutBack,
+        scale: _selectedIndex == -1 ? 1 : .96,
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          switchInCurve: Curves.easeOutBack,
+          switchOutCurve: Curves.easeIn,
 
-            ],
-          ),
+              transitionBuilder: (
+                  child,
+                  animation,
+                  ) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: ScaleTransition(
+                    scale: Tween<double>(
+                      begin: .92,
+                      end: 1,
+                    ).animate(animation),
+                    child: child,
+                  ),
+                );
+              },
+
+              child: _selectedIndex == -1
+                  ? Column(
+                key: const ValueKey(
+                  'total',
+                ),
+                mainAxisSize:
+                MainAxisSize.min,
+                children: [
+
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withValues(alpha: .08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.account_balance_wallet_rounded,
+                      size: 25,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    'Spent',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+
+                  const SizedBox(height: 3),
+
+                  Text(
+                    '₹${totalExpense.toStringAsFixed(0)}',
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height:2),
+
+                  Text(
+                    'This Month',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              )
+                  : Builder(
+                builder: (_) {
+                  final category =
+                  categories[
+                  _selectedIndex];
+
+                  return Column(
+                    key: ValueKey(
+                      category.category,
+                    ),
+                    mainAxisSize:
+                    MainAxisSize.min,
+                    children: [
+
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withValues(alpha: .08),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          _getCategoryIcon(category.category),
+                          size: 20,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+
+                      // const SizedBox(height: 8),
+
+                      Text(
+                        category.category,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      // const SizedBox(height:3),
+
+                      Text(
+                        '₹${category.amount.toStringAsFixed(0)}',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      // const SizedBox(height:2),
+
+                      Text(
+                        '${(category.percentage * 100).toStringAsFixed(1)}%',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+
+                      Text(
+                        'of total spending',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurface,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+
+      ),
+          ],
         ),
       ),
     );

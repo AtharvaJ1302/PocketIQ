@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../../core/features/constants/app_chart_colors.dart';
 import '../../../../../../core/features/constants/app_spacing.dart';
+import '../../../../../core/features/constants/app_radius.dart';
 import '../../providers/analytics_provider.dart';
 import 'cash_flow_chart.dart';
 import 'cash_flow_legend.dart';
@@ -43,91 +44,131 @@ class CashFlowCard extends ConsumerWidget {
 
     return Padding(
       padding: AppSpacing.screenPadding,
-      child: Card(
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.all(
-            AppSpacing.lg,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: AppRadius.borderRadiusXl,
+          color: theme.brightness == Brightness.dark
+              ? const Color(0xFF1B1D38).withValues(alpha: .85)
+              : theme.colorScheme.surface.withValues(alpha: .92),
+          border: Border.all(
+            color: theme.brightness == Brightness.dark
+                ? const Color(0xFF6F63FF).withValues(alpha: .18)
+                : theme.colorScheme.outlineVariant.withValues(alpha: .30),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: theme.brightness == Brightness.dark
+                  ? const Color(0xFF7C5CFF).withValues(alpha: .08)
+                  : Colors.black.withValues(alpha: .05),
+              blurRadius: 24,
+              spreadRadius: -6,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              Text(
-                'Cash Flow',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+
+                  Icon(
+                    Icons.show_chart_rounded,
+                    color: theme.colorScheme.primary,
+                    size: 24,
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Text(
+                    'Cash Flow',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
 
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: AppSpacing.xs),
 
               Text(
-                'Net Cash Flow',
+                'Monthly income vs expenses',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
 
-              const SizedBox(
-                height: 4,
-              ),
+              const SizedBox(height: AppSpacing.xl),
 
-              Row(
-                children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: (netCashFlow >= 0
+                      ? AppChartColors.income
+                      : AppChartColors.expense)
+                      .withValues(alpha: .08),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  children: [
 
-                  Text(
-                    '${netCashFlow >= 0 ? '+' : '-'}₹${netCashFlow.abs().toStringAsFixed(0)}',
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                    Icon(
+                      netCashFlow >= 0
+                          ? Icons.trending_up_rounded
+                          : Icons.trending_down_rounded,
+                      size: 30,
                       color: netCashFlow >= 0
                           ? AppChartColors.income
                           : AppChartColors.expense,
                     ),
-                  ),
 
-                  const SizedBox(
-                    width: 8,
-                  ),
+                    const SizedBox(height: 10),
 
-                  Icon(
-                    netCashFlow >= 0
-                        ? Icons.trending_up_rounded
-                        : Icons.trending_down_rounded,
-                    color: netCashFlow >= 0
-                        ? AppChartColors.income
-                        : AppChartColors.expense,
-                  ),
-                ],
+                    Text(
+                      '${netCashFlow >= 0 ? '+' : '-'}₹${netCashFlow.abs().toStringAsFixed(0)}',
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: netCashFlow >= 0
+                            ? AppChartColors.income
+                            : AppChartColors.expense,
+                      ),
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    Text(
+                      netCashFlow >= 0
+                          ? 'Positive Cash Flow'
+                          : 'Negative Cash Flow',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
-              const SizedBox(
-                height: AppSpacing.lg,
-              ),
-
-              const CashFlowLegend(),
-
-              const SizedBox(
-                height: AppSpacing.lg,
-              ),
+              const SizedBox(height: AppSpacing.xl),
 
               AnimatedSwitcher(
-                duration: const Duration(
-                  milliseconds: 350,
-                ),
-                switchInCurve:
-                Curves.easeOut,
-                switchOutCurve:
-                Curves.easeIn,
+                duration: const Duration(milliseconds: 350),
+                switchInCurve: Curves.easeOut,
+                switchOutCurve: Curves.easeIn,
                 child: CashFlowChart(
-                  key: ValueKey(
-                    analytics.filter,
-                  ),
+                  key: ValueKey(analytics.filter),
                 ),
               ),
+
+              const SizedBox(height: AppSpacing.lg),
+
+              const CashFlowLegend(),
             ],
           ),
         ),
