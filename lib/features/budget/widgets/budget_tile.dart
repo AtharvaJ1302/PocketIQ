@@ -86,103 +86,93 @@ class _BudgetTileState
               milliseconds: 350,
             ),
 
-            decoration: BoxDecoration(
-              color:
-              theme.colorScheme.surfaceContainer,
+          decoration: BoxDecoration(
+            borderRadius: AppRadius.borderRadiusLg,
 
-              borderRadius:
-              AppRadius.borderRadiusLg,
-
-              border: Border.all(
-                color: _highlighted
-                    ? (category?.color ??
-                    theme.colorScheme.primary)
-                    : Colors.transparent,
-                width: 2,
-              ),
-
-              boxShadow: _highlighted
-                  ? [
-                BoxShadow(
-                  color: (category?.color ??
-                      theme.colorScheme.primary)
-                      .withValues(alpha: .35),
-                  blurRadius: 18,
-                  spreadRadius: 2,
-                ),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: theme.brightness == Brightness.dark
+                  ? const [
+                Color(0xFF25264A),
+                Color(0xFF1B1D38),
               ]
-                  : [],
+                  : [
+                theme.colorScheme.surface,
+                theme.colorScheme.surfaceContainer,
+              ],
             ),
+
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant.withValues(alpha: .18),
+              width: 1,
+            ),
+
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: .08),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
       child: Container(
         key: _tileKey,
         width: double.infinity,
         padding: const EdgeInsets.all(
           AppSpacing.lg,
         ),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainer,
-          borderRadius:
-          AppRadius.borderRadiusLg,
-        ),
         child: Column(
           crossAxisAlignment:
           CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
+                  radius: 24,
                   backgroundColor:
-                  category?.color.withValues(
-                    alpha: .15,
-                  ) ??
-                      theme.colorScheme.primary
-                          .withValues(
-                        alpha: .15,
-                      ),
+                  category?.color.withValues(alpha: .15) ??
+                      theme.colorScheme.primary.withValues(alpha: .15),
                   child: Icon(
-                    category?.icon ??
-                        Icons.category,
-                    color:
-                    category?.color ??
-                        theme.colorScheme
-                            .primary,
+                    category?.icon ?? Icons.category,
+                    color: category?.color ?? theme.colorScheme.primary,
+                    size: 24,
                   ),
                 ),
-      
-                const SizedBox(
-                  width: AppSpacing.md,
-                ),
-      
+
+                const SizedBox(width: AppSpacing.md),
+
                 Expanded(
-                  child: Text(
-                    widget.summary.budget.category,
-                    style: theme
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(
-                      fontWeight:
-                      FontWeight.bold,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.summary.budget.category,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 4),
+
+                      Text(
+                        '${widget.summary.percentageLabel} of budget used',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-      
-                Text(
-                  widget.summary.percentageLabel,
-                  style: theme
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(
-                    fontWeight:
-                    FontWeight.bold,
-                  ),
-                ),
+
                 PopupMenuButton<String>(
                   onSelected: (value) {
                     switch (value) {
                       case 'edit':
                         widget.onEdit();
                         break;
-      
+
                       case 'delete':
                         widget.onDelete();
                         break;
@@ -217,56 +207,67 @@ class _BudgetTileState
             const SizedBox(
               height: AppSpacing.lg,
             ),
-      
+
+            PocketProgressBar(
+              progress: widget.summary.progress,
+            ),
+
+            const SizedBox(
+              height: AppSpacing.sm,
+            ),
+
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '${widget.summary.percentageLabel} of budget used',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+
+            const SizedBox(
+              height: AppSpacing.xl,
+            ),
+
             Row(
               children: [
                 Expanded(
                   child: _BudgetMetric(
                     title: 'Budget',
-                    value: CurrencyFormatter
-                        .format(
-                      widget.summary.budget
-                          .budgetAmount,
+                    value: CurrencyFormatter.format(
+                      widget.summary.budget.budgetAmount,
                     ),
+                    valueColor: const Color(0xFF7C5CFF),
                   ),
                 ),
-      
+
                 Expanded(
                   child: _BudgetMetric(
                     title: 'Spent',
-                    value: CurrencyFormatter
-                        .format(
+                    value: CurrencyFormatter.format(
                       widget.summary.spent,
                     ),
+                    valueColor: const Color(0xFFFF8A34),
                   ),
                 ),
-      
+
                 Expanded(
                   child: _BudgetMetric(
-                    title: widget
-                        .summary.isExceeded
+                    title: widget.summary.isExceeded
                         ? 'Exceeded'
                         : 'Remaining',
-                    value: CurrencyFormatter
-                        .format(
+                    value: CurrencyFormatter.format(
                       widget.summary.isExceeded
-                          ? widget.summary
-                          .exceeded
-                          : widget.summary
-                          .remaining,
+                          ? widget.summary.exceeded
+                          : widget.summary.remaining,
                     ),
+                    valueColor: widget.summary.isExceeded
+                        ? Colors.red
+                        : const Color(0xFF38D67A),
                   ),
                 ),
               ],
-            ),
-      
-            const SizedBox(
-              height: AppSpacing.lg,
-            ),
-      
-            PocketProgressBar(
-              progress:
-              widget.summary.progress,
             ),
           ],
         ),
@@ -279,10 +280,12 @@ class _BudgetTileState
 class _BudgetMetric extends StatelessWidget {
   final String title;
   final String value;
+  final Color? valueColor;
 
   const _BudgetMetric({
     required this.title,
     required this.value,
+    this.valueColor,
   });
 
   @override
@@ -305,11 +308,11 @@ class _BudgetMetric extends StatelessWidget {
 
         Text(
           value,
-          style: theme.textTheme
-              .titleMedium
-              ?.copyWith(
-            fontWeight:
-            FontWeight.bold,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: valueColor,
           ),
         ),
       ],

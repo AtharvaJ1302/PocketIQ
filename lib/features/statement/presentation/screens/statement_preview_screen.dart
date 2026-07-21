@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:printing/printing.dart';
+import '../../../../app/theme/colors/app_gradients.dart';
+import '../../../../core/features/constants/app_radius.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../../../../core/features/utils/currency_formatter.dart';
 import '../../domain/models/statement_period.dart';
@@ -17,6 +19,8 @@ class StatementPreviewScreen extends ConsumerWidget {
       BuildContext context,
       WidgetRef ref,
       ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final theme = Theme.of(context);
 
     final statement =
@@ -28,9 +32,15 @@ class StatementPreviewScreen extends ConsumerWidget {
           'Statement Preview',
         ),
       ),
-      body: ListView(
-        padding: AppSpacing.screenPadding,
-        children: [
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: isDark
+                ? AppGradients.screenBackground
+                : AppGradients.screenBackgroundLight,
+          ),
+          child: ListView(
+            padding: AppSpacing.screenPadding,
+            children: [
 
           Card(
             elevation: 0,
@@ -406,33 +416,54 @@ class StatementPreviewScreen extends ConsumerWidget {
             height: AppSpacing.section,
           ),
 
-          SizedBox(
+          Container(
             height: 56,
+            decoration: BoxDecoration(
+              borderRadius: AppRadius.borderRadiusMd,
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff6D5BFF),
+                  Color(0xff7D6DFF),
+                  Color(0xff8C7DFF),
+                ],
+              ),
+            ),
             child: FilledButton.icon(
               onPressed: () async {
-                final pdf =
-                ref.read(statementPdfProvider);
+                final pdf = ref.read(statementPdfProvider);
 
                 await Printing.layoutPdf(
                   onLayout: (format) async {
-                    return pdf.generate(
-                      statement,
-                    );
+                    return pdf.generate(statement);
                   },
                 );
               },
-
               icon: const Icon(
                 Icons.picture_as_pdf_rounded,
               ),
-
               label: const Text(
                 'Generate PDF',
               ),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size(double.infinity, 56),
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: AppRadius.borderRadiusMd,
+                ),
+              ).copyWith(
+                overlayColor: WidgetStateProperty.all(
+                  Colors.white.withValues(alpha: .08),
+                ),
+              ),
             ),
-          ),
+          )
         ],
       ),
+        ),
     );
   }
 }

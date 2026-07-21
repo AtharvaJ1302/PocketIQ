@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/theme/colors/app_gradients.dart';
 import '../../../../core/features/constants/app_spacing.dart';
 import '../widgets/generate_statement_button.dart';
 import '../widgets/statement_filter_card.dart';
@@ -13,37 +14,45 @@ class StatementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Generate Statement',
         ),
       ),
-      body: SafeArea(
-        child: ListView(
-          padding: AppSpacing.screenPadding,
-          children: const [
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: isDark
+              ? AppGradients.screenBackground
+              : AppGradients.screenBackgroundLight,
+        ),
+        child: SafeArea(
+          child: ListView(
+            padding: AppSpacing.screenPadding,
+            children: const [
+              StatementTypeSelector(),
 
-            StatementTypeSelector(),
+              SizedBox(
+                height: AppSpacing.section,
+              ),
 
-            SizedBox(
-              height: AppSpacing.section,
-            ),
+              StatementFilterCard(),
 
-            StatementFilterCard(),
+              SizedBox(
+                height: AppSpacing.section,
+              ),
 
-            SizedBox(
-              height: AppSpacing.section,
-            ),
+              StatementIncludeCard(),
 
-            StatementIncludeCard(),
+              SizedBox(
+                height: AppSpacing.xl,
+              ),
 
-            SizedBox(
-              height: AppSpacing.xl,
-            ),
-
-            GenerateStatementButton(),
-          ],
+              GenerateStatementButton(),
+            ],
+          ),
         ),
       ),
     );

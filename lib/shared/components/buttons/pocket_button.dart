@@ -41,13 +41,6 @@ class PocketButton extends StatelessWidget {
                 Color(0xff8C7DFF),
               ],
             ),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: const Color(0xff6D5BFF).withOpacity(.28),
-            //     blurRadius: 18,
-            //     offset: const Offset(0, 8),
-            //   ),
-            // ],
           ),
           child: InkWell(
             borderRadius: AppRadius.borderRadiusMd,

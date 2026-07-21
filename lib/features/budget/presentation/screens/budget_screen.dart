@@ -88,11 +88,16 @@ class _BudgetScreenState
       ),
       body: SafeArea(
         child: hasAccounts
-            ? const SingleChildScrollView(
-          padding: AppSpacing.screenPadding,
-          child: BudgetList(),
+            ? SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.lg,
+            MediaQuery.of(context).padding.bottom + 180,
+          ),
+          child: const BudgetList(),
         )
-            : _NoAccountBudgetState(),
+            : const _NoAccountBudgetState(),
       ),
       floatingActionButton: hasAccounts
           ? Padding(
@@ -100,22 +105,53 @@ class _BudgetScreenState
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom + 88,
         ),
-        child: FloatingActionButton.extended(
-          onPressed: () async {
-            await showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              useSafeArea: true,
-              builder: (_) => const CreateBudgetSheet(),
-            );
+          child:Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF7C5CFF),
+                  Color(0xFF5B4DFF),
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF7C5CFF).withValues(alpha: .35),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: FloatingActionButton.extended(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+              onPressed: () async {
+                await showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  useSafeArea: true,
+                  builder: (_) => const CreateBudgetSheet(),
+                );
 
-            if (!mounted) return;
+                if (!mounted) return;
 
-            await ref.read(budgetProvider).loadBudgets();
-          },
-          icon: const Icon(Icons.add),
-          label: const Text('Add Budget'),
-        ),
+                await ref.read(budgetProvider).loadBudgets();
+              },
+              icon: const Icon(Icons.add),
+              label: const Text(
+                'Add Budget',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          )
       )
           : null,
       );
