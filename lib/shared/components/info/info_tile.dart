@@ -18,18 +18,47 @@ class InfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainer,
+        color: isDark
+            ? const Color(0xFF1E2438)
+            : theme.colorScheme.surface,
+
         borderRadius: AppRadius.borderRadiusMd,
+
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: .08)
+              : theme.colorScheme.outline.withValues(alpha: .15),
+        ),
+
+        boxShadow: isDark
+            ? []
+            : [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: .04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
-          Icon(
-            icon,
-            color: theme.colorScheme.primary,
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: .12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              icon,
+              size: 20,
+              color: theme.colorScheme.primary,
+            ),
           ),
 
           const SizedBox(width: AppSpacing.md),
@@ -45,12 +74,13 @@ class InfoTile extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
 
                 Text(
                   value,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
               ],
